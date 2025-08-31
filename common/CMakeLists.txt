@@ -26,3 +26,6 @@ target_link_libraries(logging_example PUBLIC ${LIBS})
 
 add_executable(socket_example socket_example.cpp)
 target_link_libraries(socket_example PUBLIC ${LIBS})
+
+add_executable(test_enhancements test_enhancements.cpp)
+target_link_libraries(test_enhancements PUBLIC ${LIBS} numa atomic)
