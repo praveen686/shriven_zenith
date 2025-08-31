@@ -1,49 +1,85 @@
 # Developer Guide Documentation
 
-## Overview
-This directory contains all developer documentation including API references, coding standards, and development guides for the Shriven Zenith platform.
+## ⚠️ CRITICAL STATUS UPDATE ⚠️
 
-## Core Documentation
+**DOCUMENTATION UNDER MAJOR REVISION** - Most API documentation has been removed due to critical inaccuracies.
 
-### Getting Started
-- [Developer Guide](developer_guide.md) - Complete guide for developers working on the platform
-- [Naming Convention](naming_convention.md) - Documentation naming standards and conventions
+## Current Status
 
-### API References
-- [BldgBlocks API](bldg_blocks_api.md) - Complete API documentation for the BldgBlocks library
+### ✅ RELIABLE DOCUMENTATION
+- [Developer Guide](developer_guide.md) - **Updated** with current status
+- [Naming Convention](naming_convention.md) - Still accurate
+- [README_DOCS.md](README_DOCS.md) - **NEW** - Current documentation status
 
-### Coming Soon
-- `getting_started.md` - Quick start guide for new developers
-- `coding_standards.md` - Detailed coding standards and practices
-- `build_system.md` - Build system documentation
-- `testing_guide.md` - Testing requirements and patterns
-- `performance_guide.md` - Performance optimization guide
-- `debugging_guide.md` - Debugging techniques for low-latency systems
+### ❌ REMOVED (WAS INCORRECT)
+- ~~`bldg_blocks_api.md`~~ - **REMOVED** - 60% of APIs were wrong
+- ~~API examples~~ - **REMOVED** - None would compile
 
-## Development Standards
+### ⚠️ UNDER REVIEW
+All other documentation files may contain outdated information.
 
-### Mandatory Requirements
-1. **Compiler Flags**: All code must compile with strict flags
-2. **Zero Warnings**: No compiler warnings allowed
-3. **Explicit Conversions**: All type conversions must be explicit
-4. **Memory Management**: No dynamic allocation in hot path
-5. **Documentation**: All public APIs must be documented
+## For Developers - What To Use
 
-### Quick Reference
+### 🎯 Primary Sources (TRUSTWORTHY)
+1. **Working Examples**: `examples/` folder - all compile and run
+   ```bash
+   ./cmake/build-strict-release/examples/examples all
+   ```
+
+2. **Actual Headers**: `bldg_blocks/*.h` - real function signatures
+   ```bash
+   ls bldg_blocks/
+   cat bldg_blocks/lf_queue.h
+   ```
+
+3. **CLAUDE.md**: Mandatory coding standards - enforced
+
+### 🚫 DO NOT USE
+- Any documentation marked as "API Reference" 
+- Code examples from old documentation files
+- Function names from outdated guides
+
+## Verified Build Commands
 ```bash
-# Build commands
-./scripts/build_strict.sh  # Always use for development
-./scripts/build.sh         # Quick builds only
+# RELIABLE - builds with zero warnings
+./scripts/build_strict.sh
 
-# Test commands
-./cmake/build-release/examples/examples all
+# RELIABLE - shows actual API usage  
+./cmake/build-strict-release/examples/examples <example_name>
 ```
 
-## Key Files to Study
-1. Start with [developer_guide.md](developer_guide.md)
-2. Review [bldg_blocks_api.md](bldg_blocks_api.md)
-3. Understand [naming_convention.md](naming_convention.md)
-4. Study the examples in `/examples/`
+## Key API Reality Check
+
+### Logging (VERIFIED)
+```cpp
+LOG_INFO("Message");        // ✅ CORRECT
+LOG_OPT_INFO("Message");    // ❌ REMOVED
+g_logger                    // ✅ CORRECT  
+g_opt_logger               // ❌ REMOVED
+```
+
+### Queues (VERIFIED)
+```cpp
+// SPSC Queue - zero-copy API
+queue.getNextToWriteTo();   // ✅ CORRECT
+queue.enqueue();           // ❌ WRONG API
+
+// MPMC Queue - traditional API  
+queue.enqueue();           // ✅ CORRECT for MPMC
+```
+
+## Rebuilding Plan
+1. [x] Remove incorrect API documentation
+2. [x] Update developer guide with warnings  
+3. [x] Create status documentation
+4. [ ] Create accurate API docs from actual headers
+5. [ ] Verify all examples work
+6. [ ] Add performance benchmarks
 
 ---
-*Last Updated: 2025-08-31*
+
+**WARNING**: Only trust documentation marked as "VERIFIED" or "RELIABLE"
+
+**Status**: Major documentation cleanup in progress  
+**Date**: 2025-08-31  
+**Next**: Create accurate documentation from actual codebase
