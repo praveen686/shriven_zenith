@@ -80,7 +80,7 @@ This repository contains the foundational building blocks for an ultra low-laten
 
 ### Phase 2: Trading Components (Weeks 3-4)
 - [ ] Order book with intrusive RB-tree
-- [ ] SIMD-optimized price level aggregation
+- [ ] SIMD-accelerated price level aggregation
 - [ ] Market data feed handlers
 - [ ] Order management system
 
@@ -205,6 +205,28 @@ cd shriven_zenith
 3. **Use LIKELY/UNLIKELY for branch hints**
 4. **Pre-allocate all memory at startup**
 5. **Pin threads to CPU cores**
+
+## 📚 Documentation
+
+### Architecture & Design
+- [System Architecture Overview](docs/architecture/01_system_overview.md) - Start here to understand the platform
+- [BldgBlocks Foundation](docs/architecture/02_bldg_blocks_architecture.md) - Core components design
+- [Architecture Index](docs/architecture/index.md) - Complete architecture documentation
+
+### Developer Resources  
+- [Developer Guide](docs/developer_guide/developer_guide.md) - Comprehensive development guide
+- [BldgBlocks API Reference](docs/developer_guide/bldg_blocks_api.md) - Complete API documentation
+- [Naming Conventions](docs/developer_guide/naming_convention.md) - Documentation standards
+
+### Reports & Analysis
+- [Compiler Warnings Lessons](docs/reports/compiler_warnings_lessons.md) - Lessons from strict compilation
+- [Development Records](docs/reports/development_record_001_cache_aligned.md) - Technical decision records
+
+### Project Tracking
+- [Enhancement Tracker](docs/trackers/enhancement_tracker.md) - Progress and enhancements tracking
+
+### Critical Reading
+- [CLAUDE.md](CLAUDE.md) - **MANDATORY** design principles and coding standards
 
 ## 🤝 Contributing
 
