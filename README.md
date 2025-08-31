@@ -96,34 +96,6 @@ This repository contains the foundational building blocks for an ultra low-laten
 - [ ] Position tracking
 - [ ] P&L calculation
 
-## 📈 Enhancement Tracker
-
-### Critical Priority (P0) - Must Fix
-
-| ID | Component | Enhancement | Impact | Status | Assigned | ETA |
-|----|-----------|------------|--------|---------|----------|-----|
-| P0-001 | LFQueue | Implement proper memory barriers | Prevent race conditions | 🔴 Not Started | - | Week 1 |
-| P0-002 | LFQueue | Add cache-line alignment | Eliminate false sharing | 🔴 Not Started | - | Week 1 |
-| P0-003 | MemPool | Replace linear search with free-list | O(1) allocation | 🔴 Not Started | - | Week 1 |
-| P0-004 | MemPool | Add thread-safety with CAS | Concurrent access | 🔴 Not Started | - | Week 1 |
-| P0-005 | Thread | Remove 1-second sleep | Reduce startup time | 🔴 Not Started | - | Week 2 |
-
-### High Priority (P1) - Performance
-
-| ID | Component | Enhancement | Impact | Status | Assigned | ETA |
-|----|-----------|------------|--------|---------|----------|-----|
-| P1-001 | Logger | Remove sleep, use condition variable | Reduce latency | 🔴 Not Started | - | Week 2 |
-| P1-002 | Logger | Batch processing optimization | Throughput | 🔴 Not Started | - | Week 2 |
-| P1-003 | Memory | Huge pages support | TLB efficiency | 🔴 Not Started | - | Week 3 |
-| P1-004 | Time | RDTSC timestamps | Nanosecond precision | 🔴 Not Started | - | Week 3 |
-
-### Medium Priority (P2) - Features
-
-| ID | Component | Enhancement | Impact | Status | Assigned | ETA |
-|----|-----------|------------|--------|---------|----------|-----|
-| P2-001 | Network | Kernel bypass (DPDK) | Ultra-low latency | 🔴 Not Started | - | Week 4 |
-| P2-002 | OrderBook | Intrusive RB-tree | O(log n) operations | 🔴 Not Started | - | Week 4 |
-| P2-003 | OrderBook | SIMD price aggregation | Parallel processing | 🔴 Not Started | - | Week 5 |
 
 ## 🏗️ Build Instructions
 
