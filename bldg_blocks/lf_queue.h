@@ -21,60 +21,56 @@ namespace BldgBlocks {
   public:
     explicit SPSCLFQueue(std::size_t num_elems) :
         store_(num_elems, T()),
-        capacity_(num_elems) {
-      // Ensure power of 2 for efficient modulo
+        capacity_(num_elems),
+        mask_(num_elems - 1) {
+      // Ensure power of 2 for efficient modulo operations
       ASSERT((capacity_ & (capacity_ - 1)) == 0, 
              "Queue size must be power of 2 for optimal performance");
     }
     
     // Producer side - only called by producer thread
     auto getNextToWriteTo() noexcept -> T* {
-      const auto write_idx = write_index_.value.load(std::memory_order_relaxed);
-      const auto next_write = (write_idx + 1) & (capacity_ - 1);
-      
-      // Check if queue is full
-      if (UNLIKELY(next_write == read_index_cache_)) {
-        read_index_cache_ = read_index_.value.load(std::memory_order_acquire);
-        if (next_write == read_index_cache_) {
-          return nullptr; // Queue full
-        }
+      // Check if queue is full using count
+      const auto current_count = count_.value.load(std::memory_order_acquire);
+      if (UNLIKELY(current_count >= capacity_)) {
+        return nullptr; // Queue full (N slots used)
       }
       
-      return &store_[write_idx];
+      const auto write_idx = write_index_.value.load(std::memory_order_relaxed);
+      return &store_[write_idx & mask_];
     }
     
     auto updateWriteIndex() noexcept {
       const auto write_idx = write_index_.value.load(std::memory_order_relaxed);
-      write_index_.value.store((write_idx + 1) & (capacity_ - 1), 
+      write_index_.value.store((write_idx + 1) & mask_, 
                               std::memory_order_release);
+      // Increment count after write is committed
+      count_.value.fetch_add(1, std::memory_order_release);
     }
     
     // Consumer side - only called by consumer thread
     auto getNextToRead() noexcept -> const T* {
-      const auto read_idx = read_index_.value.load(std::memory_order_relaxed);
-      
-      // Check if queue is empty
-      if (UNLIKELY(read_idx == write_index_cache_)) {
-        write_index_cache_ = write_index_.value.load(std::memory_order_acquire);
-        if (read_idx == write_index_cache_) {
-          return nullptr; // Queue empty
-        }
+      // Check if queue is empty using count
+      const auto current_count = count_.value.load(std::memory_order_acquire);
+      if (UNLIKELY(current_count == 0)) {
+        return nullptr; // Queue empty
       }
       
-      return &store_[read_idx];
+      const auto read_idx = read_index_.value.load(std::memory_order_relaxed);
+      return &store_[read_idx & mask_];
     }
     
     auto updateReadIndex() noexcept {
       const auto read_idx = read_index_.value.load(std::memory_order_relaxed);
-      read_index_.value.store((read_idx + 1) & (capacity_ - 1), 
+      read_index_.value.store((read_idx + 1) & mask_, 
                              std::memory_order_release);
+      // Decrement count after read is committed
+      count_.value.fetch_sub(1, std::memory_order_release);
     }
     
-    // Approximate size - not exact due to concurrent access
+    // Exact size using count
     auto size() const noexcept {
-      const auto write = write_index_.value.load(std::memory_order_acquire);
-      const auto read = read_index_.value.load(std::memory_order_acquire);
-      return (write >= read) ? (write - read) : (capacity_ - read + write);
+      return count_.value.load(std::memory_order_acquire);
     }
     
     auto capacity() const noexcept { return capacity_; }
@@ -90,14 +86,18 @@ namespace BldgBlocks {
     // Storage
     std::vector<T> store_;
     const std::size_t capacity_;
+    const std::size_t mask_;
     
     // Producer side data (cache-line aligned)
     alignas(CACHE_LINE_SIZE) CacheAligned<std::atomic<std::size_t>> write_index_{0};
     alignas(CACHE_LINE_SIZE) std::size_t read_index_cache_ = 0;
     
-    // Consumer side data (cache-line aligned)
+    // Consumer side data (cache-line aligned)  
     alignas(CACHE_LINE_SIZE) CacheAligned<std::atomic<std::size_t>> read_index_{0};
     alignas(CACHE_LINE_SIZE) std::size_t write_index_cache_ = 0;
+    
+    // Count for distinguishing full from empty when indices are equal
+    alignas(CACHE_LINE_SIZE) CacheAligned<std::atomic<std::size_t>> count_{0};
   };
   
   // Multi Producer Multi Consumer lock-free queue

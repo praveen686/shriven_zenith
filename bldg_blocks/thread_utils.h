@@ -13,6 +13,8 @@
 #include <numa.h>
 #include <deque>
 #include <future>
+#include <type_traits>
+#include <tuple>
 #include "time_utils.h"
 
 namespace BldgBlocks {
@@ -83,38 +85,56 @@ namespace BldgBlocks {
   class ThreadPool {
   public:
     explicit ThreadPool(const std::vector<int>& core_ids) 
-      : workers_{}, tasks_{}, queue_mutex_{}, condition_{} {
+      : workers_{}, tasks_{}, queue_mutex_{}, condition_{}, stopped_{false} {
       for (int core_id : core_ids) {
         workers_.emplace_back([this, core_id] {
+          // Try to set thread affinity, but don't terminate on failure
           if (core_id >= 0) {
-            setThreadCore(core_id);
+            bool affinity_set = setThreadCore(core_id);
+            // Log failure but continue execution (don't exit)
+            if (!affinity_set) {
+              // Worker continues without affinity - acceptable for error handling
+            }
           }
           
-          while (!stop_.load(std::memory_order_acquire)) {
+          while (true) {
             std::function<void()> task;
             
             {
               std::unique_lock<std::mutex> lock(queue_mutex_);
               condition_.wait(lock, [this] { 
-                return stop_.load(std::memory_order_acquire) || !tasks_.empty(); 
+                return stopped_.load(std::memory_order_acquire) || !tasks_.empty(); 
               });
               
-              if (stop_.load(std::memory_order_acquire) && tasks_.empty()) {
-                return;
+              if (stopped_.load(std::memory_order_acquire) && tasks_.empty()) {
+                break;
               }
               
-              task = std::move(tasks_.front());
-              tasks_.pop_front();
+              if (!tasks_.empty()) {
+                task = std::move(tasks_.front());
+                tasks_.pop_front();
+              } else {
+                continue;  // Spurious wakeup
+              }
             }
             
-            task();
+            if (task) {
+              try {
+                task();
+              } catch (...) {
+                // Swallow exceptions to prevent thread termination
+              }
+            }
           }
         });
       }
     }
     
     ~ThreadPool() {
-      stop_.store(true, std::memory_order_release);
+      {
+        std::unique_lock<std::mutex> lock(queue_mutex_);
+        stopped_.store(true, std::memory_order_release);
+      }
       condition_.notify_all();
       
       for (auto& worker : workers_) {
@@ -125,16 +145,34 @@ namespace BldgBlocks {
     }
     
     template<typename F, typename... Args>
-    auto enqueue(F&& f, Args&&... args) {
-      auto task = std::make_shared<std::packaged_task<decltype(f(args...))()>>(
-        std::bind(std::forward<F>(f), std::forward<Args>(args)...)
+    auto enqueue(F&& f, Args&&... args)
+        -> std::future<std::invoke_result_t<F, Args...>> {
+      using R = std::invoke_result_t<F, Args...>;
+      
+      if (stopped_.load(std::memory_order_acquire)) {
+        throw std::runtime_error("enqueue on stopped ThreadPool");
+      }
+      
+      auto task = std::make_shared<std::packaged_task<R()>>(
+        [fn = std::forward<F>(f), 
+         args_tuple = std::make_tuple(std::forward<Args>(args)...)]() mutable -> R {
+          if constexpr (std::is_void_v<R>) {
+            std::apply([&fn](auto&&... captured_args) {
+              std::invoke(std::move(fn), std::forward<decltype(captured_args)>(captured_args)...);
+            }, std::move(args_tuple));
+          } else {
+            return std::apply([&fn](auto&&... captured_args) {
+              return std::invoke(std::move(fn), std::forward<decltype(captured_args)>(captured_args)...);
+            }, std::move(args_tuple));
+          }
+        }
       );
       
       auto res = task->get_future();
       
       {
         std::unique_lock<std::mutex> lock(queue_mutex_);
-        if (stop_.load(std::memory_order_acquire)) {
+        if (stopped_.load(std::memory_order_acquire)) {
           throw std::runtime_error("enqueue on stopped ThreadPool");
         }
         
@@ -145,13 +183,45 @@ namespace BldgBlocks {
       return res;
     }
     
+    /// Try to enqueue a task, returns false if stopped
+    template<typename F, typename... Args>
+    [[nodiscard]] auto try_enqueue(F&& f, Args&&... args) noexcept -> bool {
+      if (stopped_.load(std::memory_order_acquire)) {
+        return false;
+      }
+      
+      std::function<void()> task = [fn = std::forward<F>(f), 
+                                    args_tuple = std::make_tuple(std::forward<Args>(args)...)]() mutable {
+        std::apply([&fn](auto&&... captured_args) {
+          std::invoke(std::move(fn), std::forward<decltype(captured_args)>(captured_args)...);
+        }, std::move(args_tuple));
+      };
+      
+      {
+        std::unique_lock<std::mutex> lock(queue_mutex_);
+        if (stopped_.load(std::memory_order_acquire)) {
+          return false;
+        }
+        
+        tasks_.emplace_back(std::move(task));
+      }
+      
+      condition_.notify_one();
+      return true;
+    }
+    
+    /// Check if the ThreadPool is stopped
+    [[nodiscard]] auto is_stopped() const noexcept -> bool {
+      return stopped_.load(std::memory_order_acquire);
+    }
+    
   private:
     std::vector<std::thread> workers_;
     std::deque<std::function<void()>> tasks_;
     
     std::mutex queue_mutex_;
     std::condition_variable condition_;
-    std::atomic<bool> stop_{false};
+    std::atomic<bool> stopped_;
   };
   
   /// Get current CPU cycle count for precise timing

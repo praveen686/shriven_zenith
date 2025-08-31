@@ -53,7 +53,9 @@ STRICT_FLAGS="$STRICT_FLAGS -Wstrict-null-sentinel"
 
 # Security flags
 STRICT_FLAGS="$STRICT_FLAGS -D_FORTIFY_SOURCE=2"
-STRICT_FLAGS="$STRICT_FLAGS -fPIE -pie"
+# Note: -fPIE -pie are for executables only, not shared libraries
+# Using -fPIC instead which works for both
+STRICT_FLAGS="$STRICT_FLAGS -fPIC"
 STRICT_FLAGS="$STRICT_FLAGS -Wformat-security"
 
 echo -e "${YELLOW}Compiler flags:${NC}"
