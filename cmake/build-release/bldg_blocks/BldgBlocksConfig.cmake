@@ -24,20 +24,6 @@ endmacro()
 
 ####################################################################################
 
-include(CMakeFindDependencyMacro)
-
-# Find dependencies
-find_dependency(Threads REQUIRED)
-
-# Optional NUMA dependency
-find_library(NUMA_LIBRARY numa)
-if(NUMA_LIBRARY)
-    set(BldgBlocks_NUMA_FOUND TRUE)
-else()
-    set(BldgBlocks_NUMA_FOUND FALSE)
-endif()
-
-# Include targets
 include("${CMAKE_CURRENT_LIST_DIR}/BldgBlocksTargets.cmake")
 
 check_required_components(BldgBlocks)

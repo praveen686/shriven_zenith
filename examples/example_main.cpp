@@ -100,15 +100,15 @@ int main(int argc, char* argv[]) {
     std::cout << "Running: " << example_name << "\n\n";
     
     // Log the start of example
-    if (BldgBlocks::g_opt_logger) {
-        BldgBlocks::g_opt_logger->info("Starting example: %s", example_name.c_str());
+    if (BldgBlocks::g_logger) {
+        BldgBlocks::g_logger->info("Starting example: %s", example_name.c_str());
     }
     
     try {
         examples[example_name]();
     } catch (const std::exception& e) {
-        if (BldgBlocks::g_opt_logger) {
-            BldgBlocks::g_opt_logger->error("Example failed: %s", e.what());
+        if (BldgBlocks::g_logger) {
+            BldgBlocks::g_logger->error("Example failed: %s", e.what());
         }
         std::cout << "Error running example: " << e.what() << std::endl;
         BldgBlocks::shutdownLogging();
@@ -116,11 +116,11 @@ int main(int argc, char* argv[]) {
     }
     
     // Log completion
-    if (BldgBlocks::g_opt_logger) {
-        BldgBlocks::g_opt_logger->info("Example completed successfully: %s", example_name.c_str());
+    if (BldgBlocks::g_logger) {
+        BldgBlocks::g_logger->info("Example completed successfully: %s", example_name.c_str());
         
         // Print stats
-        auto stats = BldgBlocks::g_opt_logger->getStats();
+        auto stats = BldgBlocks::g_logger->getStats();
         std::cout << "\nLogging Statistics:\n";
         std::cout << "  Messages written: " << stats.messages_written << "\n";
         std::cout << "  Messages dropped: " << stats.messages_dropped << "\n";

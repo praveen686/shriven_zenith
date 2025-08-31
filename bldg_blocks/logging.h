@@ -316,30 +316,30 @@ private:
 };
 
 // Global logger instance
-extern Logger* g_opt_logger;
+extern Logger* g_logger;
 
 // Initialize global logger
 inline void initLogging(const std::string& filename = "trading.log") {
-    if (!g_opt_logger) {
-        g_opt_logger = new Logger(filename);
+    if (!g_logger) {
+        g_logger = new Logger(filename);
     }
 }
 
 // Cleanup global logger
 inline void shutdownLogging() {
-    if (g_opt_logger) {
-        g_opt_logger->stop();
-        delete g_opt_logger;
-        g_opt_logger = nullptr;
+    if (g_logger) {
+        g_logger->stop();
+        delete g_logger;
+        g_logger = nullptr;
     }
 }
 
 // Fast logging macros
-#define LOG_OPT_DEBUG(...) if (BldgBlocks::g_opt_logger) BldgBlocks::g_opt_logger->debug(__VA_ARGS__)
-#define LOG_OPT_INFO(...)  if (BldgBlocks::g_opt_logger) BldgBlocks::g_opt_logger->info(__VA_ARGS__)
-#define LOG_OPT_WARN(...)  if (BldgBlocks::g_opt_logger) BldgBlocks::g_opt_logger->warn(__VA_ARGS__)
-#define LOG_OPT_ERROR(...) if (BldgBlocks::g_opt_logger) BldgBlocks::g_opt_logger->error(__VA_ARGS__)
-#define LOG_OPT_FATAL(...) if (BldgBlocks::g_opt_logger) BldgBlocks::g_opt_logger->fatal(__VA_ARGS__)
+#define LOG_DEBUG(...) if (BldgBlocks::g_logger) BldgBlocks::g_logger->debug(__VA_ARGS__)
+#define LOG_INFO(...)  if (BldgBlocks::g_logger) BldgBlocks::g_logger->info(__VA_ARGS__)
+#define LOG_WARN(...)  if (BldgBlocks::g_logger) BldgBlocks::g_logger->warn(__VA_ARGS__)
+#define LOG_ERROR(...) if (BldgBlocks::g_logger) BldgBlocks::g_logger->error(__VA_ARGS__)
+#define LOG_FATAL(...) if (BldgBlocks::g_logger) BldgBlocks::g_logger->fatal(__VA_ARGS__)
 
 
 } // namespace BldgBlocks

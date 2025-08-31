@@ -131,52 +131,105 @@ LOG_INFO("Pool usage: %zu/%zu",
 
 ## Lock-Free Data Structures
 
-### 3. Lock-Free Queue (`lf_queue.h`)
+### 3. Lock-Free Queues (`lf_queue.h`)
 
-#### LFQueue Class
+The system provides two specialized lock-free queue implementations optimized for different use cases:
+
+#### SPSCLFQueue Class (Single Producer, Single Consumer)
 ```cpp
 template<typename T>
-class LFQueue
+class SPSCLFQueue
 ```
 
-**Purpose**: Multi-producer, multi-consumer lock-free queue.
+**Purpose**: Ultra-high performance queue for single producer, single consumer scenarios.
 
 **Key Features**:
-- True lock-free implementation using CAS operations
-- ABA problem prevention with pointer packing
-- Cache-line aligned nodes
+- Zero-copy API design for maximum performance
+- Cache-line aligned indices to prevent false sharing
+- Lock-free with relaxed memory ordering where possible
+- Power-of-2 capacity for efficient modulo operations
+
+**API**:
+```cpp
+// Construction
+SPSCLFQueue(std::size_t capacity);  // Must be power of 2
+
+// Producer API (zero-copy)
+T* getNextToWriteTo() noexcept;     // Returns nullptr if full
+void updateWriteIndex() noexcept;   // Commit the write
+
+// Consumer API (zero-copy)
+const T* getNextToRead() noexcept;  // Returns nullptr if empty
+void updateReadIndex() noexcept;    // Mark as consumed
+
+// Query
+std::size_t size() const noexcept; // Approximate size
+std::size_t capacity() const noexcept;
+```
+
+**Usage Example**:
+```cpp
+// Create SPSC queue for market data
+SPSCLFQueue<MarketData> md_queue(65536);
+
+// Producer thread (zero-copy)
+T* slot = md_queue.getNextToWriteTo();
+if (slot) {
+    *slot = MarketData{...};  // Direct construction
+    md_queue.updateWriteIndex();
+}
+
+// Consumer thread (zero-copy)
+const T* data = md_queue.getNextToRead();
+if (data) {
+    process_market_data(*data);
+    md_queue.updateReadIndex();
+}
+```
+
+#### MPMCLFQueue Class (Multi Producer, Multi Consumer)
+```cpp
+template<typename T>
+class MPMCLFQueue
+```
+
+**Purpose**: Thread-safe queue supporting multiple producers and consumers.
+
+**Key Features**:
+- CAS-based implementation for multi-thread safety
+- Sequence-based slot management prevents ABA problems
+- Cache-line aligned cells
 - Configurable capacity
 
 **API**:
 ```cpp
 // Construction
-LFQueue(std::size_t capacity);
+MPMCLFQueue(std::size_t capacity);
 
 // Operations
-bool enqueue(T&& item);                  // Move semantics
-bool enqueue(const T& item);             // Copy semantics
-bool dequeue(T& item);                   // Returns false if empty
+bool enqueue(const T& item) noexcept;   // Copy semantics
+bool dequeue(T& item) noexcept;         // Returns false if empty
 
 // Query
-bool empty() const;
-std::size_t size_approx() const;         // Approximate size
+std::size_t size() const noexcept;      // Approximate size
+std::size_t capacity() const noexcept;
 ```
 
 **Usage Example**:
 ```cpp
-// Create queue for market data
-LFQueue<MarketData> md_queue(65536);
+// Create MPMC queue for order processing
+MPMCLFQueue<Order> order_queue(65536);
 
-// Producer thread
-MarketData data{...};
-if (!md_queue.enqueue(std::move(data))) {
-    LOG_ERROR("Queue full, dropping market data");
+// Multiple producer threads
+Order order{...};
+if (!order_queue.enqueue(order)) {
+    LOG_ERROR("Queue full, dropping order");
 }
 
-// Consumer thread
-MarketData received;
-while (md_queue.dequeue(received)) {
-    process_market_data(received);
+// Multiple consumer threads
+Order received_order;
+while (order_queue.dequeue(received_order)) {
+    process_order(received_order);
 }
 ```
 
@@ -269,7 +322,7 @@ class Logger
 **API**:
 ```cpp
 // Singleton access
-Logger* g_opt_logger;
+Logger* g_logger;
 
 // Initialization
 void initLogging(const std::string& filename);
@@ -310,7 +363,7 @@ LOG_INFO("EXEC|%lu|%s|%c|%lu|%u|%lu",  // Execution report
          exec_id, symbol, side, price, qty, timestamp);
 
 // Get statistics
-auto stats = g_opt_logger->getStats();
+auto stats = g_logger->getStats();
 LOG_INFO("Logged %lu messages, dropped %lu, wrote %lu bytes",
          stats.messages_written, stats.messages_dropped, 
          stats.bytes_written);

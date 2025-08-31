@@ -254,22 +254,22 @@ void memPoolExamples() {
   std::cout << "Cache line size: " << CACHE_LINE_SIZE << " bytes" << std::endl;
   std::cout << "TestObject size: " << sizeof(TestObject) << " bytes" << std::endl;
   
-  LOG_OPT_INFO("Starting Memory Pool examples");
-  LOG_OPT_INFO("Cache line size: %d bytes", CACHE_LINE_SIZE);
-  LOG_OPT_INFO("TestObject size: %zu bytes", sizeof(TestObject));
+  LOG_INFO("Starting Memory Pool examples");
+  LOG_INFO("Cache line size: %d bytes", CACHE_LINE_SIZE);
+  LOG_INFO("TestObject size: %zu bytes", sizeof(TestObject));
   
   basicMemPoolExample();
-  LOG_OPT_INFO("Basic memory pool example completed");
+  LOG_INFO("Basic memory pool example completed");
   
   lockFreeMemPoolExample();
-  LOG_OPT_INFO("Lock-free memory pool example completed");
+  LOG_INFO("Lock-free memory pool example completed");
   
   performanceComparison();
-  LOG_OPT_INFO("Performance comparison completed");
+  LOG_INFO("Performance comparison completed");
   
   stressTest();
-  LOG_OPT_INFO("Stress test completed");
+  LOG_INFO("Stress test completed");
   
   std::cout << "\n=== Memory Pool examples completed ===" << std::endl;
-  LOG_OPT_INFO("All memory pool examples completed successfully");
+  LOG_INFO("All memory pool examples completed successfully");
 }
