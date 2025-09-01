@@ -2,20 +2,28 @@
 
 #include <chrono>
 #include <cstdint>
-#include <string>
+#include <cstring>
 #include <ctime>
 #include <x86intrin.h>
 
 namespace Common {
 
 
-// Original time utilities
-inline auto getCurrentTimeStr(std::string* time_str) {
+// Original time utilities - fixed to use char buffer
+inline void getCurrentTimeStr(char* time_buffer, size_t buffer_size) {
   const auto time = std::chrono::system_clock::to_time_t(std::chrono::system_clock::now());
-  time_str->assign(ctime(&time));
-  if (!time_str->empty())
-    time_str->at(time_str->length() - 1) = '\0';
-  return time_str;
+  const char* time_cstr = ctime(&time);
+  if (time_cstr) {
+    strncpy(time_buffer, time_cstr, buffer_size - 1);
+    time_buffer[buffer_size - 1] = '\0';
+    // Remove newline if present
+    size_t len = strlen(time_buffer);
+    if (len > 0 && time_buffer[len - 1] == '\n') {
+      time_buffer[len - 1] = '\0';
+    }
+  } else {
+    time_buffer[0] = '\0';
+  }
 }
 
 // Enhanced time utilities for ultra low latency

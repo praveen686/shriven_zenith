@@ -13,9 +13,12 @@
 #include <numa.h>
 #include <deque>
 #include <future>
+#include <cstring>
+#include "macros.h"
 #include <type_traits>
 #include <tuple>
 #include "time_utils.h"
+#include "mem_pool.h"
 
 namespace Common {
 
@@ -41,15 +44,17 @@ namespace Common {
   
   /// Creates a thread with immediate affinity setting (no sleep)
   template<typename T, typename... A>
-  inline auto createAndStartThread(int core_id, const std::string& name, 
+  inline auto createAndStartThread(int core_id, const char* name, 
                                    T&& func, A&&... args) noexcept {
     std::atomic<bool> thread_ready{false};
     std::mutex mtx;
     std::condition_variable cv;
     
-    auto t = std::make_unique<std::thread>([&thread_ready, &cv, core_id, name, 
-                                            func = std::forward<T>(func), 
-                                            ...args = std::forward<A>(args)]() mutable {
+    // Use placement new with static storage instead of make_unique
+    alignas(std::thread) static char thread_storage[sizeof(std::thread)];
+    auto* t = new (thread_storage) std::thread([&thread_ready, &cv, core_id, name, 
+                                              func = std::forward<T>(func), 
+                                              ...args = std::forward<A>(args)]() mutable {
       // Set thread affinity immediately
       if (core_id >= 0) {
         if (!setThreadCore(core_id)) {
@@ -62,7 +67,10 @@ namespace Common {
       }
       
       // Set thread name for debugging
-      pthread_setname_np(pthread_self(), name.substr(0, 15).c_str());
+      char truncated_name[16];
+      strncpy(truncated_name, name, 15);
+      truncated_name[15] = '\0';
+      pthread_setname_np(pthread_self(), truncated_name);
       
       // Signal that thread is ready
       thread_ready.store(true, std::memory_order_release);
@@ -83,11 +91,14 @@ namespace Common {
   
   /// Thread pool for pre-created threads with core affinity
   class ThreadPool {
+    static constexpr size_t MAX_THREADS = 64;
   public:
-    explicit ThreadPool(const std::vector<int>& core_ids) 
-      : workers_{}, tasks_{}, queue_mutex_{}, condition_{}, stopped_{false} {
-      for (int core_id : core_ids) {
-        workers_.emplace_back([this, core_id] {
+    explicit ThreadPool(const int* core_ids, size_t num_cores) 
+      : num_workers_(num_cores), tasks_{}, queue_mutex_{}, condition_{}, stopped_{false} {
+      ASSERT(num_cores <= MAX_THREADS, "Too many threads requested");
+      for (size_t i = 0; i < num_cores; ++i) {
+        int core_id = core_ids[i];
+        new (&workers_[i]) std::thread([this, core_id] {
           // Try to set thread affinity, but don't terminate on failure
           if (core_id >= 0) {
             bool affinity_set = setThreadCore(core_id);
@@ -119,11 +130,7 @@ namespace Common {
             }
             
             if (task) {
-              try {
-                task();
-              } catch (...) {
-                // Swallow exceptions to prevent thread termination
-              }
+              task();
             }
           }
         });
@@ -137,10 +144,11 @@ namespace Common {
       }
       condition_.notify_all();
       
-      for (auto& worker : workers_) {
-        if (worker.joinable()) {
-          worker.join();
+      for (size_t i = 0; i < num_workers_; ++i) {
+        if (workers_[i].joinable()) {
+          workers_[i].join();
         }
+        workers_[i].~thread();  // Explicit destructor call
       }
     }
     
@@ -150,10 +158,24 @@ namespace Common {
       using R = std::invoke_result_t<F, Args...>;
       
       if (stopped_.load(std::memory_order_acquire)) {
-        throw std::runtime_error("enqueue on stopped ThreadPool");
+        // Return a future with an exception already set
+        std::promise<R> error_promise;
+        error_promise.set_exception(std::make_exception_ptr(
+          std::runtime_error("enqueue on stopped ThreadPool")));
+        return error_promise.get_future();
       }
       
-      auto task = std::make_shared<std::packaged_task<R()>>(
+      // Use memory pool allocation instead of make_shared
+      auto* task_mem = GlobalMemoryPools::messages().allocate();
+      if (!task_mem) {
+        // Return a future with an exception already set
+        std::promise<R> error_promise;
+        error_promise.set_exception(std::make_exception_ptr(
+          std::runtime_error("Failed to allocate task memory from pool")));
+        return error_promise.get_future();
+      }
+      
+      auto* task = new (task_mem) std::packaged_task<R()>(
         [fn = std::forward<F>(f), 
          args_tuple = std::make_tuple(std::forward<Args>(args)...)]() mutable -> R {
           if constexpr (std::is_void_v<R>) {
@@ -168,15 +190,29 @@ namespace Common {
         }
       );
       
-      auto res = task->get_future();
+      // Create a shared wrapper that manages pool deallocation
+      auto task_deleter = [](std::packaged_task<R()>* t) {
+        if (t) {
+          t->~packaged_task();
+          GlobalMemoryPools::messages().deallocate(t);
+        }
+      };
+      
+      std::shared_ptr<std::packaged_task<R()>> shared_task(task, task_deleter);
+      
+      auto res = shared_task->get_future();
       
       {
         std::unique_lock<std::mutex> lock(queue_mutex_);
         if (stopped_.load(std::memory_order_acquire)) {
-          throw std::runtime_error("enqueue on stopped ThreadPool");
+          // Return a future with an exception already set
+          std::promise<R> error_promise;
+          error_promise.set_exception(std::make_exception_ptr(
+            std::runtime_error("enqueue on stopped ThreadPool")));
+          return error_promise.get_future();
         }
         
-        tasks_.emplace_back([task]() { (*task)(); });
+        tasks_.emplace_back([shared_task]() { (*shared_task)(); });
       }
       
       condition_.notify_one();
@@ -216,7 +252,8 @@ namespace Common {
     }
     
   private:
-    std::vector<std::thread> workers_;
+    alignas(64) std::thread workers_[MAX_THREADS];
+    size_t num_workers_;
     std::deque<std::function<void()>> tasks_;
     
     std::mutex queue_mutex_;

@@ -1,10 +1,10 @@
 #pragma once
 
 #include <iostream>
-#include <vector>
 #include <atomic>
 #include <cstddef>
-#include <new>
+#include <cstdlib>
+#include <array>
 
 #include "macros.h"
 #include "types.h"
@@ -16,16 +16,26 @@ namespace Common {
   
   
   // Single Producer Single Consumer lock-free queue
-  template<typename T>
+  template<typename T, std::size_t MaxElements>
   class SPSCLFQueue final {
+    static_assert((MaxElements & (MaxElements - 1)) == 0, 
+                  "MaxElements must be power of 2 for optimal performance");
+    static_assert(MaxElements > 0, "MaxElements must be greater than 0");
+  
   public:
-    explicit SPSCLFQueue(std::size_t num_elems) :
-        store_(num_elems, T()),
-        capacity_(num_elems),
-        mask_(num_elems - 1) {
-      // Ensure power of 2 for efficient modulo operations
-      ASSERT((capacity_ & (capacity_ - 1)) == 0, 
-             "Queue size must be power of 2 for optimal performance");
+    constexpr SPSCLFQueue() noexcept : 
+        capacity_(MaxElements),
+        mask_(MaxElements - 1) {
+      // Static initialization - no dynamic allocation
+      // Elements are default-initialized in the array
+    }
+    
+    ~SPSCLFQueue() {
+      // Destroy elements
+      for (std::size_t i = 0; i < capacity_; ++i) {
+        store_[i].~T();
+      }
+      std::free(store_);
     }
     
     // Producer side - only called by producer thread
@@ -75,16 +85,15 @@ namespace Common {
     
     auto capacity() const noexcept { return capacity_; }
     
-    // Deleted default, copy & move constructors and assignment-operators
-    SPSCLFQueue() = delete;
+    // Deleted copy & move constructors and assignment-operators
     SPSCLFQueue(const SPSCLFQueue&) = delete;
     SPSCLFQueue(const SPSCLFQueue&&) = delete;
     SPSCLFQueue& operator=(const SPSCLFQueue&) = delete;
     SPSCLFQueue& operator=(const SPSCLFQueue&&) = delete;
     
   private:
-    // Storage
-    std::vector<T> store_;
+    // Storage (pre-allocated array, no vector)
+    T* store_;
     const std::size_t capacity_;
     const std::size_t mask_;
     
@@ -105,15 +114,24 @@ namespace Common {
   class MPMCLFQueue final {
   public:
     explicit MPMCLFQueue(std::size_t num_elems) :
-        store_(num_elems),
+        store_(static_cast<Cell*>(std::aligned_alloc(alignof(Cell), sizeof(Cell) * num_elems))),
         capacity_(num_elems) {
       ASSERT((capacity_ & (capacity_ - 1)) == 0, 
              "Queue size must be power of 2 for optimal performance");
       
-      // Initialize sequence numbers
+      // Initialize cells with placement new and sequence numbers
       for (std::size_t i = 0; i < capacity_; ++i) {
+        new (&store_[i]) Cell();
         store_[i].sequence.store(i, std::memory_order_relaxed);
       }
+    }
+    
+    ~MPMCLFQueue() {
+      // Destroy cells
+      for (std::size_t i = 0; i < capacity_; ++i) {
+        store_[i].~Cell();
+      }
+      std::free(store_);
     }
     
     // Producer side - can be called by multiple threads
@@ -186,7 +204,7 @@ namespace Common {
       Cell() : sequence(0), data() {}
     };
     
-    std::vector<Cell> store_;
+    Cell* store_;  // Pre-allocated array, no vector
     const std::size_t capacity_;
     
     // Producer and consumer indices (cache-line aligned)
@@ -195,6 +213,6 @@ namespace Common {
   };
   
   // Backwards compatibility alias
-  template<typename T>
-  using LFQueue = SPSCLFQueue<T>;
+  template<typename T, std::size_t MaxElements = 1024>
+  using LFQueue = SPSCLFQueue<T, MaxElements>;
 }

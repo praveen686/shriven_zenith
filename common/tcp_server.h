@@ -35,9 +35,9 @@ public:
   };
   
   ConnectionPool(Logger&  logger) : logger_(logger) {
-    // Pre-allocate all connections
+    // Initialize all connections using placement new on static storage
     for (size_t i = 0; i < MAX_CONNECTIONS; ++i) {
-      connections_[i] = std::make_unique<Connection>(logger_);
+      ::new (static_cast<void*>(&connections_[i])) Connection(logger_);
     }
   }
   
@@ -95,7 +95,7 @@ public:
   }
   
   // Start server with enhanced performance settings
-  bool start(const std::string& ip, int port, const std::string& interface = "");
+  bool start(const char* ip, int port, const char* interface = nullptr);
   
   // Stop server gracefully
   void stop() noexcept;

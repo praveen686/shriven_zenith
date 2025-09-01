@@ -22,6 +22,13 @@ enum class Severity : uint8_t {
     INFO = 4       // Informational (TODOs, stubs)
 };
 
+/// Three-tier violation classification for production readiness
+enum class ViolationTier : uint8_t {
+    TIER_A_SAFETY = 0,      ///< Hard fail - prevents crashes/data loss/UB
+    TIER_B_PERFORMANCE = 1, ///< SLO gates - realistic, tunable performance targets  
+    TIER_C_STYLE = 2        ///< Info only - style/toolchain notes
+};
+
 /// Violation categories based on CLAUDE.md
 enum class ViolationType : uint16_t {
     // Memory violations (CRITICAL)
@@ -102,13 +109,17 @@ enum class ViolationType : uint16_t {
     // File organization violations (CRITICAL)
     REDUNDANT_FILE = 113,
     DUPLICATE_IMPLEMENTATION = 114,
-    MISPLACED_FILE = 115
+    MISPLACED_FILE = 115,
+    
+    // Style violations (INFO)
+    STYLE_DELETED_FUNCTION = 120  // = delete syntax (good practice)
 };
 
 /// Represents a single code violation
 struct Violation {
     ViolationType type;
     Severity severity;
+    ViolationTier tier;   // New tier classification
     char file_path[256];  // Fixed buffer for file path
     uint32_t line_number;
     char function_name[128];  // Fixed buffer for function name
@@ -231,6 +242,10 @@ public:
     /// CI/CD integration
     int getExitCode() const noexcept;
     
+    /// Tier-based reporting
+    uint32_t getTierViolationCount(ViolationTier tier) const noexcept;
+    void printTierSummary() noexcept;
+    
     /// IDE integration
     void generateIDEWarnings() noexcept;
     
@@ -249,6 +264,11 @@ private:
     static constexpr size_t MAX_VIOLATIONS = 10000;
     std::array<Violation, MAX_VIOLATIONS> violations_;
     std::atomic<uint32_t> violation_count_{0};
+    
+    // Tier-based counters for fast reporting
+    std::atomic<uint32_t> tier_a_count_{0};
+    std::atomic<uint32_t> tier_b_count_{0};
+    std::atomic<uint32_t> tier_c_count_{0};
     
     // Performance metrics storage
     static constexpr size_t MAX_METRICS = 100000;
@@ -276,6 +296,9 @@ private:
     void processLine(const char* line, uint32_t line_num, const char* file) noexcept;
     bool matchPattern(const char* line, const CodePattern& pattern) noexcept;
     void analyzeASTNode(const char* node_type, const char* content) noexcept;
+    
+    // Tier classification
+    ViolationTier classifyViolationTier(ViolationType type, const char* line) noexcept;
 };
 
 // ========== Inline Audit Macros ==========

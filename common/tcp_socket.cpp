@@ -7,7 +7,7 @@
 namespace Common {
 
 
-int UltraTCPSocket::connect(const std::string& ip, const std::string& iface, 
+int UltraTCPSocket::connect(const char* ip, const char* iface, 
                            int port, bool is_listening) {
     logger_.log("Connecting to %:%\n", ip, port);
     

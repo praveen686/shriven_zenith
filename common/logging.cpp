@@ -15,9 +15,7 @@
 #include <string>
 #include <string_view>
 #include <thread>
-#include <vector>
 #include <chrono>
-#include <unordered_map>
 #include <immintrin.h>  // For _mm_pause()
 #include <sys/stat.h>   // For fstat
 #include <sched.h>      // For CPU affinity
@@ -44,6 +42,14 @@ namespace Common {
 // ---------- Runtime-sized Vyukov MPMC bounded queue ----------
 class MPMCQueue {
 public:
+  static constexpr std::size_t MAX_CAPACITY = 65536;  // Maximum queue size
+  
+  // Delete copy/move to satisfy -Weffc++
+  MPMCQueue(const MPMCQueue&) = delete;
+  MPMCQueue& operator=(const MPMCQueue&) = delete;
+  MPMCQueue(MPMCQueue&&) = delete;
+  MPMCQueue& operator=(MPMCQueue&&) = delete;
+  
   struct LogRecord {
     uint64_t timestamp{0};
     uint32_t thread_id{0};
@@ -59,12 +65,35 @@ public:
   explicit MPMCQueue(std::size_t capacity_pow2)
   : size_(round_up_pow2(capacity_pow2)),
     mask_(size_ - 1),
-    buffer_(size_) {
+    buffer_(nullptr) {
+    if (size_ > MAX_CAPACITY) {
+      size_ = MAX_CAPACITY;
+      mask_ = size_ - 1;
+    }
+    
+    // Allocate aligned memory for the buffer
+    void* mem = std::aligned_alloc(64, size_ * sizeof(Cell));
+    if (!mem) {
+      std::abort();  // Fatal error
+    }
+    buffer_ = static_cast<Cell*>(mem);
+    
+    // Initialize cells
     for (std::size_t i = 0; i < size_; ++i) {
+      new (&buffer_[i]) Cell();
       buffer_[i].seq.store(i, std::memory_order_relaxed);
     }
     head_.store(0, std::memory_order_relaxed);
     tail_.store(0, std::memory_order_relaxed);
+  }
+  
+  ~MPMCQueue() {
+    if (buffer_) {
+      for (std::size_t i = 0; i < size_; ++i) {
+        buffer_[i].~Cell();
+      }
+      std::free(buffer_);
+    }
   }
 
   bool enqueue(const LogRecord& rec) noexcept {
@@ -130,9 +159,9 @@ private:
 
   alignas(64) std::atomic<std::size_t> head_{0};
   alignas(64) std::atomic<std::size_t> tail_{0};
-  const std::size_t size_;
-  const std::size_t mask_;
-  std::vector<Cell> buffer_;
+  std::size_t size_;
+  std::size_t mask_;
+  Cell* buffer_;
 };
 
 // ---------- Async logger implementation ----------
@@ -144,9 +173,8 @@ public:
   AsyncLoggerImpl(AsyncLoggerImpl&&) = delete;
   AsyncLoggerImpl& operator=(AsyncLoggerImpl&&) = delete;
   
-  AsyncLoggerImpl(const std::string& path, std::size_t capacity = 16384)
-  : path_(path),
-    file_(nullptr),
+  AsyncLoggerImpl(const char* path, std::size_t capacity = 16384)
+  : file_(nullptr),
     file_buffer_(),
     queue_(getQueueCapacity(capacity)),
     writer_thread_(),
@@ -154,6 +182,10 @@ public:
     cv_(),
     running_(true),
     queue_was_empty_(true) {
+    
+    // Copy the path to the fixed buffer
+    strncpy(path_, path, sizeof(path_) - 1);
+    path_[sizeof(path_) - 1] = '\0';
     
     // Create parent directories if needed
     try {
@@ -165,14 +197,16 @@ public:
     } catch (...) {}
 
     // Open file in text mode for writing
-    file_ = std::fopen(path_.c_str(), "w");
+    file_ = std::fopen(path_, "w");
     // No fallback to stderr - just skip writes if file fails
     
     // Use large buffer for file I/O if file opened successfully
     if (file_) {
-      // Allocate large buffer for stdio - reduces syscalls
-      file_buffer_ = std::make_unique<char[]>(1 << 20);  // 1MB buffer
-      std::setvbuf(file_, file_buffer_.get(), _IOFBF, 1 << 20);
+      // Use static buffer for stdio - reduces syscalls, no dynamic allocation
+      static constexpr size_t BUFFER_SIZE = 1 << 20;  // 1MB buffer
+      alignas(64) static char static_file_buffer[BUFFER_SIZE];
+      file_buffer_ = static_file_buffer;
+      std::setvbuf(file_, file_buffer_, _IOFBF, BUFFER_SIZE);
     }
     
     // Start writer thread with optional CPU pinning
@@ -197,7 +231,7 @@ public:
     // Perform self-test to verify logger is working
     if (!performSelfTest()) {
       // Log to stderr if file logging fails
-      std::fprintf(stderr, "Warning: Logger self-test failed for %s\n", path_.c_str());
+      std::fprintf(stderr, "Warning: Logger self-test failed for %s\n", path_);
     }
   }
 
@@ -283,14 +317,23 @@ private:
     const int spin_count = getSpinCount();
     const std::size_t batch_size = getBatchSize();
     const int flush_ms = getFlushMs();
-    std::vector<MPMCQueue::LogRecord> batch(batch_size);
+    
+    // Use fixed-size arrays instead of vectors
+    static constexpr std::size_t MAX_BATCH_SIZE = 1024;
+    MPMCQueue::LogRecord batch[MAX_BATCH_SIZE];
     
     // Pre-allocate iovecs for writev
-    std::vector<struct iovec> iovecs;
-    iovecs.reserve(batch_size * 2);  // timestamp/header + message
+    static constexpr std::size_t MAX_IOVECS = MAX_BATCH_SIZE * 2;
+    struct iovec iovecs[MAX_IOVECS];
     
-    // Cache for thread ID prefixes
-    std::unordered_map<uint32_t, std::string> tid_cache;
+    // Cache for thread ID prefixes - use fixed-size array
+    static constexpr std::size_t MAX_THREADS = 256;
+    struct TidEntry {
+      uint32_t tid{0};
+      char prefix[32]{};
+      bool valid{false};
+    };
+    TidEntry tid_cache[MAX_THREADS];
     
     // Time-based flush tracking
     auto last_flush = std::chrono::steady_clock::now();
@@ -324,7 +367,7 @@ private:
       // Write batch to file
       if (n > 0 && file_) {
         // Use writev for batch output to reduce syscalls
-        iovecs.clear();
+        std::size_t iovec_count = 0;
         
         // Thread-local buffers for formatting
         thread_local char header_buffers[256][128];  // Headers
@@ -333,12 +376,16 @@ private:
         for (std::size_t i = 0; i < n; ++i) {
           auto& rec = batch[i];
           
-          // Cache thread ID prefix
-          auto& tid_str = tid_cache[rec.thread_id];
-          if (tid_str.empty()) {
-            char tid_buf[32];
-            std::snprintf(tid_buf, sizeof(tid_buf), "T%u", rec.thread_id);
-            tid_str = tid_buf;
+          // Cache thread ID prefix - use simple hash for lookup
+          uint32_t cache_idx = rec.thread_id % MAX_THREADS;
+          TidEntry* tid_entry = &tid_cache[cache_idx];
+          
+          // Check if we have this thread ID cached
+          if (!tid_entry->valid || tid_entry->tid != rec.thread_id) {
+            // Update cache entry
+            tid_entry->tid = rec.thread_id;
+            std::snprintf(tid_entry->prefix, sizeof(tid_entry->prefix), "T%u", rec.thread_id);
+            tid_entry->valid = true;
           }
           
           // Format timestamp and header
@@ -352,17 +399,17 @@ private:
               static_cast<long long>(seconds),
               static_cast<long long>(nanos),
               levelToString(rec.level),
-              tid_str.c_str());
+              tid_entry->prefix);
           
-          if (header_len > 0) {
+          if (header_len > 0 && iovec_count + 3 < MAX_IOVECS) {
             // Add header
-            iovecs.push_back({header_buffers[i], static_cast<size_t>(header_len)});
+            iovecs[iovec_count++] = {header_buffers[i], static_cast<size_t>(header_len)};
             // Add message
-            iovecs.push_back({rec.msg, rec.len});
+            iovecs[iovec_count++] = {rec.msg, rec.len};
             // Add newline
             msg_newlines[i][0] = '\n';
             msg_newlines[i][1] = '\0';
-            iovecs.push_back({msg_newlines[i], 1});
+            iovecs[iovec_count++] = {msg_newlines[i], 1};
             
             written_.fetch_add(1, std::memory_order_relaxed);
             bytes_.fetch_add(static_cast<uint64_t>(header_len + rec.len + 1), std::memory_order_relaxed);
@@ -382,12 +429,12 @@ private:
         } else {
 #endif
         // Write all at once with writev (with safety checks)
-        if (!iovecs.empty()) {
+        if (iovec_count > 0) {
           int fd = fileno(file_);
           bool use_writev = isRegularFile(fd);
           
           if (use_writev) {
-            ssize_t written = ::writev(fd, iovecs.data(), static_cast<int>(iovecs.size()));
+            ssize_t written = ::writev(fd, iovecs, static_cast<int>(iovec_count));
             if (written < 0) {
               use_writev = false;  // Fall back on error
             }
@@ -558,9 +605,9 @@ private:
   }
 #endif
 
-  std::string path_;
+  char path_[512];
   FILE* file_;
-  std::unique_ptr<char[]> file_buffer_;  // Buffer for setvbuf
+  char* file_buffer_;  // Buffer for setvbuf (points to static storage)
   MPMCQueue queue_;
   std::thread writer_thread_;
   std::mutex mutex_;
@@ -574,11 +621,11 @@ private:
 };
 
 // Global logger instance
-static std::unique_ptr<AsyncLoggerImpl> g_logger_impl;
+static AsyncLoggerImpl* g_logger_impl = nullptr;
 static std::mutex g_logger_mutex;
 
 // Logger class implementation
-Logger::Logger(const std::string& /*filename*/) 
+Logger::Logger(const char* filename) 
     : filename_(),
       running_(true),
       writer_thread_(),
@@ -586,7 +633,13 @@ Logger::Logger(const std::string& /*filename*/)
       file_(nullptr),
       cv_(),
       mutex_() {
-    // This constructor is kept for API compatibility
+    // Copy filename to buffer
+    if (filename) {
+        strncpy(filename_, filename, sizeof(filename_) - 1);
+        filename_[sizeof(filename_) - 1] = '\0';
+    } else {
+        filename_[0] = '\0';
+    }
     // The actual implementation is in the global singleton
 }
 
@@ -613,22 +666,32 @@ Logger::Stats Logger::getStats() const noexcept {
 Logger* g_logger = nullptr;
 
 // Initialize global logger
-void initLogging(const std::string& log_file) {
+void initLogging(const char* log_file) {
     std::lock_guard<std::mutex> lock(g_logger_mutex);
     
     // Clean up old instance
     if (g_logger) {
-        delete g_logger;
+        // Call destructor manually since we used placement new
+        g_logger->~Logger();
         g_logger = nullptr;
     }
-    g_logger_impl.reset();
+    if (g_logger_impl) {
+        // Call destructor manually since we used placement new
+        g_logger_impl->~AsyncLoggerImpl();
+        g_logger_impl = nullptr;
+    }
     
     // Create new instance with configurable buffer size
     // Use environment variable if set, otherwise default to small buffer for overflow test
     // This allows tests to customize the queue size per test case
     std::size_t default_capacity = 4096;  // Small for overflow test
-    g_logger_impl = std::make_unique<AsyncLoggerImpl>(log_file, default_capacity);
-    g_logger = new Logger(log_file);
+    // Use placement new with static storage to avoid heap allocation
+    alignas(AsyncLoggerImpl) static char impl_storage[sizeof(AsyncLoggerImpl)];
+    g_logger_impl = reinterpret_cast<AsyncLoggerImpl*>(impl_storage);
+    new (g_logger_impl) AsyncLoggerImpl(log_file, default_capacity);
+    // Use placement new with static storage to avoid heap allocation
+    alignas(Logger) static char logger_storage[sizeof(Logger)];
+    g_logger = new (logger_storage) Logger(log_file);
 }
 
 // Shutdown global logger
@@ -636,10 +699,15 @@ void shutdownLogging() {
     std::lock_guard<std::mutex> lock(g_logger_mutex);
     
     if (g_logger) {
-        delete g_logger;
+        // Call destructor manually since we used placement new
+        g_logger->~Logger();
         g_logger = nullptr;
     }
-    g_logger_impl.reset();
+    if (g_logger_impl) {
+        // Call destructor manually since we used placement new
+        g_logger_impl->~AsyncLoggerImpl();
+        g_logger_impl = nullptr;
+    }
 }
 
 // Internal logging function used by macros

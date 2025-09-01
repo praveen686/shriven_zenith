@@ -129,7 +129,7 @@ public:
     Logger(Logger&&) = delete;
     Logger& operator=(Logger&&) = delete;
     
-    explicit Logger(const std::string& filename = "");
+    explicit Logger(const char* filename = nullptr);
     
     ~Logger();
     
@@ -181,7 +181,7 @@ private:
     const char* levelToString(Level level) const noexcept;
     void formatTimestamp(uint64_t rdtsc_time, char* buffer, size_t size) const noexcept;
     
-    std::string filename_;
+    char filename_[256];  // Fixed size filename buffer
     std::atomic<bool> running_;
     std::thread writer_thread_;
     
@@ -204,7 +204,7 @@ private:
 extern Logger* g_logger;
 
 // Initialize global logger
-void initLogging(const std::string& filename = "trading.log");
+void initLogging(const char* filename = "trading.log");
 
 // Cleanup global logger
 void shutdownLogging();

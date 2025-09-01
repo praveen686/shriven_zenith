@@ -167,6 +167,9 @@ int main(int argc, char* argv[]) {
         printf("Info:     %u\n", auditor.getViolationCount(Auditor::Severity::INFO));
         printf("Total:    %u\n", auditor.getTotalViolations());
         printf("\n");
+        
+        // Show tiered summary
+        auditor.printTierSummary();
     }
     
     // Handle different output modes

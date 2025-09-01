@@ -134,7 +134,7 @@ struct UltraTCPSocket {
   explicit UltraTCPSocket(Logger&  logger) : logger_(logger) {}
 
   /// Create TCP socket with all performance settings
-  auto connect(const std::string &ip, const std::string &iface, int port, bool is_listening) -> int;
+  auto connect(const char* ip, const char* iface, int port, bool is_listening) -> int;
 
   /// High-performance send/receive loop
   auto sendAndRecv() noexcept -> bool;

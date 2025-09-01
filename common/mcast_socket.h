@@ -19,7 +19,7 @@ struct UltraMcastSocket {
   explicit UltraMcastSocket(Logger&  logger) : logger_(logger) {}
 
   /// Join multicast group with all optimizations
-  auto join(const std::string &ip, const std::string &iface, int port) -> int;
+  auto join(const char* ip, const char* iface, int port) -> int;
 
   /// High-performance receive with hardware timestamping
   auto recv(void *data, size_t max_len, uint64_t *hw_timestamp = nullptr) noexcept -> ssize_t;
@@ -31,7 +31,7 @@ struct UltraMcastSocket {
   auto send(const void *data, size_t len) noexcept -> ssize_t;
 
   /// Enable source-specific multicast (IGMPv3)
-  auto joinSource(const std::string &group_ip, const std::string &source_ip) -> bool;
+  auto joinSource(const char* group_ip, const char* source_ip) -> bool;
 
   /// Leave multicast group
   auto leave() -> bool;
@@ -59,8 +59,8 @@ struct UltraMcastSocket {
 private:
   int socket_fd_ = -1;
   struct sockaddr_in mcast_addr_{};
-  std::string group_ip_;
-  std::string interface_;
+  char group_ip_[16];  // Max IPv4 address length
+  char interface_[32]; // Interface name buffer
   
   /// Hardware timestamp support
   bool hw_timestamp_enabled_ = false;
@@ -100,7 +100,7 @@ public:
   }
   
   // Subscribe to market data feed
-  bool subscribe(const std::string& mcast_ip, int port, const std::string& interface = "") {
+  bool subscribe(const char* mcast_ip, int port, const char* interface = nullptr) {
     socket_fd_ = socket(AF_INET, SOCK_DGRAM, IPPROTO_UDP);
     if (socket_fd_ < 0) return false;
     

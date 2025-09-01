@@ -51,14 +51,14 @@
 #endif
 
 // Assertions with better optimization
-inline auto ASSERT(bool cond, const std::string &msg) noexcept {
+inline auto ASSERT(bool cond, const char* msg) noexcept {
   if (UNLIKELY(!cond)) {
     std::cerr << "ASSERT : " << msg << std::endl;
     __builtin_trap(); // Faster than exit()
   }
 }
 
-inline auto FATAL(const std::string &msg) noexcept {
+inline auto FATAL(const char* msg) noexcept {
   std::cerr << "FATAL : " << msg << std::endl;
   __builtin_trap();
 }

@@ -25,8 +25,8 @@ namespace Common {
 
 
 struct SocketCfg {
-  std::string ip_;
-  std::string iface_;
+  char ip_[16];    // IPv4 address
+  char iface_[32]; // Interface name
   int port_ = -1;
   bool is_udp_ = false;
   bool is_listening_ = false;
@@ -36,19 +36,16 @@ struct SocketCfg {
   int busy_poll_us_ = 50;
   int numa_node_ = -1;
 
-  auto toString() const {
-    std::stringstream ss;
-    ss << "SocketCfg[ip:" << ip_
-       << " iface:" << iface_
-       << " port:" << port_
-       << " is_udp:" << is_udp_
-       << " is_listening:" << is_listening_
-       << " needs_SO_timestamp:" << needs_so_timestamp_
-       << " zero_copy:" << zero_copy_
-       << " busy_poll:" << busy_poll_
-       << " numa_node:" << numa_node_
-       << "]";
-    return ss.str();
+  void toString(char* buffer, size_t buffer_size) const {
+    snprintf(buffer, buffer_size,
+             "SocketCfg[ip:%s iface:%s port:%d is_udp:%s is_listening:%s needs_SO_timestamp:%s zero_copy:%s busy_poll:%s numa_node:%d]",
+             ip_, iface_, port_, 
+             is_udp_ ? "true" : "false",
+             is_listening_ ? "true" : "false",
+             needs_so_timestamp_ ? "true" : "false",
+             zero_copy_ ? "true" : "false",
+             busy_poll_ ? "true" : "false",
+             numa_node_);
   }
 };
 
@@ -56,21 +53,23 @@ struct SocketCfg {
 constexpr int MaxTCPServerBacklog = 1024;
 
 /// Convert interface name "eth0" to ip "123.123.123.123"
-inline auto getIfaceIP(const std::string &iface) -> std::string {
-  char buf[NI_MAXHOST] = {'\0'};
+inline bool getIfaceIP(const char* iface, char* ip_buffer, size_t buffer_size) {
   ifaddrs *ifaddr = nullptr;
+  bool found = false;
 
   if (getifaddrs(&ifaddr) != -1) {
     for (ifaddrs *ifa = ifaddr; ifa; ifa = ifa->ifa_next) {
-      if (ifa->ifa_addr && ifa->ifa_addr->sa_family == AF_INET && iface == ifa->ifa_name) {
-        getnameinfo(ifa->ifa_addr, sizeof(sockaddr_in), buf, sizeof(buf), NULL, 0, NI_NUMERICHOST);
+      if (ifa->ifa_addr && ifa->ifa_addr->sa_family == AF_INET && strcmp(iface, ifa->ifa_name) == 0) {
+        if (getnameinfo(ifa->ifa_addr, sizeof(sockaddr_in), ip_buffer, static_cast<socklen_t>(buffer_size), nullptr, 0, NI_NUMERICHOST) == 0) {
+          found = true;
+        }
         break;
       }
     }
     freeifaddrs(ifaddr);
   }
 
-  return buf;
+  return found;
 }
 
 /// Set socket non-blocking
@@ -130,18 +129,24 @@ inline auto setLargeBuffers(int fd, int size = 4 * 1024 * 1024) -> bool {
 }
 
 /// Join multicast group
-inline auto join(int fd, const std::string &ip) -> bool {
-  const ip_mreq mreq{{inet_addr(ip.c_str())}, {htonl(INADDR_ANY)}};
+inline auto join(int fd, const char* ip) -> bool {
+  const ip_mreq mreq{{inet_addr(ip)}, {htonl(INADDR_ANY)}};
   return (setsockopt(fd, IPPROTO_IP, IP_ADD_MEMBERSHIP, &mreq, sizeof(mreq)) != -1);
 }
 
 /// Create socket with all performance settings
 [[nodiscard]] inline auto createSocket(Logger&  logger, const SocketCfg& socket_cfg) -> int {
-  std::string time_str;
-
-  const auto ip = socket_cfg.ip_.empty() ? getIfaceIP(socket_cfg.iface_) : socket_cfg.ip_;
+  char time_str[32];
+  char ip_buffer[16];
+  
+  const char* ip = (strlen(socket_cfg.ip_) == 0) ? 
+                   (getIfaceIP(socket_cfg.iface_, ip_buffer, sizeof(ip_buffer)) ? ip_buffer : "0.0.0.0") :
+                   socket_cfg.ip_;
+  char cfg_str[256];
+  Common::getCurrentTimeStr(time_str, sizeof(time_str));
+  socket_cfg.toString(cfg_str, sizeof(cfg_str));
   logger.info("%:% %() % cfg:%\n", __FILE__, __LINE__, __FUNCTION__,
-             Common::getCurrentTimeStr(&time_str), socket_cfg.toString());
+             time_str, cfg_str);
 
   const auto socket_fd = socket(AF_INET, socket_cfg.is_udp_ ? SOCK_DGRAM : SOCK_STREAM, 
                                 socket_cfg.is_udp_ ? IPPROTO_UDP : IPPROTO_TCP);

@@ -114,7 +114,7 @@ public:
     : logger_(logger) {}
   
   // Enhanced connect with low-latency options
-  int connect(const std::string& ip, const std::string& iface, int port, bool is_listening) {
+  int connect(const char* ip, const char* iface, int port, bool is_listening) {
     socket_fd_ = socket(AF_INET, SOCK_STREAM | SOCK_NONBLOCK, IPPROTO_TCP);
     if (socket_fd_ < 0) return -1;
     
@@ -223,7 +223,7 @@ class UltraLowLatencyMcastSocket {
 public:
   explicit UltraLowLatencyMcastSocket(Logger&  logger) : logger_(logger) {}
   
-  int join(const std::string& ip, const std::string& iface, int port) {
+  int join(const char* ip, const char* iface, int port) {
     socket_fd_ = socket(AF_INET, SOCK_DGRAM, IPPROTO_UDP);
     if (socket_fd_ < 0) return -1;
     

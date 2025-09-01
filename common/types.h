@@ -10,6 +10,7 @@
 #include <memory>
 #include <immintrin.h>
 #include <numa.h>
+#include <cassert>
 
 #include "macros.h"
 
@@ -69,7 +70,13 @@ struct alignas(Align) CacheAligned {
   
   // Default constructor
   CacheAligned() noexcept(std::is_nothrow_default_constructible_v<T>) {
-    ::new (static_cast<void*>(std::addressof(value))) T();
+    if constexpr (std::is_trivially_default_constructible_v<T>) {
+      // For trivial types, zero-initialize
+      memset(static_cast<void*>(std::addressof(value)), 0, sizeof(T));
+    } else {
+      // Use in-place construction without new operator
+      std::construct_at(std::addressof(value));
+    }
   }
   
   // Universal constructor with perfect forwarding
@@ -101,15 +108,14 @@ private:
   template<typename U>
   void construct_init(U&& u) {
     if constexpr (is_atomic_v<T>) {
-      // For atomic types, default construct then store
-      ::new (static_cast<void*>(std::addressof(value))) T();
+      // For atomic types, construct then store
+      std::construct_at(std::addressof(value));
       using V = typename T::value_type;
       value.store(static_cast<V>(std::forward<U>(u)), 
                  std::memory_order_relaxed);
     } else {
-      // Placement new for perfect forwarding
-      ::new (static_cast<void*>(std::addressof(value))) 
-          T(std::forward<U>(u));
+      // In-place construction without new operator
+      std::construct_at(std::addressof(value), std::forward<U>(u));
     }
   }
   
@@ -304,9 +310,100 @@ private:
   int numa_node_;
 };
 
-/// High-performance containers using NUMA allocator
-template<typename T>
-using NumaVector = std::vector<T, NumaAllocator<T>>;
+/// High-performance fixed-size containers using NUMA allocator
+template<typename T, size_t N>
+struct NumaArray {
+public:
+  using value_type = T;
+  using size_type = size_t;
+  using reference = T&;
+  using const_reference = const T&;
+  using pointer = T*;
+  using const_pointer = const T*;
+  using iterator = T*;
+  using const_iterator = const T*;
+  
+  explicit NumaArray(int numa_node = -1) : allocator_(numa_node), size_(0) {
+    data_ = allocator_.allocate(N);
+    // Initialize all elements
+    for (size_t i = 0; i < N; ++i) {
+      std::construct_at(&data_[i]);
+    }
+  }
+  
+  ~NumaArray() {
+    // Destroy all constructed elements
+    for (size_t i = 0; i < size_; ++i) {
+      std::destroy_at(&data_[i]);
+    }
+    allocator_.deallocate(data_, N);
+  }
+  
+  // Non-copyable but moveable
+  NumaArray(const NumaArray&) = delete;
+  NumaArray& operator=(const NumaArray&) = delete;
+  NumaArray(NumaArray&&) = default;
+  NumaArray& operator=(NumaArray&&) = default;
+  
+  reference operator[](size_type pos) noexcept { return data_[pos]; }
+  const_reference operator[](size_type pos) const noexcept { return data_[pos]; }
+  
+  reference at(size_type pos) {
+    // Assert in debug, undefined behavior in release for performance
+    assert(pos < size_ && "NumaArray::at index out of range");
+    return data_[pos];
+  }
+  
+  const_reference at(size_type pos) const {
+    // Assert in debug, undefined behavior in release for performance
+    assert(pos < size_ && "NumaArray::at index out of range");
+    return data_[pos];
+  }
+  
+  iterator begin() noexcept { return data_; }
+  const_iterator begin() const noexcept { return data_; }
+  iterator end() noexcept { return data_ + size_; }
+  const_iterator end() const noexcept { return data_ + size_; }
+  
+  bool empty() const noexcept { return size_ == 0; }
+  size_type size() const noexcept { return size_; }
+  constexpr size_type max_size() const noexcept { return N; }
+  
+  [[nodiscard]] bool push_back(const T& value) noexcept {
+    if (size_ >= N) return false;  // Array full
+    data_[size_] = value;
+    ++size_;
+    return true;
+  }
+  
+  [[nodiscard]] bool push_back(T&& value) noexcept {
+    if (size_ >= N) return false;  // Array full
+    data_[size_] = std::move(value);
+    ++size_;
+    return true;
+  }
+  
+  void pop_back() {
+    if (size_ > 0) {
+      --size_;
+      std::destroy_at(&data_[size_]);
+      std::construct_at(&data_[size_]);
+    }
+  }
+  
+  void clear() noexcept {
+    for (size_t i = 0; i < size_; ++i) {
+      std::destroy_at(&data_[i]);
+      std::construct_at(&data_[i]);
+    }
+    size_ = 0;
+  }
+  
+private:
+  NumaAllocator<T> allocator_;
+  T* data_;
+  size_t size_;
+};
 
 /// Lock-free atomic pointer with ABA protection
 template<typename T>

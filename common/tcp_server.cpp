@@ -8,7 +8,7 @@
 namespace Common {
 
 
-bool UltraTCPServer::start(const std::string& ip, int port, const std::string& interface) {
+bool UltraTCPServer::start(const char* ip, int port, const char* interface) {
     logger_.log("Starting UltraTCPServer on %:%\n", ip, port);
     
     // Create server socket with optimizations

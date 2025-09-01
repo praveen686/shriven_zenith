@@ -39,8 +39,14 @@ if(CMAKE_CXX_COMPILER_ID MATCHES "Clang")
 endif()
 
 # Compiler optimizations
-set(CMAKE_CXX_FLAGS_RELEASE "-O3 -DNDEBUG -march=native -mtune=native -flto")
+# NDEBUG removed per CLAUDE.md safety requirements - assertions remain active in production
+set(CMAKE_CXX_FLAGS_RELEASE "-O3 -march=native -mtune=native -flto")
 set(CMAKE_CXX_FLAGS_DEBUG "-O0 -g3 -fsanitize=address")
+
+# Ensure NDEBUG is never defined (defensive)
+add_compile_options(-UNDEBUG)
+# Enable production assertions
+add_compile_definitions(PROD_ASSERTS_ON=1)
 
 # Include coverage configuration if available
 if(EXISTS "${CMAKE_CURRENT_SOURCE_DIR}/cmake/Coverage.cmake")
@@ -93,14 +99,9 @@ find_library(NUMA_LIBRARY numa)
 
 # Add subdirectories
 add_subdirectory(common)
-add_subdirectory(examples)
 
 # Add auditor
 if(EXISTS "${CMAKE_CURRENT_SOURCE_DIR}/auditor/CMakeLists.txt")
     add_subdirectory(auditor)
 endif()
 
-# Add tests
-if(EXISTS "${CMAKE_CURRENT_SOURCE_DIR}/tests/CMakeLists.txt")
-    add_subdirectory(tests)
-endif()

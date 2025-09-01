@@ -7,11 +7,13 @@
 namespace Common {
 
 
-int UltraMcastSocket::join(const std::string& ip, const std::string& iface, int port) {
+int UltraMcastSocket::join(const char* ip, const char* iface, int port) {
     logger_.log("Joining multicast group %:% on interface %\n", ip, port, iface);
     
-    group_ip_ = ip;
-    interface_ = iface;
+    strncpy(group_ip_, ip, sizeof(group_ip_) - 1);
+    group_ip_[sizeof(group_ip_) - 1] = '\0';
+    strncpy(interface_, iface, sizeof(interface_) - 1);
+    interface_[sizeof(interface_) - 1] = '\0';
     
     // Create UDP socket with all optimizations
     SocketCfg cfg;
@@ -166,10 +168,10 @@ ssize_t UltraMcastSocket::send(const void* data, size_t len) noexcept {
     return sent;
 }
 
-bool UltraMcastSocket::joinSource(const std::string& group_ip, const std::string& source_ip) {
+bool UltraMcastSocket::joinSource(const char* group_ip, const char* source_ip) {
     struct ip_mreq_source mreq{};
-    mreq.imr_multiaddr.s_addr = inet_addr(group_ip.c_str());
-    mreq.imr_sourceaddr.s_addr = inet_addr(source_ip.c_str());
+    mreq.imr_multiaddr.s_addr = inet_addr(group_ip);
+    mreq.imr_sourceaddr.s_addr = inet_addr(source_ip);
     mreq.imr_interface.s_addr = INADDR_ANY;
     
     if (setsockopt(socket_fd_, IPPROTO_IP, IP_ADD_SOURCE_MEMBERSHIP, &mreq, sizeof(mreq)) < 0) {
