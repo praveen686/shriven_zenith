@@ -111,108 +111,108 @@ build install/strip: phony CMakeFiles/install/strip.util
 # =============================================================================
 
 # =============================================================================
-# Object build statements for SHARED_LIBRARY target BldgBlocksImpl
+# Object build statements for SHARED_LIBRARY target CommonImpl
 
 
 #############################################
-# Order-only phony target for BldgBlocksImpl
+# Order-only phony target for CommonImpl
 
-build cmake_object_order_depends_target_BldgBlocksImpl: phony || bldg_blocks/CMakeFiles/BldgBlocksImpl.dir
+build cmake_object_order_depends_target_CommonImpl: phony || common/CMakeFiles/CommonImpl.dir
 
-build bldg_blocks/CMakeFiles/BldgBlocksImpl.dir/logging.cpp.o: CXX_COMPILER__BldgBlocksImpl_unscanned_Release /home/isoula/om/shriven_zenith/bldg_blocks/logging.cpp || cmake_object_order_depends_target_BldgBlocksImpl
-  DEFINES = -DBldgBlocksImpl_EXPORTS
-  DEP_FILE = bldg_blocks/CMakeFiles/BldgBlocksImpl.dir/logging.cpp.o.d
+build common/CMakeFiles/CommonImpl.dir/logging.cpp.o: CXX_COMPILER__CommonImpl_unscanned_Release /home/isoula/om/shriven_zenith/common/logging.cpp || cmake_object_order_depends_target_CommonImpl
+  DEFINES = -DCommonImpl_EXPORTS
+  DEP_FILE = common/CMakeFiles/CommonImpl.dir/logging.cpp.o.d
   FLAGS = -Wall -Wextra -Werror -Wpedantic -Wcast-align -Wcast-qual -Wconversion -Wctor-dtor-privacy -Wdisabled-optimization -Wformat=2 -Winit-self -Wmissing-declarations -Wmissing-include-dirs -Wold-style-cast -Woverloaded-virtual -Wredundant-decls -Wshadow -Wsign-conversion -Wsign-promo -Wstrict-overflow=5 -Wswitch-default -Wundef -Wno-unused -Wno-variadic-macros -Wno-parentheses -fdiagnostics-show-option -Wunreachable-code -Wunused-parameter -Wunused-function -Wunused-variable -Wunused-value -Wwrite-strings -Wno-missing-field-initializers -Wpointer-arith -Wstack-protector -fno-common -fstack-protector-strong -Wdouble-promotion -Wfloat-equal -Wlogical-op -Wplacement-new=2 -Wzero-as-null-pointer-constant -Wnon-virtual-dtor -Weffc++ -Wstrict-null-sentinel -D_FORTIFY_SOURCE=2 -fPIC -Wformat-security -Wall -Wextra -Werror -Wpedantic -Wcast-align -Wcast-qual -Wconversion -Wctor-dtor-privacy -Wdisabled-optimization -Wformat=2 -Winit-self -Wmissing-declarations -Wmissing-include-dirs -Wold-style-cast -Woverloaded-virtual -Wredundant-decls -Wshadow -Wsign-conversion -Wsign-promo -Wstrict-overflow=5 -Wswitch-default -Wundef -Wno-unused -Wno-variadic-macros -Wno-parentheses -fdiagnostics-show-option -Wunreachable-code -Wunused-parameter -Wunused-function -Wunused-variable -Wunused-value -Wwrite-strings -Wno-missing-field-initializers -Wpointer-arith -Wstack-protector -fno-common -fstack-protector-strong -Wdouble-promotion -Wfloat-equal -Wlogical-op -Wplacement-new=2 -O3 -DNDEBUG -march=native -mtune=native -flto -std=c++23 -fPIC -O3 -DNDEBUG -march=native -mtune=native -flto
-  INCLUDES = -I/home/isoula/om/shriven_zenith/bldg_blocks -I/home/isoula/om/shriven_zenith/cmake/build-strict-release/bldg_blocks
-  OBJECT_DIR = bldg_blocks/CMakeFiles/BldgBlocksImpl.dir
-  OBJECT_FILE_DIR = bldg_blocks/CMakeFiles/BldgBlocksImpl.dir
-  TARGET_COMPILE_PDB = bldg_blocks/CMakeFiles/BldgBlocksImpl.dir/
-  TARGET_PDB = bldg_blocks/libBldgBlocksImpl.pdb
+  INCLUDES = -I/home/isoula/om/shriven_zenith/common -I/home/isoula/om/shriven_zenith/cmake/build-strict-release/common
+  OBJECT_DIR = common/CMakeFiles/CommonImpl.dir
+  OBJECT_FILE_DIR = common/CMakeFiles/CommonImpl.dir
+  TARGET_COMPILE_PDB = common/CMakeFiles/CommonImpl.dir/
+  TARGET_PDB = common/libCommonImpl.pdb
 
 
 # =============================================================================
-# Link build statements for SHARED_LIBRARY target BldgBlocksImpl
+# Link build statements for SHARED_LIBRARY target CommonImpl
 
 
 #############################################
-# Link the shared library bldg_blocks/libBldgBlocksImpl.so
+# Link the shared library common/libCommonImpl.so
 
-build bldg_blocks/libBldgBlocksImpl.so: CXX_SHARED_LIBRARY_LINKER__BldgBlocksImpl_Release bldg_blocks/CMakeFiles/BldgBlocksImpl.dir/logging.cpp.o | /usr/lib/x86_64-linux-gnu/libnuma.so
+build common/libCommonImpl.so: CXX_SHARED_LIBRARY_LINKER__CommonImpl_Release common/CMakeFiles/CommonImpl.dir/logging.cpp.o | /usr/lib/x86_64-linux-gnu/libnuma.so
   LANGUAGE_COMPILE_FLAGS = -Wall -Wextra -Werror -Wpedantic -Wcast-align -Wcast-qual -Wconversion -Wctor-dtor-privacy -Wdisabled-optimization -Wformat=2 -Winit-self -Wmissing-declarations -Wmissing-include-dirs -Wold-style-cast -Woverloaded-virtual -Wredundant-decls -Wshadow -Wsign-conversion -Wsign-promo -Wstrict-overflow=5 -Wswitch-default -Wundef -Wno-unused -Wno-variadic-macros -Wno-parentheses -fdiagnostics-show-option -Wunreachable-code -Wunused-parameter -Wunused-function -Wunused-variable -Wunused-value -Wwrite-strings -Wno-missing-field-initializers -Wpointer-arith -Wstack-protector -fno-common -fstack-protector-strong -Wdouble-promotion -Wfloat-equal -Wlogical-op -Wplacement-new=2 -Wzero-as-null-pointer-constant -Wnon-virtual-dtor -Weffc++ -Wstrict-null-sentinel -D_FORTIFY_SOURCE=2 -fPIC -Wformat-security -Wall -Wextra -Werror -Wpedantic -Wcast-align -Wcast-qual -Wconversion -Wctor-dtor-privacy -Wdisabled-optimization -Wformat=2 -Winit-self -Wmissing-declarations -Wmissing-include-dirs -Wold-style-cast -Woverloaded-virtual -Wredundant-decls -Wshadow -Wsign-conversion -Wsign-promo -Wstrict-overflow=5 -Wswitch-default -Wundef -Wno-unused -Wno-variadic-macros -Wno-parentheses -fdiagnostics-show-option -Wunreachable-code -Wunused-parameter -Wunused-function -Wunused-variable -Wunused-value -Wwrite-strings -Wno-missing-field-initializers -Wpointer-arith -Wstack-protector -fno-common -fstack-protector-strong -Wdouble-promotion -Wfloat-equal -Wlogical-op -Wplacement-new=2 -O3 -DNDEBUG -march=native -mtune=native -flto
   LINK_LIBRARIES = /usr/lib/x86_64-linux-gnu/libnuma.so
-  OBJECT_DIR = bldg_blocks/CMakeFiles/BldgBlocksImpl.dir
+  OBJECT_DIR = common/CMakeFiles/CommonImpl.dir
   POST_BUILD = :
   PRE_LINK = :
-  SONAME = libBldgBlocksImpl.so
+  SONAME = libCommonImpl.so
   SONAME_FLAG = -Wl,-soname,
-  TARGET_COMPILE_PDB = bldg_blocks/CMakeFiles/BldgBlocksImpl.dir/
-  TARGET_FILE = bldg_blocks/libBldgBlocksImpl.so
-  TARGET_PDB = bldg_blocks/libBldgBlocksImpl.pdb
+  TARGET_COMPILE_PDB = common/CMakeFiles/CommonImpl.dir/
+  TARGET_FILE = common/libCommonImpl.so
+  TARGET_PDB = common/libCommonImpl.pdb
 
 
 #############################################
 # Utility command for edit_cache
 
-build bldg_blocks/CMakeFiles/edit_cache.util: CUSTOM_COMMAND
-  COMMAND = cd /home/isoula/om/shriven_zenith/cmake/build-strict-release/bldg_blocks && /usr/bin/cmake -E echo No\ interactive\ CMake\ dialog\ available.
+build common/CMakeFiles/edit_cache.util: CUSTOM_COMMAND
+  COMMAND = cd /home/isoula/om/shriven_zenith/cmake/build-strict-release/common && /usr/bin/cmake -E echo No\ interactive\ CMake\ dialog\ available.
   DESC = No interactive CMake dialog available...
   restat = 1
 
-build bldg_blocks/edit_cache: phony bldg_blocks/CMakeFiles/edit_cache.util
+build common/edit_cache: phony common/CMakeFiles/edit_cache.util
 
 
 #############################################
 # Utility command for rebuild_cache
 
-build bldg_blocks/CMakeFiles/rebuild_cache.util: CUSTOM_COMMAND
-  COMMAND = cd /home/isoula/om/shriven_zenith/cmake/build-strict-release/bldg_blocks && /usr/bin/cmake --regenerate-during-build -S/home/isoula/om/shriven_zenith -B/home/isoula/om/shriven_zenith/cmake/build-strict-release
+build common/CMakeFiles/rebuild_cache.util: CUSTOM_COMMAND
+  COMMAND = cd /home/isoula/om/shriven_zenith/cmake/build-strict-release/common && /usr/bin/cmake --regenerate-during-build -S/home/isoula/om/shriven_zenith -B/home/isoula/om/shriven_zenith/cmake/build-strict-release
   DESC = Running CMake to regenerate build system...
   pool = console
   restat = 1
 
-build bldg_blocks/rebuild_cache: phony bldg_blocks/CMakeFiles/rebuild_cache.util
+build common/rebuild_cache: phony common/CMakeFiles/rebuild_cache.util
 
 
 #############################################
 # Utility command for list_install_components
 
-build bldg_blocks/list_install_components: phony
+build common/list_install_components: phony
 
 
 #############################################
 # Utility command for install
 
-build bldg_blocks/CMakeFiles/install.util: CUSTOM_COMMAND bldg_blocks/all
-  COMMAND = cd /home/isoula/om/shriven_zenith/cmake/build-strict-release/bldg_blocks && /usr/bin/cmake -P cmake_install.cmake
+build common/CMakeFiles/install.util: CUSTOM_COMMAND common/all
+  COMMAND = cd /home/isoula/om/shriven_zenith/cmake/build-strict-release/common && /usr/bin/cmake -P cmake_install.cmake
   DESC = Install the project...
   pool = console
   restat = 1
 
-build bldg_blocks/install: phony bldg_blocks/CMakeFiles/install.util
+build common/install: phony common/CMakeFiles/install.util
 
 
 #############################################
 # Utility command for install/local
 
-build bldg_blocks/CMakeFiles/install/local.util: CUSTOM_COMMAND bldg_blocks/all
-  COMMAND = cd /home/isoula/om/shriven_zenith/cmake/build-strict-release/bldg_blocks && /usr/bin/cmake -DCMAKE_INSTALL_LOCAL_ONLY=1 -P cmake_install.cmake
+build common/CMakeFiles/install/local.util: CUSTOM_COMMAND common/all
+  COMMAND = cd /home/isoula/om/shriven_zenith/cmake/build-strict-release/common && /usr/bin/cmake -DCMAKE_INSTALL_LOCAL_ONLY=1 -P cmake_install.cmake
   DESC = Installing only the local directory...
   pool = console
   restat = 1
 
-build bldg_blocks/install/local: phony bldg_blocks/CMakeFiles/install/local.util
+build common/install/local: phony common/CMakeFiles/install/local.util
 
 
 #############################################
 # Utility command for install/strip
 
-build bldg_blocks/CMakeFiles/install/strip.util: CUSTOM_COMMAND bldg_blocks/all
-  COMMAND = cd /home/isoula/om/shriven_zenith/cmake/build-strict-release/bldg_blocks && /usr/bin/cmake -DCMAKE_INSTALL_DO_STRIP=1 -P cmake_install.cmake
+build common/CMakeFiles/install/strip.util: CUSTOM_COMMAND common/all
+  COMMAND = cd /home/isoula/om/shriven_zenith/cmake/build-strict-release/common && /usr/bin/cmake -DCMAKE_INSTALL_DO_STRIP=1 -P cmake_install.cmake
   DESC = Installing the project stripped...
   pool = console
   restat = 1
 
-build bldg_blocks/install/strip: phony bldg_blocks/CMakeFiles/install/strip.util
+build common/install/strip: phony common/CMakeFiles/install/strip.util
 
 # =============================================================================
 # Write statements declared in CMakeLists.txt:
@@ -226,12 +226,12 @@ build bldg_blocks/install/strip: phony bldg_blocks/CMakeFiles/install/strip.util
 #############################################
 # Order-only phony target for examples
 
-build cmake_object_order_depends_target_examples: phony || cmake_object_order_depends_target_BldgBlocksImpl
+build cmake_object_order_depends_target_examples: phony || cmake_object_order_depends_target_CommonImpl
 
 build examples/CMakeFiles/examples.dir/example_main.cpp.o: CXX_COMPILER__examples_unscanned_Release /home/isoula/om/shriven_zenith/examples/example_main.cpp || cmake_object_order_depends_target_examples
   DEP_FILE = examples/CMakeFiles/examples.dir/example_main.cpp.o.d
   FLAGS = -Wall -Wextra -Werror -Wpedantic -Wcast-align -Wcast-qual -Wconversion -Wctor-dtor-privacy -Wdisabled-optimization -Wformat=2 -Winit-self -Wmissing-declarations -Wmissing-include-dirs -Wold-style-cast -Woverloaded-virtual -Wredundant-decls -Wshadow -Wsign-conversion -Wsign-promo -Wstrict-overflow=5 -Wswitch-default -Wundef -Wno-unused -Wno-variadic-macros -Wno-parentheses -fdiagnostics-show-option -Wunreachable-code -Wunused-parameter -Wunused-function -Wunused-variable -Wunused-value -Wwrite-strings -Wno-missing-field-initializers -Wpointer-arith -Wstack-protector -fno-common -fstack-protector-strong -Wdouble-promotion -Wfloat-equal -Wlogical-op -Wplacement-new=2 -Wzero-as-null-pointer-constant -Wnon-virtual-dtor -Weffc++ -Wstrict-null-sentinel -D_FORTIFY_SOURCE=2 -fPIC -Wformat-security -Wall -Wextra -Werror -Wpedantic -Wcast-align -Wcast-qual -Wconversion -Wctor-dtor-privacy -Wdisabled-optimization -Wformat=2 -Winit-self -Wmissing-declarations -Wmissing-include-dirs -Wold-style-cast -Woverloaded-virtual -Wredundant-decls -Wshadow -Wsign-conversion -Wsign-promo -Wstrict-overflow=5 -Wswitch-default -Wundef -Wno-unused -Wno-variadic-macros -Wno-parentheses -fdiagnostics-show-option -Wunreachable-code -Wunused-parameter -Wunused-function -Wunused-variable -Wunused-value -Wwrite-strings -Wno-missing-field-initializers -Wpointer-arith -Wstack-protector -fno-common -fstack-protector-strong -Wdouble-promotion -Wfloat-equal -Wlogical-op -Wplacement-new=2 -O3 -DNDEBUG -march=native -mtune=native -flto -std=c++23 -O3 -DNDEBUG -march=native -mtune=native -flto
-  INCLUDES = -I/home/isoula/om/shriven_zenith/examples/../bldg_blocks -I/home/isoula/om/shriven_zenith/bldg_blocks -I/home/isoula/om/shriven_zenith/cmake/build-strict-release/bldg_blocks
+  INCLUDES = -I/home/isoula/om/shriven_zenith/examples/../common -I/home/isoula/om/shriven_zenith/common -I/home/isoula/om/shriven_zenith/cmake/build-strict-release/common
   OBJECT_DIR = examples/CMakeFiles/examples.dir
   OBJECT_FILE_DIR = examples/CMakeFiles/examples.dir
   TARGET_COMPILE_PDB = examples/CMakeFiles/examples.dir/
@@ -240,7 +240,7 @@ build examples/CMakeFiles/examples.dir/example_main.cpp.o: CXX_COMPILER__example
 build examples/CMakeFiles/examples.dir/mem_pool_example.cpp.o: CXX_COMPILER__examples_unscanned_Release /home/isoula/om/shriven_zenith/examples/mem_pool_example.cpp || cmake_object_order_depends_target_examples
   DEP_FILE = examples/CMakeFiles/examples.dir/mem_pool_example.cpp.o.d
   FLAGS = -Wall -Wextra -Werror -Wpedantic -Wcast-align -Wcast-qual -Wconversion -Wctor-dtor-privacy -Wdisabled-optimization -Wformat=2 -Winit-self -Wmissing-declarations -Wmissing-include-dirs -Wold-style-cast -Woverloaded-virtual -Wredundant-decls -Wshadow -Wsign-conversion -Wsign-promo -Wstrict-overflow=5 -Wswitch-default -Wundef -Wno-unused -Wno-variadic-macros -Wno-parentheses -fdiagnostics-show-option -Wunreachable-code -Wunused-parameter -Wunused-function -Wunused-variable -Wunused-value -Wwrite-strings -Wno-missing-field-initializers -Wpointer-arith -Wstack-protector -fno-common -fstack-protector-strong -Wdouble-promotion -Wfloat-equal -Wlogical-op -Wplacement-new=2 -Wzero-as-null-pointer-constant -Wnon-virtual-dtor -Weffc++ -Wstrict-null-sentinel -D_FORTIFY_SOURCE=2 -fPIC -Wformat-security -Wall -Wextra -Werror -Wpedantic -Wcast-align -Wcast-qual -Wconversion -Wctor-dtor-privacy -Wdisabled-optimization -Wformat=2 -Winit-self -Wmissing-declarations -Wmissing-include-dirs -Wold-style-cast -Woverloaded-virtual -Wredundant-decls -Wshadow -Wsign-conversion -Wsign-promo -Wstrict-overflow=5 -Wswitch-default -Wundef -Wno-unused -Wno-variadic-macros -Wno-parentheses -fdiagnostics-show-option -Wunreachable-code -Wunused-parameter -Wunused-function -Wunused-variable -Wunused-value -Wwrite-strings -Wno-missing-field-initializers -Wpointer-arith -Wstack-protector -fno-common -fstack-protector-strong -Wdouble-promotion -Wfloat-equal -Wlogical-op -Wplacement-new=2 -O3 -DNDEBUG -march=native -mtune=native -flto -std=c++23 -O3 -DNDEBUG -march=native -mtune=native -flto
-  INCLUDES = -I/home/isoula/om/shriven_zenith/examples/../bldg_blocks -I/home/isoula/om/shriven_zenith/bldg_blocks -I/home/isoula/om/shriven_zenith/cmake/build-strict-release/bldg_blocks
+  INCLUDES = -I/home/isoula/om/shriven_zenith/examples/../common -I/home/isoula/om/shriven_zenith/common -I/home/isoula/om/shriven_zenith/cmake/build-strict-release/common
   OBJECT_DIR = examples/CMakeFiles/examples.dir
   OBJECT_FILE_DIR = examples/CMakeFiles/examples.dir
   TARGET_COMPILE_PDB = examples/CMakeFiles/examples.dir/
@@ -249,7 +249,7 @@ build examples/CMakeFiles/examples.dir/mem_pool_example.cpp.o: CXX_COMPILER__exa
 build examples/CMakeFiles/examples.dir/lf_queue_example.cpp.o: CXX_COMPILER__examples_unscanned_Release /home/isoula/om/shriven_zenith/examples/lf_queue_example.cpp || cmake_object_order_depends_target_examples
   DEP_FILE = examples/CMakeFiles/examples.dir/lf_queue_example.cpp.o.d
   FLAGS = -Wall -Wextra -Werror -Wpedantic -Wcast-align -Wcast-qual -Wconversion -Wctor-dtor-privacy -Wdisabled-optimization -Wformat=2 -Winit-self -Wmissing-declarations -Wmissing-include-dirs -Wold-style-cast -Woverloaded-virtual -Wredundant-decls -Wshadow -Wsign-conversion -Wsign-promo -Wstrict-overflow=5 -Wswitch-default -Wundef -Wno-unused -Wno-variadic-macros -Wno-parentheses -fdiagnostics-show-option -Wunreachable-code -Wunused-parameter -Wunused-function -Wunused-variable -Wunused-value -Wwrite-strings -Wno-missing-field-initializers -Wpointer-arith -Wstack-protector -fno-common -fstack-protector-strong -Wdouble-promotion -Wfloat-equal -Wlogical-op -Wplacement-new=2 -Wzero-as-null-pointer-constant -Wnon-virtual-dtor -Weffc++ -Wstrict-null-sentinel -D_FORTIFY_SOURCE=2 -fPIC -Wformat-security -Wall -Wextra -Werror -Wpedantic -Wcast-align -Wcast-qual -Wconversion -Wctor-dtor-privacy -Wdisabled-optimization -Wformat=2 -Winit-self -Wmissing-declarations -Wmissing-include-dirs -Wold-style-cast -Woverloaded-virtual -Wredundant-decls -Wshadow -Wsign-conversion -Wsign-promo -Wstrict-overflow=5 -Wswitch-default -Wundef -Wno-unused -Wno-variadic-macros -Wno-parentheses -fdiagnostics-show-option -Wunreachable-code -Wunused-parameter -Wunused-function -Wunused-variable -Wunused-value -Wwrite-strings -Wno-missing-field-initializers -Wpointer-arith -Wstack-protector -fno-common -fstack-protector-strong -Wdouble-promotion -Wfloat-equal -Wlogical-op -Wplacement-new=2 -O3 -DNDEBUG -march=native -mtune=native -flto -std=c++23 -O3 -DNDEBUG -march=native -mtune=native -flto
-  INCLUDES = -I/home/isoula/om/shriven_zenith/examples/../bldg_blocks -I/home/isoula/om/shriven_zenith/bldg_blocks -I/home/isoula/om/shriven_zenith/cmake/build-strict-release/bldg_blocks
+  INCLUDES = -I/home/isoula/om/shriven_zenith/examples/../common -I/home/isoula/om/shriven_zenith/common -I/home/isoula/om/shriven_zenith/cmake/build-strict-release/common
   OBJECT_DIR = examples/CMakeFiles/examples.dir
   OBJECT_FILE_DIR = examples/CMakeFiles/examples.dir
   TARGET_COMPILE_PDB = examples/CMakeFiles/examples.dir/
@@ -258,7 +258,7 @@ build examples/CMakeFiles/examples.dir/lf_queue_example.cpp.o: CXX_COMPILER__exa
 build examples/CMakeFiles/examples.dir/thread_example.cpp.o: CXX_COMPILER__examples_unscanned_Release /home/isoula/om/shriven_zenith/examples/thread_example.cpp || cmake_object_order_depends_target_examples
   DEP_FILE = examples/CMakeFiles/examples.dir/thread_example.cpp.o.d
   FLAGS = -Wall -Wextra -Werror -Wpedantic -Wcast-align -Wcast-qual -Wconversion -Wctor-dtor-privacy -Wdisabled-optimization -Wformat=2 -Winit-self -Wmissing-declarations -Wmissing-include-dirs -Wold-style-cast -Woverloaded-virtual -Wredundant-decls -Wshadow -Wsign-conversion -Wsign-promo -Wstrict-overflow=5 -Wswitch-default -Wundef -Wno-unused -Wno-variadic-macros -Wno-parentheses -fdiagnostics-show-option -Wunreachable-code -Wunused-parameter -Wunused-function -Wunused-variable -Wunused-value -Wwrite-strings -Wno-missing-field-initializers -Wpointer-arith -Wstack-protector -fno-common -fstack-protector-strong -Wdouble-promotion -Wfloat-equal -Wlogical-op -Wplacement-new=2 -Wzero-as-null-pointer-constant -Wnon-virtual-dtor -Weffc++ -Wstrict-null-sentinel -D_FORTIFY_SOURCE=2 -fPIC -Wformat-security -Wall -Wextra -Werror -Wpedantic -Wcast-align -Wcast-qual -Wconversion -Wctor-dtor-privacy -Wdisabled-optimization -Wformat=2 -Winit-self -Wmissing-declarations -Wmissing-include-dirs -Wold-style-cast -Woverloaded-virtual -Wredundant-decls -Wshadow -Wsign-conversion -Wsign-promo -Wstrict-overflow=5 -Wswitch-default -Wundef -Wno-unused -Wno-variadic-macros -Wno-parentheses -fdiagnostics-show-option -Wunreachable-code -Wunused-parameter -Wunused-function -Wunused-variable -Wunused-value -Wwrite-strings -Wno-missing-field-initializers -Wpointer-arith -Wstack-protector -fno-common -fstack-protector-strong -Wdouble-promotion -Wfloat-equal -Wlogical-op -Wplacement-new=2 -O3 -DNDEBUG -march=native -mtune=native -flto -std=c++23 -O3 -DNDEBUG -march=native -mtune=native -flto
-  INCLUDES = -I/home/isoula/om/shriven_zenith/examples/../bldg_blocks -I/home/isoula/om/shriven_zenith/bldg_blocks -I/home/isoula/om/shriven_zenith/cmake/build-strict-release/bldg_blocks
+  INCLUDES = -I/home/isoula/om/shriven_zenith/examples/../common -I/home/isoula/om/shriven_zenith/common -I/home/isoula/om/shriven_zenith/cmake/build-strict-release/common
   OBJECT_DIR = examples/CMakeFiles/examples.dir
   OBJECT_FILE_DIR = examples/CMakeFiles/examples.dir
   TARGET_COMPILE_PDB = examples/CMakeFiles/examples.dir/
@@ -272,9 +272,9 @@ build examples/CMakeFiles/examples.dir/thread_example.cpp.o: CXX_COMPILER__examp
 #############################################
 # Link the executable examples/examples
 
-build examples/examples: CXX_EXECUTABLE_LINKER__examples_Release examples/CMakeFiles/examples.dir/example_main.cpp.o examples/CMakeFiles/examples.dir/mem_pool_example.cpp.o examples/CMakeFiles/examples.dir/lf_queue_example.cpp.o examples/CMakeFiles/examples.dir/thread_example.cpp.o | bldg_blocks/libBldgBlocksImpl.so /usr/lib/x86_64-linux-gnu/libnuma.so /usr/lib/x86_64-linux-gnu/libnuma.so || bldg_blocks/libBldgBlocksImpl.so
+build examples/examples: CXX_EXECUTABLE_LINKER__examples_Release examples/CMakeFiles/examples.dir/example_main.cpp.o examples/CMakeFiles/examples.dir/mem_pool_example.cpp.o examples/CMakeFiles/examples.dir/lf_queue_example.cpp.o examples/CMakeFiles/examples.dir/thread_example.cpp.o | common/libCommonImpl.so /usr/lib/x86_64-linux-gnu/libnuma.so /usr/lib/x86_64-linux-gnu/libnuma.so || common/libCommonImpl.so
   FLAGS = -Wall -Wextra -Werror -Wpedantic -Wcast-align -Wcast-qual -Wconversion -Wctor-dtor-privacy -Wdisabled-optimization -Wformat=2 -Winit-self -Wmissing-declarations -Wmissing-include-dirs -Wold-style-cast -Woverloaded-virtual -Wredundant-decls -Wshadow -Wsign-conversion -Wsign-promo -Wstrict-overflow=5 -Wswitch-default -Wundef -Wno-unused -Wno-variadic-macros -Wno-parentheses -fdiagnostics-show-option -Wunreachable-code -Wunused-parameter -Wunused-function -Wunused-variable -Wunused-value -Wwrite-strings -Wno-missing-field-initializers -Wpointer-arith -Wstack-protector -fno-common -fstack-protector-strong -Wdouble-promotion -Wfloat-equal -Wlogical-op -Wplacement-new=2 -Wzero-as-null-pointer-constant -Wnon-virtual-dtor -Weffc++ -Wstrict-null-sentinel -D_FORTIFY_SOURCE=2 -fPIC -Wformat-security -Wall -Wextra -Werror -Wpedantic -Wcast-align -Wcast-qual -Wconversion -Wctor-dtor-privacy -Wdisabled-optimization -Wformat=2 -Winit-self -Wmissing-declarations -Wmissing-include-dirs -Wold-style-cast -Woverloaded-virtual -Wredundant-decls -Wshadow -Wsign-conversion -Wsign-promo -Wstrict-overflow=5 -Wswitch-default -Wundef -Wno-unused -Wno-variadic-macros -Wno-parentheses -fdiagnostics-show-option -Wunreachable-code -Wunused-parameter -Wunused-function -Wunused-variable -Wunused-value -Wwrite-strings -Wno-missing-field-initializers -Wpointer-arith -Wstack-protector -fno-common -fstack-protector-strong -Wdouble-promotion -Wfloat-equal -Wlogical-op -Wplacement-new=2 -O3 -DNDEBUG -march=native -mtune=native -flto
-  LINK_LIBRARIES = -Wl,-rpath,/home/isoula/om/shriven_zenith/cmake/build-strict-release/bldg_blocks  bldg_blocks/libBldgBlocksImpl.so  /usr/lib/x86_64-linux-gnu/libnuma.so  /usr/lib/x86_64-linux-gnu/libnuma.so
+  LINK_LIBRARIES = -Wl,-rpath,/home/isoula/om/shriven_zenith/cmake/build-strict-release/common  common/libCommonImpl.so  /usr/lib/x86_64-linux-gnu/libnuma.so  /usr/lib/x86_64-linux-gnu/libnuma.so
   OBJECT_DIR = examples/CMakeFiles/examples.dir
   POST_BUILD = :
   PRE_LINK = :
@@ -353,40 +353,40 @@ build examples/install/strip: phony examples/CMakeFiles/install/strip.util
 # =============================================================================
 
 # =============================================================================
-# Object build statements for EXECUTABLE target benchmark_enhancements
+# Object build statements for EXECUTABLE target benchmark_common
 
 
 #############################################
-# Order-only phony target for benchmark_enhancements
+# Order-only phony target for benchmark_common
 
-build cmake_object_order_depends_target_benchmark_enhancements: phony || cmake_object_order_depends_target_BldgBlocksImpl
+build cmake_object_order_depends_target_benchmark_common: phony || cmake_object_order_depends_target_CommonImpl
 
-build tests/CMakeFiles/benchmark_enhancements.dir/benchmarks/benchmark_enhancements.cpp.o: CXX_COMPILER__benchmark_enhancements_unscanned_Release /home/isoula/om/shriven_zenith/tests/benchmarks/benchmark_enhancements.cpp || cmake_object_order_depends_target_benchmark_enhancements
-  DEP_FILE = tests/CMakeFiles/benchmark_enhancements.dir/benchmarks/benchmark_enhancements.cpp.o.d
+build tests/CMakeFiles/benchmark_common.dir/benchmarks/benchmark_common.cpp.o: CXX_COMPILER__benchmark_common_unscanned_Release /home/isoula/om/shriven_zenith/tests/benchmarks/benchmark_common.cpp || cmake_object_order_depends_target_benchmark_common
+  DEP_FILE = tests/CMakeFiles/benchmark_common.dir/benchmarks/benchmark_common.cpp.o.d
   FLAGS = -Wall -Wextra -Werror -Wpedantic -Wcast-align -Wcast-qual -Wconversion -Wctor-dtor-privacy -Wdisabled-optimization -Wformat=2 -Winit-self -Wmissing-declarations -Wmissing-include-dirs -Wold-style-cast -Woverloaded-virtual -Wredundant-decls -Wshadow -Wsign-conversion -Wsign-promo -Wstrict-overflow=5 -Wswitch-default -Wundef -Wno-unused -Wno-variadic-macros -Wno-parentheses -fdiagnostics-show-option -Wunreachable-code -Wunused-parameter -Wunused-function -Wunused-variable -Wunused-value -Wwrite-strings -Wno-missing-field-initializers -Wpointer-arith -Wstack-protector -fno-common -fstack-protector-strong -Wdouble-promotion -Wfloat-equal -Wlogical-op -Wplacement-new=2 -Wzero-as-null-pointer-constant -Wnon-virtual-dtor -Weffc++ -Wstrict-null-sentinel -D_FORTIFY_SOURCE=2 -fPIC -Wformat-security -Wall -Wextra -Werror -Wpedantic -Wcast-align -Wcast-qual -Wconversion -Wctor-dtor-privacy -Wdisabled-optimization -Wformat=2 -Winit-self -Wmissing-declarations -Wmissing-include-dirs -Wold-style-cast -Woverloaded-virtual -Wredundant-decls -Wshadow -Wsign-conversion -Wsign-promo -Wstrict-overflow=5 -Wswitch-default -Wundef -Wno-unused -Wno-variadic-macros -Wno-parentheses -fdiagnostics-show-option -Wunreachable-code -Wunused-parameter -Wunused-function -Wunused-variable -Wunused-value -Wwrite-strings -Wno-missing-field-initializers -Wpointer-arith -Wstack-protector -fno-common -fstack-protector-strong -Wdouble-promotion -Wfloat-equal -Wlogical-op -Wplacement-new=2 -O3 -DNDEBUG -march=native -mtune=native -flto -std=c++23 -O3 -DNDEBUG -march=native -mtune=native -flto
-  INCLUDES = -I/home/isoula/om/shriven_zenith -I/home/isoula/om/shriven_zenith/bldg_blocks -I/home/isoula/om/shriven_zenith/cmake/build-strict-release/bldg_blocks
-  OBJECT_DIR = tests/CMakeFiles/benchmark_enhancements.dir
-  OBJECT_FILE_DIR = tests/CMakeFiles/benchmark_enhancements.dir/benchmarks
-  TARGET_COMPILE_PDB = tests/CMakeFiles/benchmark_enhancements.dir/
-  TARGET_PDB = tests/benchmark_enhancements.pdb
+  INCLUDES = -I/home/isoula/om/shriven_zenith -I/home/isoula/om/shriven_zenith/common -I/home/isoula/om/shriven_zenith/cmake/build-strict-release/common
+  OBJECT_DIR = tests/CMakeFiles/benchmark_common.dir
+  OBJECT_FILE_DIR = tests/CMakeFiles/benchmark_common.dir/benchmarks
+  TARGET_COMPILE_PDB = tests/CMakeFiles/benchmark_common.dir/
+  TARGET_PDB = tests/benchmark_common.pdb
 
 
 # =============================================================================
-# Link build statements for EXECUTABLE target benchmark_enhancements
+# Link build statements for EXECUTABLE target benchmark_common
 
 
 #############################################
-# Link the executable tests/benchmark_enhancements
+# Link the executable tests/benchmark_common
 
-build tests/benchmark_enhancements: CXX_EXECUTABLE_LINKER__benchmark_enhancements_Release tests/CMakeFiles/benchmark_enhancements.dir/benchmarks/benchmark_enhancements.cpp.o | bldg_blocks/libBldgBlocksImpl.so /usr/lib/x86_64-linux-gnu/libnuma.so || bldg_blocks/libBldgBlocksImpl.so
+build tests/benchmark_common: CXX_EXECUTABLE_LINKER__benchmark_common_Release tests/CMakeFiles/benchmark_common.dir/benchmarks/benchmark_common.cpp.o | common/libCommonImpl.so /usr/lib/x86_64-linux-gnu/libnuma.so || common/libCommonImpl.so
   FLAGS = -Wall -Wextra -Werror -Wpedantic -Wcast-align -Wcast-qual -Wconversion -Wctor-dtor-privacy -Wdisabled-optimization -Wformat=2 -Winit-self -Wmissing-declarations -Wmissing-include-dirs -Wold-style-cast -Woverloaded-virtual -Wredundant-decls -Wshadow -Wsign-conversion -Wsign-promo -Wstrict-overflow=5 -Wswitch-default -Wundef -Wno-unused -Wno-variadic-macros -Wno-parentheses -fdiagnostics-show-option -Wunreachable-code -Wunused-parameter -Wunused-function -Wunused-variable -Wunused-value -Wwrite-strings -Wno-missing-field-initializers -Wpointer-arith -Wstack-protector -fno-common -fstack-protector-strong -Wdouble-promotion -Wfloat-equal -Wlogical-op -Wplacement-new=2 -Wzero-as-null-pointer-constant -Wnon-virtual-dtor -Weffc++ -Wstrict-null-sentinel -D_FORTIFY_SOURCE=2 -fPIC -Wformat-security -Wall -Wextra -Werror -Wpedantic -Wcast-align -Wcast-qual -Wconversion -Wctor-dtor-privacy -Wdisabled-optimization -Wformat=2 -Winit-self -Wmissing-declarations -Wmissing-include-dirs -Wold-style-cast -Woverloaded-virtual -Wredundant-decls -Wshadow -Wsign-conversion -Wsign-promo -Wstrict-overflow=5 -Wswitch-default -Wundef -Wno-unused -Wno-variadic-macros -Wno-parentheses -fdiagnostics-show-option -Wunreachable-code -Wunused-parameter -Wunused-function -Wunused-variable -Wunused-value -Wwrite-strings -Wno-missing-field-initializers -Wpointer-arith -Wstack-protector -fno-common -fstack-protector-strong -Wdouble-promotion -Wfloat-equal -Wlogical-op -Wplacement-new=2 -O3 -DNDEBUG -march=native -mtune=native -flto
-  LINK_LIBRARIES = -Wl,-rpath,/home/isoula/om/shriven_zenith/cmake/build-strict-release/bldg_blocks  bldg_blocks/libBldgBlocksImpl.so  -lnuma  -latomic  -lgtest  /usr/lib/x86_64-linux-gnu/libnuma.so
-  OBJECT_DIR = tests/CMakeFiles/benchmark_enhancements.dir
+  LINK_LIBRARIES = -Wl,-rpath,/home/isoula/om/shriven_zenith/cmake/build-strict-release/common  common/libCommonImpl.so  -lnuma  -latomic  -lgtest  /usr/lib/x86_64-linux-gnu/libnuma.so
+  OBJECT_DIR = tests/CMakeFiles/benchmark_common.dir
   POST_BUILD = :
   PRE_LINK = :
-  TARGET_COMPILE_PDB = tests/CMakeFiles/benchmark_enhancements.dir/
-  TARGET_FILE = tests/benchmark_enhancements
-  TARGET_PDB = tests/benchmark_enhancements.pdb
+  TARGET_COMPILE_PDB = tests/CMakeFiles/benchmark_common.dir/
+  TARGET_FILE = tests/benchmark_common
+  TARGET_PDB = tests/benchmark_common.pdb
 
 # =============================================================================
 # Object build statements for EXECUTABLE target test_mem_pool
@@ -395,12 +395,12 @@ build tests/benchmark_enhancements: CXX_EXECUTABLE_LINKER__benchmark_enhancement
 #############################################
 # Order-only phony target for test_mem_pool
 
-build cmake_object_order_depends_target_test_mem_pool: phony || cmake_object_order_depends_target_BldgBlocksImpl
+build cmake_object_order_depends_target_test_mem_pool: phony || cmake_object_order_depends_target_CommonImpl
 
 build tests/CMakeFiles/test_mem_pool.dir/unit/test_mem_pool.cpp.o: CXX_COMPILER__test_mem_pool_unscanned_Release /home/isoula/om/shriven_zenith/tests/unit/test_mem_pool.cpp || cmake_object_order_depends_target_test_mem_pool
   DEP_FILE = tests/CMakeFiles/test_mem_pool.dir/unit/test_mem_pool.cpp.o.d
   FLAGS = -Wall -Wextra -Werror -Wpedantic -Wcast-align -Wcast-qual -Wconversion -Wctor-dtor-privacy -Wdisabled-optimization -Wformat=2 -Winit-self -Wmissing-declarations -Wmissing-include-dirs -Wold-style-cast -Woverloaded-virtual -Wredundant-decls -Wshadow -Wsign-conversion -Wsign-promo -Wstrict-overflow=5 -Wswitch-default -Wundef -Wno-unused -Wno-variadic-macros -Wno-parentheses -fdiagnostics-show-option -Wunreachable-code -Wunused-parameter -Wunused-function -Wunused-variable -Wunused-value -Wwrite-strings -Wno-missing-field-initializers -Wpointer-arith -Wstack-protector -fno-common -fstack-protector-strong -Wdouble-promotion -Wfloat-equal -Wlogical-op -Wplacement-new=2 -Wzero-as-null-pointer-constant -Wnon-virtual-dtor -Weffc++ -Wstrict-null-sentinel -D_FORTIFY_SOURCE=2 -fPIC -Wformat-security -Wall -Wextra -Werror -Wpedantic -Wcast-align -Wcast-qual -Wconversion -Wctor-dtor-privacy -Wdisabled-optimization -Wformat=2 -Winit-self -Wmissing-declarations -Wmissing-include-dirs -Wold-style-cast -Woverloaded-virtual -Wredundant-decls -Wshadow -Wsign-conversion -Wsign-promo -Wstrict-overflow=5 -Wswitch-default -Wundef -Wno-unused -Wno-variadic-macros -Wno-parentheses -fdiagnostics-show-option -Wunreachable-code -Wunused-parameter -Wunused-function -Wunused-variable -Wunused-value -Wwrite-strings -Wno-missing-field-initializers -Wpointer-arith -Wstack-protector -fno-common -fstack-protector-strong -Wdouble-promotion -Wfloat-equal -Wlogical-op -Wplacement-new=2 -O3 -DNDEBUG -march=native -mtune=native -flto -std=c++23 -Wno-error=strict-overflow -O3 -DNDEBUG -march=native -mtune=native -flto
-  INCLUDES = -I/home/isoula/om/shriven_zenith -I/home/isoula/om/shriven_zenith/bldg_blocks -I/home/isoula/om/shriven_zenith/cmake/build-strict-release/bldg_blocks
+  INCLUDES = -I/home/isoula/om/shriven_zenith -I/home/isoula/om/shriven_zenith/common -I/home/isoula/om/shriven_zenith/cmake/build-strict-release/common
   OBJECT_DIR = tests/CMakeFiles/test_mem_pool.dir
   OBJECT_FILE_DIR = tests/CMakeFiles/test_mem_pool.dir/unit
   TARGET_COMPILE_PDB = tests/CMakeFiles/test_mem_pool.dir/
@@ -414,10 +414,10 @@ build tests/CMakeFiles/test_mem_pool.dir/unit/test_mem_pool.cpp.o: CXX_COMPILER_
 #############################################
 # Link the executable tests/test_mem_pool
 
-build tests/test_mem_pool: CXX_EXECUTABLE_LINKER__test_mem_pool_Release tests/CMakeFiles/test_mem_pool.dir/unit/test_mem_pool.cpp.o | bldg_blocks/libBldgBlocksImpl.so /usr/lib/x86_64-linux-gnu/libnuma.so || bldg_blocks/libBldgBlocksImpl.so
+build tests/test_mem_pool: CXX_EXECUTABLE_LINKER__test_mem_pool_Release tests/CMakeFiles/test_mem_pool.dir/unit/test_mem_pool.cpp.o | common/libCommonImpl.so /usr/lib/x86_64-linux-gnu/libnuma.so || common/libCommonImpl.so
   FLAGS = -Wall -Wextra -Werror -Wpedantic -Wcast-align -Wcast-qual -Wconversion -Wctor-dtor-privacy -Wdisabled-optimization -Wformat=2 -Winit-self -Wmissing-declarations -Wmissing-include-dirs -Wold-style-cast -Woverloaded-virtual -Wredundant-decls -Wshadow -Wsign-conversion -Wsign-promo -Wstrict-overflow=5 -Wswitch-default -Wundef -Wno-unused -Wno-variadic-macros -Wno-parentheses -fdiagnostics-show-option -Wunreachable-code -Wunused-parameter -Wunused-function -Wunused-variable -Wunused-value -Wwrite-strings -Wno-missing-field-initializers -Wpointer-arith -Wstack-protector -fno-common -fstack-protector-strong -Wdouble-promotion -Wfloat-equal -Wlogical-op -Wplacement-new=2 -Wzero-as-null-pointer-constant -Wnon-virtual-dtor -Weffc++ -Wstrict-null-sentinel -D_FORTIFY_SOURCE=2 -fPIC -Wformat-security -Wall -Wextra -Werror -Wpedantic -Wcast-align -Wcast-qual -Wconversion -Wctor-dtor-privacy -Wdisabled-optimization -Wformat=2 -Winit-self -Wmissing-declarations -Wmissing-include-dirs -Wold-style-cast -Woverloaded-virtual -Wredundant-decls -Wshadow -Wsign-conversion -Wsign-promo -Wstrict-overflow=5 -Wswitch-default -Wundef -Wno-unused -Wno-variadic-macros -Wno-parentheses -fdiagnostics-show-option -Wunreachable-code -Wunused-parameter -Wunused-function -Wunused-variable -Wunused-value -Wwrite-strings -Wno-missing-field-initializers -Wpointer-arith -Wstack-protector -fno-common -fstack-protector-strong -Wdouble-promotion -Wfloat-equal -Wlogical-op -Wplacement-new=2 -O3 -DNDEBUG -march=native -mtune=native -flto
   LINK_FLAGS = -Wno-error=strict-overflow
-  LINK_LIBRARIES = -Wl,-rpath,/home/isoula/om/shriven_zenith/cmake/build-strict-release/bldg_blocks  bldg_blocks/libBldgBlocksImpl.so  -lnuma  -latomic  -lgtest  /usr/lib/x86_64-linux-gnu/libnuma.so
+  LINK_LIBRARIES = -Wl,-rpath,/home/isoula/om/shriven_zenith/cmake/build-strict-release/common  common/libCommonImpl.so  -lnuma  -latomic  -lgtest  /usr/lib/x86_64-linux-gnu/libnuma.so
   OBJECT_DIR = tests/CMakeFiles/test_mem_pool.dir
   POST_BUILD = :
   PRE_LINK = :
@@ -432,12 +432,12 @@ build tests/test_mem_pool: CXX_EXECUTABLE_LINKER__test_mem_pool_Release tests/CM
 #############################################
 # Order-only phony target for test_lf_queue
 
-build cmake_object_order_depends_target_test_lf_queue: phony || cmake_object_order_depends_target_BldgBlocksImpl
+build cmake_object_order_depends_target_test_lf_queue: phony || cmake_object_order_depends_target_CommonImpl
 
 build tests/CMakeFiles/test_lf_queue.dir/unit/test_lf_queue.cpp.o: CXX_COMPILER__test_lf_queue_unscanned_Release /home/isoula/om/shriven_zenith/tests/unit/test_lf_queue.cpp || cmake_object_order_depends_target_test_lf_queue
   DEP_FILE = tests/CMakeFiles/test_lf_queue.dir/unit/test_lf_queue.cpp.o.d
   FLAGS = -Wall -Wextra -Werror -Wpedantic -Wcast-align -Wcast-qual -Wconversion -Wctor-dtor-privacy -Wdisabled-optimization -Wformat=2 -Winit-self -Wmissing-declarations -Wmissing-include-dirs -Wold-style-cast -Woverloaded-virtual -Wredundant-decls -Wshadow -Wsign-conversion -Wsign-promo -Wstrict-overflow=5 -Wswitch-default -Wundef -Wno-unused -Wno-variadic-macros -Wno-parentheses -fdiagnostics-show-option -Wunreachable-code -Wunused-parameter -Wunused-function -Wunused-variable -Wunused-value -Wwrite-strings -Wno-missing-field-initializers -Wpointer-arith -Wstack-protector -fno-common -fstack-protector-strong -Wdouble-promotion -Wfloat-equal -Wlogical-op -Wplacement-new=2 -Wzero-as-null-pointer-constant -Wnon-virtual-dtor -Weffc++ -Wstrict-null-sentinel -D_FORTIFY_SOURCE=2 -fPIC -Wformat-security -Wall -Wextra -Werror -Wpedantic -Wcast-align -Wcast-qual -Wconversion -Wctor-dtor-privacy -Wdisabled-optimization -Wformat=2 -Winit-self -Wmissing-declarations -Wmissing-include-dirs -Wold-style-cast -Woverloaded-virtual -Wredundant-decls -Wshadow -Wsign-conversion -Wsign-promo -Wstrict-overflow=5 -Wswitch-default -Wundef -Wno-unused -Wno-variadic-macros -Wno-parentheses -fdiagnostics-show-option -Wunreachable-code -Wunused-parameter -Wunused-function -Wunused-variable -Wunused-value -Wwrite-strings -Wno-missing-field-initializers -Wpointer-arith -Wstack-protector -fno-common -fstack-protector-strong -Wdouble-promotion -Wfloat-equal -Wlogical-op -Wplacement-new=2 -O3 -DNDEBUG -march=native -mtune=native -flto -std=c++23 -Wno-error=strict-overflow -O3 -DNDEBUG -march=native -mtune=native -flto
-  INCLUDES = -I/home/isoula/om/shriven_zenith -I/home/isoula/om/shriven_zenith/bldg_blocks -I/home/isoula/om/shriven_zenith/cmake/build-strict-release/bldg_blocks
+  INCLUDES = -I/home/isoula/om/shriven_zenith -I/home/isoula/om/shriven_zenith/common -I/home/isoula/om/shriven_zenith/cmake/build-strict-release/common
   OBJECT_DIR = tests/CMakeFiles/test_lf_queue.dir
   OBJECT_FILE_DIR = tests/CMakeFiles/test_lf_queue.dir/unit
   TARGET_COMPILE_PDB = tests/CMakeFiles/test_lf_queue.dir/
@@ -451,10 +451,10 @@ build tests/CMakeFiles/test_lf_queue.dir/unit/test_lf_queue.cpp.o: CXX_COMPILER_
 #############################################
 # Link the executable tests/test_lf_queue
 
-build tests/test_lf_queue: CXX_EXECUTABLE_LINKER__test_lf_queue_Release tests/CMakeFiles/test_lf_queue.dir/unit/test_lf_queue.cpp.o | bldg_blocks/libBldgBlocksImpl.so /usr/lib/x86_64-linux-gnu/libnuma.so || bldg_blocks/libBldgBlocksImpl.so
+build tests/test_lf_queue: CXX_EXECUTABLE_LINKER__test_lf_queue_Release tests/CMakeFiles/test_lf_queue.dir/unit/test_lf_queue.cpp.o | common/libCommonImpl.so /usr/lib/x86_64-linux-gnu/libnuma.so || common/libCommonImpl.so
   FLAGS = -Wall -Wextra -Werror -Wpedantic -Wcast-align -Wcast-qual -Wconversion -Wctor-dtor-privacy -Wdisabled-optimization -Wformat=2 -Winit-self -Wmissing-declarations -Wmissing-include-dirs -Wold-style-cast -Woverloaded-virtual -Wredundant-decls -Wshadow -Wsign-conversion -Wsign-promo -Wstrict-overflow=5 -Wswitch-default -Wundef -Wno-unused -Wno-variadic-macros -Wno-parentheses -fdiagnostics-show-option -Wunreachable-code -Wunused-parameter -Wunused-function -Wunused-variable -Wunused-value -Wwrite-strings -Wno-missing-field-initializers -Wpointer-arith -Wstack-protector -fno-common -fstack-protector-strong -Wdouble-promotion -Wfloat-equal -Wlogical-op -Wplacement-new=2 -Wzero-as-null-pointer-constant -Wnon-virtual-dtor -Weffc++ -Wstrict-null-sentinel -D_FORTIFY_SOURCE=2 -fPIC -Wformat-security -Wall -Wextra -Werror -Wpedantic -Wcast-align -Wcast-qual -Wconversion -Wctor-dtor-privacy -Wdisabled-optimization -Wformat=2 -Winit-self -Wmissing-declarations -Wmissing-include-dirs -Wold-style-cast -Woverloaded-virtual -Wredundant-decls -Wshadow -Wsign-conversion -Wsign-promo -Wstrict-overflow=5 -Wswitch-default -Wundef -Wno-unused -Wno-variadic-macros -Wno-parentheses -fdiagnostics-show-option -Wunreachable-code -Wunused-parameter -Wunused-function -Wunused-variable -Wunused-value -Wwrite-strings -Wno-missing-field-initializers -Wpointer-arith -Wstack-protector -fno-common -fstack-protector-strong -Wdouble-promotion -Wfloat-equal -Wlogical-op -Wplacement-new=2 -O3 -DNDEBUG -march=native -mtune=native -flto
   LINK_FLAGS = -Wno-error=strict-overflow
-  LINK_LIBRARIES = -Wl,-rpath,/home/isoula/om/shriven_zenith/cmake/build-strict-release/bldg_blocks  bldg_blocks/libBldgBlocksImpl.so  -lnuma  -latomic  -lgtest  /usr/lib/x86_64-linux-gnu/libnuma.so
+  LINK_LIBRARIES = -Wl,-rpath,/home/isoula/om/shriven_zenith/cmake/build-strict-release/common  common/libCommonImpl.so  -lnuma  -latomic  -lgtest  /usr/lib/x86_64-linux-gnu/libnuma.so
   OBJECT_DIR = tests/CMakeFiles/test_lf_queue.dir
   POST_BUILD = :
   PRE_LINK = :
@@ -469,12 +469,12 @@ build tests/test_lf_queue: CXX_EXECUTABLE_LINKER__test_lf_queue_Release tests/CM
 #############################################
 # Order-only phony target for test_logger
 
-build cmake_object_order_depends_target_test_logger: phony || cmake_object_order_depends_target_BldgBlocksImpl
+build cmake_object_order_depends_target_test_logger: phony || cmake_object_order_depends_target_CommonImpl
 
 build tests/CMakeFiles/test_logger.dir/unit/test_logger.cpp.o: CXX_COMPILER__test_logger_unscanned_Release /home/isoula/om/shriven_zenith/tests/unit/test_logger.cpp || cmake_object_order_depends_target_test_logger
   DEP_FILE = tests/CMakeFiles/test_logger.dir/unit/test_logger.cpp.o.d
   FLAGS = -Wall -Wextra -Werror -Wpedantic -Wcast-align -Wcast-qual -Wconversion -Wctor-dtor-privacy -Wdisabled-optimization -Wformat=2 -Winit-self -Wmissing-declarations -Wmissing-include-dirs -Wold-style-cast -Woverloaded-virtual -Wredundant-decls -Wshadow -Wsign-conversion -Wsign-promo -Wstrict-overflow=5 -Wswitch-default -Wundef -Wno-unused -Wno-variadic-macros -Wno-parentheses -fdiagnostics-show-option -Wunreachable-code -Wunused-parameter -Wunused-function -Wunused-variable -Wunused-value -Wwrite-strings -Wno-missing-field-initializers -Wpointer-arith -Wstack-protector -fno-common -fstack-protector-strong -Wdouble-promotion -Wfloat-equal -Wlogical-op -Wplacement-new=2 -Wzero-as-null-pointer-constant -Wnon-virtual-dtor -Weffc++ -Wstrict-null-sentinel -D_FORTIFY_SOURCE=2 -fPIC -Wformat-security -Wall -Wextra -Werror -Wpedantic -Wcast-align -Wcast-qual -Wconversion -Wctor-dtor-privacy -Wdisabled-optimization -Wformat=2 -Winit-self -Wmissing-declarations -Wmissing-include-dirs -Wold-style-cast -Woverloaded-virtual -Wredundant-decls -Wshadow -Wsign-conversion -Wsign-promo -Wstrict-overflow=5 -Wswitch-default -Wundef -Wno-unused -Wno-variadic-macros -Wno-parentheses -fdiagnostics-show-option -Wunreachable-code -Wunused-parameter -Wunused-function -Wunused-variable -Wunused-value -Wwrite-strings -Wno-missing-field-initializers -Wpointer-arith -Wstack-protector -fno-common -fstack-protector-strong -Wdouble-promotion -Wfloat-equal -Wlogical-op -Wplacement-new=2 -O3 -DNDEBUG -march=native -mtune=native -flto -std=c++23 -Wno-error=strict-overflow -O3 -DNDEBUG -march=native -mtune=native -flto
-  INCLUDES = -I/home/isoula/om/shriven_zenith -I/home/isoula/om/shriven_zenith/bldg_blocks -I/home/isoula/om/shriven_zenith/cmake/build-strict-release/bldg_blocks
+  INCLUDES = -I/home/isoula/om/shriven_zenith -I/home/isoula/om/shriven_zenith/common -I/home/isoula/om/shriven_zenith/cmake/build-strict-release/common
   OBJECT_DIR = tests/CMakeFiles/test_logger.dir
   OBJECT_FILE_DIR = tests/CMakeFiles/test_logger.dir/unit
   TARGET_COMPILE_PDB = tests/CMakeFiles/test_logger.dir/
@@ -488,10 +488,10 @@ build tests/CMakeFiles/test_logger.dir/unit/test_logger.cpp.o: CXX_COMPILER__tes
 #############################################
 # Link the executable tests/test_logger
 
-build tests/test_logger: CXX_EXECUTABLE_LINKER__test_logger_Release tests/CMakeFiles/test_logger.dir/unit/test_logger.cpp.o | bldg_blocks/libBldgBlocksImpl.so /usr/lib/x86_64-linux-gnu/libnuma.so || bldg_blocks/libBldgBlocksImpl.so
+build tests/test_logger: CXX_EXECUTABLE_LINKER__test_logger_Release tests/CMakeFiles/test_logger.dir/unit/test_logger.cpp.o | common/libCommonImpl.so /usr/lib/x86_64-linux-gnu/libnuma.so || common/libCommonImpl.so
   FLAGS = -Wall -Wextra -Werror -Wpedantic -Wcast-align -Wcast-qual -Wconversion -Wctor-dtor-privacy -Wdisabled-optimization -Wformat=2 -Winit-self -Wmissing-declarations -Wmissing-include-dirs -Wold-style-cast -Woverloaded-virtual -Wredundant-decls -Wshadow -Wsign-conversion -Wsign-promo -Wstrict-overflow=5 -Wswitch-default -Wundef -Wno-unused -Wno-variadic-macros -Wno-parentheses -fdiagnostics-show-option -Wunreachable-code -Wunused-parameter -Wunused-function -Wunused-variable -Wunused-value -Wwrite-strings -Wno-missing-field-initializers -Wpointer-arith -Wstack-protector -fno-common -fstack-protector-strong -Wdouble-promotion -Wfloat-equal -Wlogical-op -Wplacement-new=2 -Wzero-as-null-pointer-constant -Wnon-virtual-dtor -Weffc++ -Wstrict-null-sentinel -D_FORTIFY_SOURCE=2 -fPIC -Wformat-security -Wall -Wextra -Werror -Wpedantic -Wcast-align -Wcast-qual -Wconversion -Wctor-dtor-privacy -Wdisabled-optimization -Wformat=2 -Winit-self -Wmissing-declarations -Wmissing-include-dirs -Wold-style-cast -Woverloaded-virtual -Wredundant-decls -Wshadow -Wsign-conversion -Wsign-promo -Wstrict-overflow=5 -Wswitch-default -Wundef -Wno-unused -Wno-variadic-macros -Wno-parentheses -fdiagnostics-show-option -Wunreachable-code -Wunused-parameter -Wunused-function -Wunused-variable -Wunused-value -Wwrite-strings -Wno-missing-field-initializers -Wpointer-arith -Wstack-protector -fno-common -fstack-protector-strong -Wdouble-promotion -Wfloat-equal -Wlogical-op -Wplacement-new=2 -O3 -DNDEBUG -march=native -mtune=native -flto
   LINK_FLAGS = -Wno-error=strict-overflow
-  LINK_LIBRARIES = -Wl,-rpath,/home/isoula/om/shriven_zenith/cmake/build-strict-release/bldg_blocks  bldg_blocks/libBldgBlocksImpl.so  -lnuma  -latomic  -lgtest  /usr/lib/x86_64-linux-gnu/libnuma.so
+  LINK_LIBRARIES = -Wl,-rpath,/home/isoula/om/shriven_zenith/cmake/build-strict-release/common  common/libCommonImpl.so  -lnuma  -latomic  -lgtest  /usr/lib/x86_64-linux-gnu/libnuma.so
   OBJECT_DIR = tests/CMakeFiles/test_logger.dir
   POST_BUILD = :
   PRE_LINK = :
@@ -506,12 +506,12 @@ build tests/test_logger: CXX_EXECUTABLE_LINKER__test_logger_Release tests/CMakeF
 #############################################
 # Order-only phony target for test_thread_utils
 
-build cmake_object_order_depends_target_test_thread_utils: phony || cmake_object_order_depends_target_BldgBlocksImpl
+build cmake_object_order_depends_target_test_thread_utils: phony || cmake_object_order_depends_target_CommonImpl
 
 build tests/CMakeFiles/test_thread_utils.dir/unit/test_thread_utils.cpp.o: CXX_COMPILER__test_thread_utils_unscanned_Release /home/isoula/om/shriven_zenith/tests/unit/test_thread_utils.cpp || cmake_object_order_depends_target_test_thread_utils
   DEP_FILE = tests/CMakeFiles/test_thread_utils.dir/unit/test_thread_utils.cpp.o.d
   FLAGS = -Wall -Wextra -Werror -Wpedantic -Wcast-align -Wcast-qual -Wconversion -Wctor-dtor-privacy -Wdisabled-optimization -Wformat=2 -Winit-self -Wmissing-declarations -Wmissing-include-dirs -Wold-style-cast -Woverloaded-virtual -Wredundant-decls -Wshadow -Wsign-conversion -Wsign-promo -Wstrict-overflow=5 -Wswitch-default -Wundef -Wno-unused -Wno-variadic-macros -Wno-parentheses -fdiagnostics-show-option -Wunreachable-code -Wunused-parameter -Wunused-function -Wunused-variable -Wunused-value -Wwrite-strings -Wno-missing-field-initializers -Wpointer-arith -Wstack-protector -fno-common -fstack-protector-strong -Wdouble-promotion -Wfloat-equal -Wlogical-op -Wplacement-new=2 -Wzero-as-null-pointer-constant -Wnon-virtual-dtor -Weffc++ -Wstrict-null-sentinel -D_FORTIFY_SOURCE=2 -fPIC -Wformat-security -Wall -Wextra -Werror -Wpedantic -Wcast-align -Wcast-qual -Wconversion -Wctor-dtor-privacy -Wdisabled-optimization -Wformat=2 -Winit-self -Wmissing-declarations -Wmissing-include-dirs -Wold-style-cast -Woverloaded-virtual -Wredundant-decls -Wshadow -Wsign-conversion -Wsign-promo -Wstrict-overflow=5 -Wswitch-default -Wundef -Wno-unused -Wno-variadic-macros -Wno-parentheses -fdiagnostics-show-option -Wunreachable-code -Wunused-parameter -Wunused-function -Wunused-variable -Wunused-value -Wwrite-strings -Wno-missing-field-initializers -Wpointer-arith -Wstack-protector -fno-common -fstack-protector-strong -Wdouble-promotion -Wfloat-equal -Wlogical-op -Wplacement-new=2 -O3 -DNDEBUG -march=native -mtune=native -flto -std=c++23 -Wno-error=strict-overflow -O3 -DNDEBUG -march=native -mtune=native -flto
-  INCLUDES = -I/home/isoula/om/shriven_zenith -I/home/isoula/om/shriven_zenith/bldg_blocks -I/home/isoula/om/shriven_zenith/cmake/build-strict-release/bldg_blocks
+  INCLUDES = -I/home/isoula/om/shriven_zenith -I/home/isoula/om/shriven_zenith/common -I/home/isoula/om/shriven_zenith/cmake/build-strict-release/common
   OBJECT_DIR = tests/CMakeFiles/test_thread_utils.dir
   OBJECT_FILE_DIR = tests/CMakeFiles/test_thread_utils.dir/unit
   TARGET_COMPILE_PDB = tests/CMakeFiles/test_thread_utils.dir/
@@ -525,10 +525,10 @@ build tests/CMakeFiles/test_thread_utils.dir/unit/test_thread_utils.cpp.o: CXX_C
 #############################################
 # Link the executable tests/test_thread_utils
 
-build tests/test_thread_utils: CXX_EXECUTABLE_LINKER__test_thread_utils_Release tests/CMakeFiles/test_thread_utils.dir/unit/test_thread_utils.cpp.o | bldg_blocks/libBldgBlocksImpl.so /usr/lib/x86_64-linux-gnu/libnuma.so || bldg_blocks/libBldgBlocksImpl.so
+build tests/test_thread_utils: CXX_EXECUTABLE_LINKER__test_thread_utils_Release tests/CMakeFiles/test_thread_utils.dir/unit/test_thread_utils.cpp.o | common/libCommonImpl.so /usr/lib/x86_64-linux-gnu/libnuma.so || common/libCommonImpl.so
   FLAGS = -Wall -Wextra -Werror -Wpedantic -Wcast-align -Wcast-qual -Wconversion -Wctor-dtor-privacy -Wdisabled-optimization -Wformat=2 -Winit-self -Wmissing-declarations -Wmissing-include-dirs -Wold-style-cast -Woverloaded-virtual -Wredundant-decls -Wshadow -Wsign-conversion -Wsign-promo -Wstrict-overflow=5 -Wswitch-default -Wundef -Wno-unused -Wno-variadic-macros -Wno-parentheses -fdiagnostics-show-option -Wunreachable-code -Wunused-parameter -Wunused-function -Wunused-variable -Wunused-value -Wwrite-strings -Wno-missing-field-initializers -Wpointer-arith -Wstack-protector -fno-common -fstack-protector-strong -Wdouble-promotion -Wfloat-equal -Wlogical-op -Wplacement-new=2 -Wzero-as-null-pointer-constant -Wnon-virtual-dtor -Weffc++ -Wstrict-null-sentinel -D_FORTIFY_SOURCE=2 -fPIC -Wformat-security -Wall -Wextra -Werror -Wpedantic -Wcast-align -Wcast-qual -Wconversion -Wctor-dtor-privacy -Wdisabled-optimization -Wformat=2 -Winit-self -Wmissing-declarations -Wmissing-include-dirs -Wold-style-cast -Woverloaded-virtual -Wredundant-decls -Wshadow -Wsign-conversion -Wsign-promo -Wstrict-overflow=5 -Wswitch-default -Wundef -Wno-unused -Wno-variadic-macros -Wno-parentheses -fdiagnostics-show-option -Wunreachable-code -Wunused-parameter -Wunused-function -Wunused-variable -Wunused-value -Wwrite-strings -Wno-missing-field-initializers -Wpointer-arith -Wstack-protector -fno-common -fstack-protector-strong -Wdouble-promotion -Wfloat-equal -Wlogical-op -Wplacement-new=2 -O3 -DNDEBUG -march=native -mtune=native -flto
   LINK_FLAGS = -Wno-error=strict-overflow
-  LINK_LIBRARIES = -Wl,-rpath,/home/isoula/om/shriven_zenith/cmake/build-strict-release/bldg_blocks  bldg_blocks/libBldgBlocksImpl.so  -lnuma  -latomic  -lgtest  /usr/lib/x86_64-linux-gnu/libnuma.so
+  LINK_LIBRARIES = -Wl,-rpath,/home/isoula/om/shriven_zenith/cmake/build-strict-release/common  common/libCommonImpl.so  -lnuma  -latomic  -lgtest  /usr/lib/x86_64-linux-gnu/libnuma.so
   OBJECT_DIR = tests/CMakeFiles/test_thread_utils.dir
   POST_BUILD = :
   PRE_LINK = :
@@ -543,13 +543,13 @@ build tests/test_thread_utils: CXX_EXECUTABLE_LINKER__test_thread_utils_Release 
 #############################################
 # Order-only phony target for test_zero_policy
 
-build cmake_object_order_depends_target_test_zero_policy: phony || cmake_object_order_depends_target_BldgBlocksImpl
+build cmake_object_order_depends_target_test_zero_policy: phony || cmake_object_order_depends_target_CommonImpl
 
 build tests/CMakeFiles/test_zero_policy.dir/unit/test_zero_policy.cpp.o: CXX_COMPILER__test_zero_policy_unscanned_Release /home/isoula/om/shriven_zenith/tests/unit/test_zero_policy.cpp || cmake_object_order_depends_target_test_zero_policy
   DEFINES = -DTESTING
   DEP_FILE = tests/CMakeFiles/test_zero_policy.dir/unit/test_zero_policy.cpp.o.d
   FLAGS = -Wall -Wextra -Werror -Wpedantic -Wcast-align -Wcast-qual -Wconversion -Wctor-dtor-privacy -Wdisabled-optimization -Wformat=2 -Winit-self -Wmissing-declarations -Wmissing-include-dirs -Wold-style-cast -Woverloaded-virtual -Wredundant-decls -Wshadow -Wsign-conversion -Wsign-promo -Wstrict-overflow=5 -Wswitch-default -Wundef -Wno-unused -Wno-variadic-macros -Wno-parentheses -fdiagnostics-show-option -Wunreachable-code -Wunused-parameter -Wunused-function -Wunused-variable -Wunused-value -Wwrite-strings -Wno-missing-field-initializers -Wpointer-arith -Wstack-protector -fno-common -fstack-protector-strong -Wdouble-promotion -Wfloat-equal -Wlogical-op -Wplacement-new=2 -Wzero-as-null-pointer-constant -Wnon-virtual-dtor -Weffc++ -Wstrict-null-sentinel -D_FORTIFY_SOURCE=2 -fPIC -Wformat-security -Wall -Wextra -Werror -Wpedantic -Wcast-align -Wcast-qual -Wconversion -Wctor-dtor-privacy -Wdisabled-optimization -Wformat=2 -Winit-self -Wmissing-declarations -Wmissing-include-dirs -Wold-style-cast -Woverloaded-virtual -Wredundant-decls -Wshadow -Wsign-conversion -Wsign-promo -Wstrict-overflow=5 -Wswitch-default -Wundef -Wno-unused -Wno-variadic-macros -Wno-parentheses -fdiagnostics-show-option -Wunreachable-code -Wunused-parameter -Wunused-function -Wunused-variable -Wunused-value -Wwrite-strings -Wno-missing-field-initializers -Wpointer-arith -Wstack-protector -fno-common -fstack-protector-strong -Wdouble-promotion -Wfloat-equal -Wlogical-op -Wplacement-new=2 -O3 -DNDEBUG -march=native -mtune=native -flto -std=c++23 -Wno-error=strict-overflow -O3 -DNDEBUG -march=native -mtune=native -flto
-  INCLUDES = -I/home/isoula/om/shriven_zenith -I/home/isoula/om/shriven_zenith/bldg_blocks -I/home/isoula/om/shriven_zenith/cmake/build-strict-release/bldg_blocks
+  INCLUDES = -I/home/isoula/om/shriven_zenith -I/home/isoula/om/shriven_zenith/common -I/home/isoula/om/shriven_zenith/cmake/build-strict-release/common
   OBJECT_DIR = tests/CMakeFiles/test_zero_policy.dir
   OBJECT_FILE_DIR = tests/CMakeFiles/test_zero_policy.dir/unit
   TARGET_COMPILE_PDB = tests/CMakeFiles/test_zero_policy.dir/
@@ -563,10 +563,10 @@ build tests/CMakeFiles/test_zero_policy.dir/unit/test_zero_policy.cpp.o: CXX_COM
 #############################################
 # Link the executable tests/test_zero_policy
 
-build tests/test_zero_policy: CXX_EXECUTABLE_LINKER__test_zero_policy_Release tests/CMakeFiles/test_zero_policy.dir/unit/test_zero_policy.cpp.o | bldg_blocks/libBldgBlocksImpl.so /usr/lib/x86_64-linux-gnu/libnuma.so || bldg_blocks/libBldgBlocksImpl.so
+build tests/test_zero_policy: CXX_EXECUTABLE_LINKER__test_zero_policy_Release tests/CMakeFiles/test_zero_policy.dir/unit/test_zero_policy.cpp.o | common/libCommonImpl.so /usr/lib/x86_64-linux-gnu/libnuma.so || common/libCommonImpl.so
   FLAGS = -Wall -Wextra -Werror -Wpedantic -Wcast-align -Wcast-qual -Wconversion -Wctor-dtor-privacy -Wdisabled-optimization -Wformat=2 -Winit-self -Wmissing-declarations -Wmissing-include-dirs -Wold-style-cast -Woverloaded-virtual -Wredundant-decls -Wshadow -Wsign-conversion -Wsign-promo -Wstrict-overflow=5 -Wswitch-default -Wundef -Wno-unused -Wno-variadic-macros -Wno-parentheses -fdiagnostics-show-option -Wunreachable-code -Wunused-parameter -Wunused-function -Wunused-variable -Wunused-value -Wwrite-strings -Wno-missing-field-initializers -Wpointer-arith -Wstack-protector -fno-common -fstack-protector-strong -Wdouble-promotion -Wfloat-equal -Wlogical-op -Wplacement-new=2 -Wzero-as-null-pointer-constant -Wnon-virtual-dtor -Weffc++ -Wstrict-null-sentinel -D_FORTIFY_SOURCE=2 -fPIC -Wformat-security -Wall -Wextra -Werror -Wpedantic -Wcast-align -Wcast-qual -Wconversion -Wctor-dtor-privacy -Wdisabled-optimization -Wformat=2 -Winit-self -Wmissing-declarations -Wmissing-include-dirs -Wold-style-cast -Woverloaded-virtual -Wredundant-decls -Wshadow -Wsign-conversion -Wsign-promo -Wstrict-overflow=5 -Wswitch-default -Wundef -Wno-unused -Wno-variadic-macros -Wno-parentheses -fdiagnostics-show-option -Wunreachable-code -Wunused-parameter -Wunused-function -Wunused-variable -Wunused-value -Wwrite-strings -Wno-missing-field-initializers -Wpointer-arith -Wstack-protector -fno-common -fstack-protector-strong -Wdouble-promotion -Wfloat-equal -Wlogical-op -Wplacement-new=2 -O3 -DNDEBUG -march=native -mtune=native -flto
   LINK_FLAGS = -Wno-error=strict-overflow
-  LINK_LIBRARIES = -Wl,-rpath,/home/isoula/om/shriven_zenith/cmake/build-strict-release/bldg_blocks  bldg_blocks/libBldgBlocksImpl.so  -lnuma  -latomic  -lgtest  /usr/lib/x86_64-linux-gnu/libnuma.so
+  LINK_LIBRARIES = -Wl,-rpath,/home/isoula/om/shriven_zenith/cmake/build-strict-release/common  common/libCommonImpl.so  -lnuma  -latomic  -lgtest  /usr/lib/x86_64-linux-gnu/libnuma.so
   OBJECT_DIR = tests/CMakeFiles/test_zero_policy.dir
   POST_BUILD = :
   PRE_LINK = :
@@ -642,13 +642,13 @@ build tests/install/strip: phony tests/CMakeFiles/install/strip.util
 # =============================================================================
 # Target aliases.
 
-build BldgBlocksImpl: phony bldg_blocks/libBldgBlocksImpl.so
+build CommonImpl: phony common/libCommonImpl.so
 
-build benchmark_enhancements: phony tests/benchmark_enhancements
+build benchmark_common: phony tests/benchmark_common
 
 build examples: phony examples/examples
 
-build libBldgBlocksImpl.so: phony bldg_blocks/libBldgBlocksImpl.so
+build libCommonImpl.so: phony common/libCommonImpl.so
 
 build test_lf_queue: phony tests/test_lf_queue
 
@@ -668,14 +668,14 @@ build test_zero_policy: phony tests/test_zero_policy
 #############################################
 # Folder: /home/isoula/om/shriven_zenith/cmake/build-strict-release
 
-build all: phony bldg_blocks/all examples/all tests/all
+build all: phony common/all examples/all tests/all
 
 # =============================================================================
 
 #############################################
-# Folder: /home/isoula/om/shriven_zenith/cmake/build-strict-release/bldg_blocks
+# Folder: /home/isoula/om/shriven_zenith/cmake/build-strict-release/common
 
-build bldg_blocks/all: phony bldg_blocks/libBldgBlocksImpl.so
+build common/all: phony common/libCommonImpl.so
 
 # =============================================================================
 
@@ -689,7 +689,7 @@ build examples/all: phony examples/examples
 #############################################
 # Folder: /home/isoula/om/shriven_zenith/cmake/build-strict-release/tests
 
-build tests/all: phony tests/benchmark_enhancements tests/test_mem_pool tests/test_lf_queue tests/test_logger tests/test_thread_utils tests/test_zero_policy
+build tests/all: phony tests/benchmark_common tests/test_mem_pool tests/test_lf_queue tests/test_logger tests/test_thread_utils tests/test_zero_policy
 
 # =============================================================================
 # Built-in targets
@@ -698,14 +698,14 @@ build tests/all: phony tests/benchmark_enhancements tests/test_mem_pool tests/te
 #############################################
 # Re-run CMake if any of its inputs changed.
 
-build build.ninja: RERUN_CMAKE | /home/isoula/om/shriven_zenith/CMakeLists.txt /home/isoula/om/shriven_zenith/bldg_blocks/BldgBlocksConfig.cmake.in /home/isoula/om/shriven_zenith/bldg_blocks/CMakeLists.txt /home/isoula/om/shriven_zenith/bldg_blocks/config.h.in /home/isoula/om/shriven_zenith/examples/CMakeLists.txt /home/isoula/om/shriven_zenith/tests/CMakeLists.txt /usr/share/cmake-3.28/Modules/BasicConfigVersion-AnyNewerVersion.cmake.in /usr/share/cmake-3.28/Modules/CMakeCXXCompiler.cmake.in /usr/share/cmake-3.28/Modules/CMakeCXXCompilerABI.cpp /usr/share/cmake-3.28/Modules/CMakeCXXInformation.cmake /usr/share/cmake-3.28/Modules/CMakeCommonLanguageInclude.cmake /usr/share/cmake-3.28/Modules/CMakeCompilerIdDetection.cmake /usr/share/cmake-3.28/Modules/CMakeDetermineCXXCompiler.cmake /usr/share/cmake-3.28/Modules/CMakeDetermineCompileFeatures.cmake /usr/share/cmake-3.28/Modules/CMakeDetermineCompiler.cmake /usr/share/cmake-3.28/Modules/CMakeDetermineCompilerABI.cmake /usr/share/cmake-3.28/Modules/CMakeDetermineCompilerId.cmake /usr/share/cmake-3.28/Modules/CMakeDetermineSystem.cmake /usr/share/cmake-3.28/Modules/CMakeFindBinUtils.cmake /usr/share/cmake-3.28/Modules/CMakeGenericSystem.cmake /usr/share/cmake-3.28/Modules/CMakeInitializeConfigs.cmake /usr/share/cmake-3.28/Modules/CMakeLanguageInformation.cmake /usr/share/cmake-3.28/Modules/CMakePackageConfigHelpers.cmake /usr/share/cmake-3.28/Modules/CMakeParseImplicitIncludeInfo.cmake /usr/share/cmake-3.28/Modules/CMakeParseImplicitLinkInfo.cmake /usr/share/cmake-3.28/Modules/CMakeParseLibraryArchitecture.cmake /usr/share/cmake-3.28/Modules/CMakeSystem.cmake.in /usr/share/cmake-3.28/Modules/CMakeSystemSpecificInformation.cmake /usr/share/cmake-3.28/Modules/CMakeSystemSpecificInitialize.cmake /usr/share/cmake-3.28/Modules/CMakeTestCXXCompiler.cmake /usr/share/cmake-3.28/Modules/CMakeTestCompilerCommon.cmake /usr/share/cmake-3.28/Modules/CheckCXXSourceCompiles.cmake /usr/share/cmake-3.28/Modules/CheckIncludeFileCXX.cmake /usr/share/cmake-3.28/Modules/CheckLibraryExists.cmake /usr/share/cmake-3.28/Modules/Compiler/ADSP-DetermineCompiler.cmake /usr/share/cmake-3.28/Modules/Compiler/ARMCC-DetermineCompiler.cmake /usr/share/cmake-3.28/Modules/Compiler/ARMClang-DetermineCompiler.cmake /usr/share/cmake-3.28/Modules/Compiler/AppleClang-DetermineCompiler.cmake /usr/share/cmake-3.28/Modules/Compiler/Borland-DetermineCompiler.cmake /usr/share/cmake-3.28/Modules/Compiler/CMakeCommonCompilerMacros.cmake /usr/share/cmake-3.28/Modules/Compiler/Clang-DetermineCompiler.cmake /usr/share/cmake-3.28/Modules/Compiler/Clang-DetermineCompilerInternal.cmake /usr/share/cmake-3.28/Modules/Compiler/Comeau-CXX-DetermineCompiler.cmake /usr/share/cmake-3.28/Modules/Compiler/Compaq-CXX-DetermineCompiler.cmake /usr/share/cmake-3.28/Modules/Compiler/Cray-DetermineCompiler.cmake /usr/share/cmake-3.28/Modules/Compiler/CrayClang-DetermineCompiler.cmake /usr/share/cmake-3.28/Modules/Compiler/Embarcadero-DetermineCompiler.cmake /usr/share/cmake-3.28/Modules/Compiler/Fujitsu-DetermineCompiler.cmake /usr/share/cmake-3.28/Modules/Compiler/FujitsuClang-DetermineCompiler.cmake /usr/share/cmake-3.28/Modules/Compiler/GHS-DetermineCompiler.cmake /usr/share/cmake-3.28/Modules/Compiler/GNU-CXX-DetermineCompiler.cmake /usr/share/cmake-3.28/Modules/Compiler/GNU-CXX.cmake /usr/share/cmake-3.28/Modules/Compiler/GNU-FindBinUtils.cmake /usr/share/cmake-3.28/Modules/Compiler/GNU.cmake /usr/share/cmake-3.28/Modules/Compiler/HP-CXX-DetermineCompiler.cmake /usr/share/cmake-3.28/Modules/Compiler/IAR-DetermineCompiler.cmake /usr/share/cmake-3.28/Modules/Compiler/IBMCPP-CXX-DetermineVersionInternal.cmake /usr/share/cmake-3.28/Modules/Compiler/IBMClang-CXX-DetermineCompiler.cmake /usr/share/cmake-3.28/Modules/Compiler/Intel-DetermineCompiler.cmake /usr/share/cmake-3.28/Modules/Compiler/IntelLLVM-DetermineCompiler.cmake /usr/share/cmake-3.28/Modules/Compiler/LCC-CXX-DetermineCompiler.cmake /usr/share/cmake-3.28/Modules/Compiler/MSVC-DetermineCompiler.cmake /usr/share/cmake-3.28/Modules/Compiler/NVHPC-DetermineCompiler.cmake /usr/share/cmake-3.28/Modules/Compiler/NVIDIA-DetermineCompiler.cmake /usr/share/cmake-3.28/Modules/Compiler/OpenWatcom-DetermineCompiler.cmake /usr/share/cmake-3.28/Modules/Compiler/OrangeC-DetermineCompiler.cmake /usr/share/cmake-3.28/Modules/Compiler/PGI-DetermineCompiler.cmake /usr/share/cmake-3.28/Modules/Compiler/PathScale-DetermineCompiler.cmake /usr/share/cmake-3.28/Modules/Compiler/SCO-DetermineCompiler.cmake /usr/share/cmake-3.28/Modules/Compiler/SunPro-CXX-DetermineCompiler.cmake /usr/share/cmake-3.28/Modules/Compiler/TI-DetermineCompiler.cmake /usr/share/cmake-3.28/Modules/Compiler/Tasking-DetermineCompiler.cmake /usr/share/cmake-3.28/Modules/Compiler/VisualAge-CXX-DetermineCompiler.cmake /usr/share/cmake-3.28/Modules/Compiler/Watcom-DetermineCompiler.cmake /usr/share/cmake-3.28/Modules/Compiler/XL-CXX-DetermineCompiler.cmake /usr/share/cmake-3.28/Modules/Compiler/XLClang-CXX-DetermineCompiler.cmake /usr/share/cmake-3.28/Modules/Compiler/zOS-CXX-DetermineCompiler.cmake /usr/share/cmake-3.28/Modules/FindPackageHandleStandardArgs.cmake /usr/share/cmake-3.28/Modules/FindPackageMessage.cmake /usr/share/cmake-3.28/Modules/FindPkgConfig.cmake /usr/share/cmake-3.28/Modules/FindThreads.cmake /usr/share/cmake-3.28/Modules/Internal/CheckSourceCompiles.cmake /usr/share/cmake-3.28/Modules/Internal/FeatureTesting.cmake /usr/share/cmake-3.28/Modules/Platform/Linux-Determine-CXX.cmake /usr/share/cmake-3.28/Modules/Platform/Linux-GNU-CXX.cmake /usr/share/cmake-3.28/Modules/Platform/Linux-GNU.cmake /usr/share/cmake-3.28/Modules/Platform/Linux-Initialize.cmake /usr/share/cmake-3.28/Modules/Platform/Linux.cmake /usr/share/cmake-3.28/Modules/Platform/UnixPaths.cmake /usr/share/cmake-3.28/Modules/WriteBasicConfigVersionFile.cmake CMakeCache.txt CMakeFiles/3.28.3/CMakeCXXCompiler.cmake CMakeFiles/3.28.3/CMakeSystem.cmake
+build build.ninja: RERUN_CMAKE | /home/isoula/om/shriven_zenith/CMakeLists.txt /home/isoula/om/shriven_zenith/common/CMakeLists.txt /home/isoula/om/shriven_zenith/common/CommonConfig.cmake.in /home/isoula/om/shriven_zenith/common/config.h.in /home/isoula/om/shriven_zenith/examples/CMakeLists.txt /home/isoula/om/shriven_zenith/tests/CMakeLists.txt /usr/share/cmake-3.28/Modules/BasicConfigVersion-AnyNewerVersion.cmake.in /usr/share/cmake-3.28/Modules/CMakeCXXCompiler.cmake.in /usr/share/cmake-3.28/Modules/CMakeCXXCompilerABI.cpp /usr/share/cmake-3.28/Modules/CMakeCXXInformation.cmake /usr/share/cmake-3.28/Modules/CMakeCommonLanguageInclude.cmake /usr/share/cmake-3.28/Modules/CMakeCompilerIdDetection.cmake /usr/share/cmake-3.28/Modules/CMakeDetermineCXXCompiler.cmake /usr/share/cmake-3.28/Modules/CMakeDetermineCompileFeatures.cmake /usr/share/cmake-3.28/Modules/CMakeDetermineCompiler.cmake /usr/share/cmake-3.28/Modules/CMakeDetermineCompilerABI.cmake /usr/share/cmake-3.28/Modules/CMakeDetermineCompilerId.cmake /usr/share/cmake-3.28/Modules/CMakeDetermineSystem.cmake /usr/share/cmake-3.28/Modules/CMakeFindBinUtils.cmake /usr/share/cmake-3.28/Modules/CMakeGenericSystem.cmake /usr/share/cmake-3.28/Modules/CMakeInitializeConfigs.cmake /usr/share/cmake-3.28/Modules/CMakeLanguageInformation.cmake /usr/share/cmake-3.28/Modules/CMakePackageConfigHelpers.cmake /usr/share/cmake-3.28/Modules/CMakeParseImplicitIncludeInfo.cmake /usr/share/cmake-3.28/Modules/CMakeParseImplicitLinkInfo.cmake /usr/share/cmake-3.28/Modules/CMakeParseLibraryArchitecture.cmake /usr/share/cmake-3.28/Modules/CMakeSystem.cmake.in /usr/share/cmake-3.28/Modules/CMakeSystemSpecificInformation.cmake /usr/share/cmake-3.28/Modules/CMakeSystemSpecificInitialize.cmake /usr/share/cmake-3.28/Modules/CMakeTestCXXCompiler.cmake /usr/share/cmake-3.28/Modules/CMakeTestCompilerCommon.cmake /usr/share/cmake-3.28/Modules/CheckCXXSourceCompiles.cmake /usr/share/cmake-3.28/Modules/CheckIncludeFileCXX.cmake /usr/share/cmake-3.28/Modules/CheckLibraryExists.cmake /usr/share/cmake-3.28/Modules/Compiler/ADSP-DetermineCompiler.cmake /usr/share/cmake-3.28/Modules/Compiler/ARMCC-DetermineCompiler.cmake /usr/share/cmake-3.28/Modules/Compiler/ARMClang-DetermineCompiler.cmake /usr/share/cmake-3.28/Modules/Compiler/AppleClang-DetermineCompiler.cmake /usr/share/cmake-3.28/Modules/Compiler/Borland-DetermineCompiler.cmake /usr/share/cmake-3.28/Modules/Compiler/CMakeCommonCompilerMacros.cmake /usr/share/cmake-3.28/Modules/Compiler/Clang-DetermineCompiler.cmake /usr/share/cmake-3.28/Modules/Compiler/Clang-DetermineCompilerInternal.cmake /usr/share/cmake-3.28/Modules/Compiler/Comeau-CXX-DetermineCompiler.cmake /usr/share/cmake-3.28/Modules/Compiler/Compaq-CXX-DetermineCompiler.cmake /usr/share/cmake-3.28/Modules/Compiler/Cray-DetermineCompiler.cmake /usr/share/cmake-3.28/Modules/Compiler/CrayClang-DetermineCompiler.cmake /usr/share/cmake-3.28/Modules/Compiler/Embarcadero-DetermineCompiler.cmake /usr/share/cmake-3.28/Modules/Compiler/Fujitsu-DetermineCompiler.cmake /usr/share/cmake-3.28/Modules/Compiler/FujitsuClang-DetermineCompiler.cmake /usr/share/cmake-3.28/Modules/Compiler/GHS-DetermineCompiler.cmake /usr/share/cmake-3.28/Modules/Compiler/GNU-CXX-DetermineCompiler.cmake /usr/share/cmake-3.28/Modules/Compiler/GNU-CXX.cmake /usr/share/cmake-3.28/Modules/Compiler/GNU-FindBinUtils.cmake /usr/share/cmake-3.28/Modules/Compiler/GNU.cmake /usr/share/cmake-3.28/Modules/Compiler/HP-CXX-DetermineCompiler.cmake /usr/share/cmake-3.28/Modules/Compiler/IAR-DetermineCompiler.cmake /usr/share/cmake-3.28/Modules/Compiler/IBMCPP-CXX-DetermineVersionInternal.cmake /usr/share/cmake-3.28/Modules/Compiler/IBMClang-CXX-DetermineCompiler.cmake /usr/share/cmake-3.28/Modules/Compiler/Intel-DetermineCompiler.cmake /usr/share/cmake-3.28/Modules/Compiler/IntelLLVM-DetermineCompiler.cmake /usr/share/cmake-3.28/Modules/Compiler/LCC-CXX-DetermineCompiler.cmake /usr/share/cmake-3.28/Modules/Compiler/MSVC-DetermineCompiler.cmake /usr/share/cmake-3.28/Modules/Compiler/NVHPC-DetermineCompiler.cmake /usr/share/cmake-3.28/Modules/Compiler/NVIDIA-DetermineCompiler.cmake /usr/share/cmake-3.28/Modules/Compiler/OpenWatcom-DetermineCompiler.cmake /usr/share/cmake-3.28/Modules/Compiler/OrangeC-DetermineCompiler.cmake /usr/share/cmake-3.28/Modules/Compiler/PGI-DetermineCompiler.cmake /usr/share/cmake-3.28/Modules/Compiler/PathScale-DetermineCompiler.cmake /usr/share/cmake-3.28/Modules/Compiler/SCO-DetermineCompiler.cmake /usr/share/cmake-3.28/Modules/Compiler/SunPro-CXX-DetermineCompiler.cmake /usr/share/cmake-3.28/Modules/Compiler/TI-DetermineCompiler.cmake /usr/share/cmake-3.28/Modules/Compiler/Tasking-DetermineCompiler.cmake /usr/share/cmake-3.28/Modules/Compiler/VisualAge-CXX-DetermineCompiler.cmake /usr/share/cmake-3.28/Modules/Compiler/Watcom-DetermineCompiler.cmake /usr/share/cmake-3.28/Modules/Compiler/XL-CXX-DetermineCompiler.cmake /usr/share/cmake-3.28/Modules/Compiler/XLClang-CXX-DetermineCompiler.cmake /usr/share/cmake-3.28/Modules/Compiler/zOS-CXX-DetermineCompiler.cmake /usr/share/cmake-3.28/Modules/FindPackageHandleStandardArgs.cmake /usr/share/cmake-3.28/Modules/FindPackageMessage.cmake /usr/share/cmake-3.28/Modules/FindPkgConfig.cmake /usr/share/cmake-3.28/Modules/FindThreads.cmake /usr/share/cmake-3.28/Modules/Internal/CheckSourceCompiles.cmake /usr/share/cmake-3.28/Modules/Internal/FeatureTesting.cmake /usr/share/cmake-3.28/Modules/Platform/Linux-Determine-CXX.cmake /usr/share/cmake-3.28/Modules/Platform/Linux-GNU-CXX.cmake /usr/share/cmake-3.28/Modules/Platform/Linux-GNU.cmake /usr/share/cmake-3.28/Modules/Platform/Linux-Initialize.cmake /usr/share/cmake-3.28/Modules/Platform/Linux.cmake /usr/share/cmake-3.28/Modules/Platform/UnixPaths.cmake /usr/share/cmake-3.28/Modules/WriteBasicConfigVersionFile.cmake CMakeCache.txt CMakeFiles/3.28.3/CMakeCXXCompiler.cmake CMakeFiles/3.28.3/CMakeSystem.cmake
   pool = console
 
 
 #############################################
 # A missing CMake input file is not an error.
 
-build /home/isoula/om/shriven_zenith/CMakeLists.txt /home/isoula/om/shriven_zenith/bldg_blocks/BldgBlocksConfig.cmake.in /home/isoula/om/shriven_zenith/bldg_blocks/CMakeLists.txt /home/isoula/om/shriven_zenith/bldg_blocks/config.h.in /home/isoula/om/shriven_zenith/examples/CMakeLists.txt /home/isoula/om/shriven_zenith/tests/CMakeLists.txt /usr/share/cmake-3.28/Modules/BasicConfigVersion-AnyNewerVersion.cmake.in /usr/share/cmake-3.28/Modules/CMakeCXXCompiler.cmake.in /usr/share/cmake-3.28/Modules/CMakeCXXCompilerABI.cpp /usr/share/cmake-3.28/Modules/CMakeCXXInformation.cmake /usr/share/cmake-3.28/Modules/CMakeCommonLanguageInclude.cmake /usr/share/cmake-3.28/Modules/CMakeCompilerIdDetection.cmake /usr/share/cmake-3.28/Modules/CMakeDetermineCXXCompiler.cmake /usr/share/cmake-3.28/Modules/CMakeDetermineCompileFeatures.cmake /usr/share/cmake-3.28/Modules/CMakeDetermineCompiler.cmake /usr/share/cmake-3.28/Modules/CMakeDetermineCompilerABI.cmake /usr/share/cmake-3.28/Modules/CMakeDetermineCompilerId.cmake /usr/share/cmake-3.28/Modules/CMakeDetermineSystem.cmake /usr/share/cmake-3.28/Modules/CMakeFindBinUtils.cmake /usr/share/cmake-3.28/Modules/CMakeGenericSystem.cmake /usr/share/cmake-3.28/Modules/CMakeInitializeConfigs.cmake /usr/share/cmake-3.28/Modules/CMakeLanguageInformation.cmake /usr/share/cmake-3.28/Modules/CMakePackageConfigHelpers.cmake /usr/share/cmake-3.28/Modules/CMakeParseImplicitIncludeInfo.cmake /usr/share/cmake-3.28/Modules/CMakeParseImplicitLinkInfo.cmake /usr/share/cmake-3.28/Modules/CMakeParseLibraryArchitecture.cmake /usr/share/cmake-3.28/Modules/CMakeSystem.cmake.in /usr/share/cmake-3.28/Modules/CMakeSystemSpecificInformation.cmake /usr/share/cmake-3.28/Modules/CMakeSystemSpecificInitialize.cmake /usr/share/cmake-3.28/Modules/CMakeTestCXXCompiler.cmake /usr/share/cmake-3.28/Modules/CMakeTestCompilerCommon.cmake /usr/share/cmake-3.28/Modules/CheckCXXSourceCompiles.cmake /usr/share/cmake-3.28/Modules/CheckIncludeFileCXX.cmake /usr/share/cmake-3.28/Modules/CheckLibraryExists.cmake /usr/share/cmake-3.28/Modules/Compiler/ADSP-DetermineCompiler.cmake /usr/share/cmake-3.28/Modules/Compiler/ARMCC-DetermineCompiler.cmake /usr/share/cmake-3.28/Modules/Compiler/ARMClang-DetermineCompiler.cmake /usr/share/cmake-3.28/Modules/Compiler/AppleClang-DetermineCompiler.cmake /usr/share/cmake-3.28/Modules/Compiler/Borland-DetermineCompiler.cmake /usr/share/cmake-3.28/Modules/Compiler/CMakeCommonCompilerMacros.cmake /usr/share/cmake-3.28/Modules/Compiler/Clang-DetermineCompiler.cmake /usr/share/cmake-3.28/Modules/Compiler/Clang-DetermineCompilerInternal.cmake /usr/share/cmake-3.28/Modules/Compiler/Comeau-CXX-DetermineCompiler.cmake /usr/share/cmake-3.28/Modules/Compiler/Compaq-CXX-DetermineCompiler.cmake /usr/share/cmake-3.28/Modules/Compiler/Cray-DetermineCompiler.cmake /usr/share/cmake-3.28/Modules/Compiler/CrayClang-DetermineCompiler.cmake /usr/share/cmake-3.28/Modules/Compiler/Embarcadero-DetermineCompiler.cmake /usr/share/cmake-3.28/Modules/Compiler/Fujitsu-DetermineCompiler.cmake /usr/share/cmake-3.28/Modules/Compiler/FujitsuClang-DetermineCompiler.cmake /usr/share/cmake-3.28/Modules/Compiler/GHS-DetermineCompiler.cmake /usr/share/cmake-3.28/Modules/Compiler/GNU-CXX-DetermineCompiler.cmake /usr/share/cmake-3.28/Modules/Compiler/GNU-CXX.cmake /usr/share/cmake-3.28/Modules/Compiler/GNU-FindBinUtils.cmake /usr/share/cmake-3.28/Modules/Compiler/GNU.cmake /usr/share/cmake-3.28/Modules/Compiler/HP-CXX-DetermineCompiler.cmake /usr/share/cmake-3.28/Modules/Compiler/IAR-DetermineCompiler.cmake /usr/share/cmake-3.28/Modules/Compiler/IBMCPP-CXX-DetermineVersionInternal.cmake /usr/share/cmake-3.28/Modules/Compiler/IBMClang-CXX-DetermineCompiler.cmake /usr/share/cmake-3.28/Modules/Compiler/Intel-DetermineCompiler.cmake /usr/share/cmake-3.28/Modules/Compiler/IntelLLVM-DetermineCompiler.cmake /usr/share/cmake-3.28/Modules/Compiler/LCC-CXX-DetermineCompiler.cmake /usr/share/cmake-3.28/Modules/Compiler/MSVC-DetermineCompiler.cmake /usr/share/cmake-3.28/Modules/Compiler/NVHPC-DetermineCompiler.cmake /usr/share/cmake-3.28/Modules/Compiler/NVIDIA-DetermineCompiler.cmake /usr/share/cmake-3.28/Modules/Compiler/OpenWatcom-DetermineCompiler.cmake /usr/share/cmake-3.28/Modules/Compiler/OrangeC-DetermineCompiler.cmake /usr/share/cmake-3.28/Modules/Compiler/PGI-DetermineCompiler.cmake /usr/share/cmake-3.28/Modules/Compiler/PathScale-DetermineCompiler.cmake /usr/share/cmake-3.28/Modules/Compiler/SCO-DetermineCompiler.cmake /usr/share/cmake-3.28/Modules/Compiler/SunPro-CXX-DetermineCompiler.cmake /usr/share/cmake-3.28/Modules/Compiler/TI-DetermineCompiler.cmake /usr/share/cmake-3.28/Modules/Compiler/Tasking-DetermineCompiler.cmake /usr/share/cmake-3.28/Modules/Compiler/VisualAge-CXX-DetermineCompiler.cmake /usr/share/cmake-3.28/Modules/Compiler/Watcom-DetermineCompiler.cmake /usr/share/cmake-3.28/Modules/Compiler/XL-CXX-DetermineCompiler.cmake /usr/share/cmake-3.28/Modules/Compiler/XLClang-CXX-DetermineCompiler.cmake /usr/share/cmake-3.28/Modules/Compiler/zOS-CXX-DetermineCompiler.cmake /usr/share/cmake-3.28/Modules/FindPackageHandleStandardArgs.cmake /usr/share/cmake-3.28/Modules/FindPackageMessage.cmake /usr/share/cmake-3.28/Modules/FindPkgConfig.cmake /usr/share/cmake-3.28/Modules/FindThreads.cmake /usr/share/cmake-3.28/Modules/Internal/CheckSourceCompiles.cmake /usr/share/cmake-3.28/Modules/Internal/FeatureTesting.cmake /usr/share/cmake-3.28/Modules/Platform/Linux-Determine-CXX.cmake /usr/share/cmake-3.28/Modules/Platform/Linux-GNU-CXX.cmake /usr/share/cmake-3.28/Modules/Platform/Linux-GNU.cmake /usr/share/cmake-3.28/Modules/Platform/Linux-Initialize.cmake /usr/share/cmake-3.28/Modules/Platform/Linux.cmake /usr/share/cmake-3.28/Modules/Platform/UnixPaths.cmake /usr/share/cmake-3.28/Modules/WriteBasicConfigVersionFile.cmake CMakeCache.txt CMakeFiles/3.28.3/CMakeCXXCompiler.cmake CMakeFiles/3.28.3/CMakeSystem.cmake: phony
+build /home/isoula/om/shriven_zenith/CMakeLists.txt /home/isoula/om/shriven_zenith/common/CMakeLists.txt /home/isoula/om/shriven_zenith/common/CommonConfig.cmake.in /home/isoula/om/shriven_zenith/common/config.h.in /home/isoula/om/shriven_zenith/examples/CMakeLists.txt /home/isoula/om/shriven_zenith/tests/CMakeLists.txt /usr/share/cmake-3.28/Modules/BasicConfigVersion-AnyNewerVersion.cmake.in /usr/share/cmake-3.28/Modules/CMakeCXXCompiler.cmake.in /usr/share/cmake-3.28/Modules/CMakeCXXCompilerABI.cpp /usr/share/cmake-3.28/Modules/CMakeCXXInformation.cmake /usr/share/cmake-3.28/Modules/CMakeCommonLanguageInclude.cmake /usr/share/cmake-3.28/Modules/CMakeCompilerIdDetection.cmake /usr/share/cmake-3.28/Modules/CMakeDetermineCXXCompiler.cmake /usr/share/cmake-3.28/Modules/CMakeDetermineCompileFeatures.cmake /usr/share/cmake-3.28/Modules/CMakeDetermineCompiler.cmake /usr/share/cmake-3.28/Modules/CMakeDetermineCompilerABI.cmake /usr/share/cmake-3.28/Modules/CMakeDetermineCompilerId.cmake /usr/share/cmake-3.28/Modules/CMakeDetermineSystem.cmake /usr/share/cmake-3.28/Modules/CMakeFindBinUtils.cmake /usr/share/cmake-3.28/Modules/CMakeGenericSystem.cmake /usr/share/cmake-3.28/Modules/CMakeInitializeConfigs.cmake /usr/share/cmake-3.28/Modules/CMakeLanguageInformation.cmake /usr/share/cmake-3.28/Modules/CMakePackageConfigHelpers.cmake /usr/share/cmake-3.28/Modules/CMakeParseImplicitIncludeInfo.cmake /usr/share/cmake-3.28/Modules/CMakeParseImplicitLinkInfo.cmake /usr/share/cmake-3.28/Modules/CMakeParseLibraryArchitecture.cmake /usr/share/cmake-3.28/Modules/CMakeSystem.cmake.in /usr/share/cmake-3.28/Modules/CMakeSystemSpecificInformation.cmake /usr/share/cmake-3.28/Modules/CMakeSystemSpecificInitialize.cmake /usr/share/cmake-3.28/Modules/CMakeTestCXXCompiler.cmake /usr/share/cmake-3.28/Modules/CMakeTestCompilerCommon.cmake /usr/share/cmake-3.28/Modules/CheckCXXSourceCompiles.cmake /usr/share/cmake-3.28/Modules/CheckIncludeFileCXX.cmake /usr/share/cmake-3.28/Modules/CheckLibraryExists.cmake /usr/share/cmake-3.28/Modules/Compiler/ADSP-DetermineCompiler.cmake /usr/share/cmake-3.28/Modules/Compiler/ARMCC-DetermineCompiler.cmake /usr/share/cmake-3.28/Modules/Compiler/ARMClang-DetermineCompiler.cmake /usr/share/cmake-3.28/Modules/Compiler/AppleClang-DetermineCompiler.cmake /usr/share/cmake-3.28/Modules/Compiler/Borland-DetermineCompiler.cmake /usr/share/cmake-3.28/Modules/Compiler/CMakeCommonCompilerMacros.cmake /usr/share/cmake-3.28/Modules/Compiler/Clang-DetermineCompiler.cmake /usr/share/cmake-3.28/Modules/Compiler/Clang-DetermineCompilerInternal.cmake /usr/share/cmake-3.28/Modules/Compiler/Comeau-CXX-DetermineCompiler.cmake /usr/share/cmake-3.28/Modules/Compiler/Compaq-CXX-DetermineCompiler.cmake /usr/share/cmake-3.28/Modules/Compiler/Cray-DetermineCompiler.cmake /usr/share/cmake-3.28/Modules/Compiler/CrayClang-DetermineCompiler.cmake /usr/share/cmake-3.28/Modules/Compiler/Embarcadero-DetermineCompiler.cmake /usr/share/cmake-3.28/Modules/Compiler/Fujitsu-DetermineCompiler.cmake /usr/share/cmake-3.28/Modules/Compiler/FujitsuClang-DetermineCompiler.cmake /usr/share/cmake-3.28/Modules/Compiler/GHS-DetermineCompiler.cmake /usr/share/cmake-3.28/Modules/Compiler/GNU-CXX-DetermineCompiler.cmake /usr/share/cmake-3.28/Modules/Compiler/GNU-CXX.cmake /usr/share/cmake-3.28/Modules/Compiler/GNU-FindBinUtils.cmake /usr/share/cmake-3.28/Modules/Compiler/GNU.cmake /usr/share/cmake-3.28/Modules/Compiler/HP-CXX-DetermineCompiler.cmake /usr/share/cmake-3.28/Modules/Compiler/IAR-DetermineCompiler.cmake /usr/share/cmake-3.28/Modules/Compiler/IBMCPP-CXX-DetermineVersionInternal.cmake /usr/share/cmake-3.28/Modules/Compiler/IBMClang-CXX-DetermineCompiler.cmake /usr/share/cmake-3.28/Modules/Compiler/Intel-DetermineCompiler.cmake /usr/share/cmake-3.28/Modules/Compiler/IntelLLVM-DetermineCompiler.cmake /usr/share/cmake-3.28/Modules/Compiler/LCC-CXX-DetermineCompiler.cmake /usr/share/cmake-3.28/Modules/Compiler/MSVC-DetermineCompiler.cmake /usr/share/cmake-3.28/Modules/Compiler/NVHPC-DetermineCompiler.cmake /usr/share/cmake-3.28/Modules/Compiler/NVIDIA-DetermineCompiler.cmake /usr/share/cmake-3.28/Modules/Compiler/OpenWatcom-DetermineCompiler.cmake /usr/share/cmake-3.28/Modules/Compiler/OrangeC-DetermineCompiler.cmake /usr/share/cmake-3.28/Modules/Compiler/PGI-DetermineCompiler.cmake /usr/share/cmake-3.28/Modules/Compiler/PathScale-DetermineCompiler.cmake /usr/share/cmake-3.28/Modules/Compiler/SCO-DetermineCompiler.cmake /usr/share/cmake-3.28/Modules/Compiler/SunPro-CXX-DetermineCompiler.cmake /usr/share/cmake-3.28/Modules/Compiler/TI-DetermineCompiler.cmake /usr/share/cmake-3.28/Modules/Compiler/Tasking-DetermineCompiler.cmake /usr/share/cmake-3.28/Modules/Compiler/VisualAge-CXX-DetermineCompiler.cmake /usr/share/cmake-3.28/Modules/Compiler/Watcom-DetermineCompiler.cmake /usr/share/cmake-3.28/Modules/Compiler/XL-CXX-DetermineCompiler.cmake /usr/share/cmake-3.28/Modules/Compiler/XLClang-CXX-DetermineCompiler.cmake /usr/share/cmake-3.28/Modules/Compiler/zOS-CXX-DetermineCompiler.cmake /usr/share/cmake-3.28/Modules/FindPackageHandleStandardArgs.cmake /usr/share/cmake-3.28/Modules/FindPackageMessage.cmake /usr/share/cmake-3.28/Modules/FindPkgConfig.cmake /usr/share/cmake-3.28/Modules/FindThreads.cmake /usr/share/cmake-3.28/Modules/Internal/CheckSourceCompiles.cmake /usr/share/cmake-3.28/Modules/Internal/FeatureTesting.cmake /usr/share/cmake-3.28/Modules/Platform/Linux-Determine-CXX.cmake /usr/share/cmake-3.28/Modules/Platform/Linux-GNU-CXX.cmake /usr/share/cmake-3.28/Modules/Platform/Linux-GNU.cmake /usr/share/cmake-3.28/Modules/Platform/Linux-Initialize.cmake /usr/share/cmake-3.28/Modules/Platform/Linux.cmake /usr/share/cmake-3.28/Modules/Platform/UnixPaths.cmake /usr/share/cmake-3.28/Modules/WriteBasicConfigVersionFile.cmake CMakeCache.txt CMakeFiles/3.28.3/CMakeCXXCompiler.cmake CMakeFiles/3.28.3/CMakeSystem.cmake: phony
 
 
 #############################################

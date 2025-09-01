@@ -1,248 +1,102 @@
-# Shriven Zenith - Ultra Low-Latency Trading Platform
+# Shriven Zenith
 
-## 📊 Project Status: State 0.5 - Foundation Enhanced ✅
+Low-latency trading platform components.
 
-This repository contains a **production-ready foundation** for an ultra low-latency trading platform. The core building blocks are **complete and exceed performance targets**, with all components verified working at nanosecond-level latencies.
+## Structure
 
-**Latest Updates (2025-09-01):**
-- ✅ **MemoryPool Enhanced**: Split Arrays (SoA) design for perfect cache-line alignment
-- ✅ **Double-Free Protection**: Idempotent deallocation with atomic state tracking
-- ✅ **ZeroPolicy System**: Compile-time configurable memory zeroing (None/OnAcquire/OnRelease)
-- ✅ **Comprehensive Testing**: New test suites with corruption tracking
-
-## 🏗️ Current State - Foundation Complete ✅
-
-### Core Components Implemented and Verified
-
-#### 1. **Lock-Free Queues** (`bldg_blocks/lf_queue.h`)
-- **Status**: ✅ **Production Ready**
-- **Implementation**:
-  - **SPSC Queue**: Zero-copy API with proper memory barriers (`memory_order_release`/`acquire`)
-  - **MPMC Queue**: Traditional enqueue/dequeue with CAS operations
-  - **Cache-line aligned**: Separate producer/consumer data to prevent false sharing
-  - **Power-of-2 sizing**: Efficient modulo operations with bitwise AND
-- **Verified Performance**:
-  - **45ns average latency** (target: <100ns) ✅ **Exceeded**
-  - **24M messages/sec throughput** (SPSC)
-  - **Zero compiler warnings** with strict flags
-
-#### 2. **Memory Pool** (`bldg_blocks/mem_pool.h`) - **ENHANCED 2025-09-01**
-- **Status**: ✅ **Production Ready with Policy Support**
-- **Implementation**:
-  - **O(1) allocation/deallocation** using index-based free-list
-  - **Thread-safe** with spinlock and exponential backoff
-  - **NUMA-aware** allocation on specified nodes
-  - **Split Arrays (SoA)** design for perfect cache-line alignment
-  - **Double-free protection** with atomic state tracking
-  - **ZeroPolicy template** for configurable memory zeroing:
-    - `ZeroPolicy::None`: No zeroing (26ns - fastest)
-    - `ZeroPolicy::OnAcquire`: Zero on allocation (+3.3% overhead)
-    - `ZeroPolicy::OnRelease`: Zero on deallocation (+6.8% overhead)
-  - **allocate_zeroed()** method for explicit zeroed allocation
-- **Verified Performance**:
-  - **26ns average allocation** (None policy) ✅ **Exceeded target**
-  - **38M allocations/sec/core** sustained throughput
-  - **Zero memory leaks** and **double-free safe**
-  - **100% cache-line aligned** with SoA design
-
-#### 3. **High-Performance Logger** (`bldg_blocks/logging.h`)
-- **Status**: ✅ **Ultra-Low Latency**
-- **Implementation**:
-  - **Lock-free ring buffer** with SIMD-optimized memory copying
-  - **Asynchronous I/O** with dedicated writer thread
-  - **RDTSC timestamps** for nanosecond precision
-  - **Batched writes** to minimize system calls
-- **Verified Performance**:
-  - **35ns average logging latency** (target: <100ns) ✅ **Exceeded**
-  - **8M messages/sec** sustained logging rate
-  - **Zero allocation** after initialization
-
-#### 4. **Thread Utilities** (`bldg_blocks/thread_utils.h`)
-- **Status**: ✅ **NUMA Optimized**
-- **Implementation**:
-  - **CPU affinity management** with core isolation support
-  - **Real-time priority** scheduling (SCHED_FIFO)
-  - **NUMA-aware** memory allocation
-  - **Thread creation helpers** with proper initialization
-- **Features**:
-  - **Instant thread setup** (no blocking sleeps)
-  - **Hardware topology detection**
-  - **Interrupt isolation** support
-
-#### 5. **Network Foundation** (`bldg_blocks/socket_utils.h`)
-- **Status**: ✅ **Prepared for Ultra-Low Latency**
-- **Implementation**:
-  - **Non-blocking sockets** with TCP_NODELAY
-  - **SO_TIMESTAMP** hardware timestamping support
-  - **Multicast** market data reception ready
-  - **Kernel bypass preparation** (DPDK integration points)
-
-### Current Performance vs. Targets
-
-| Component | Target Latency | **Achieved Latency** | Status |
-|-----------|----------------|---------------------|---------|
-| Memory Allocation | < 50ns | **26ns** | ✅ **48% better** |
-| Queue Operations | < 100ns | **45ns** | ✅ **55% better** |
-| Logging | < 100ns | **35ns** | ✅ **65% better** |
-| Overall Throughput | 20M ops/sec | **24M ops/sec** | ✅ **20% better** |
-
-### System Integration Status
-
-- **Build System**: ✅ Zero warnings with strict compiler flags
-- **Examples**: ✅ All components tested and working
-- **Documentation**: ✅ Complete technical guide available
-- **Performance**: ✅ All targets exceeded by significant margins
-
-## 🚀 Next Phase: Production Readiness
-
-### Current Status: **Foundation Complete** → **Moving to Production Validation**
-
-The core building blocks are **complete and exceeding performance targets**. Focus now shifts to production readiness:
-
-### Phase 1: Testing & Validation (Weeks 1-2) - **Current Priority**
-- [ ] Comprehensive unit test suite with contract verification
-- [ ] Automated performance benchmarking and regression detection
-- [ ] Stress testing under extreme concurrent load
-- [ ] Continuous integration pipeline
-
-### Phase 2: Advanced Features (Weeks 3-4)
-- [ ] Trading engine with high-performance order book
-- [ ] Real-time risk management system
-- [ ] Market data feed handlers with protocol support
-- [ ] Advanced monitoring and observability
-
-### Phase 3: Ultra-Performance Optimization (Weeks 5-6)
-- [ ] Kernel bypass networking integration (DPDK)
-- [ ] Huge pages and memory optimization
-- [ ] Hardware acceleration evaluation
-- [ ] End-to-end latency optimization
-
-### Phase 4: Production Deployment (Weeks 7-8)
-- [ ] Strategy framework and backtesting
-- [ ] Production monitoring and alerting
-- [ ] Disaster recovery and failover
-- [ ] Performance analytics and reporting
-
-
-## 🏗️ Build Instructions
-
-### Prerequisites
-- CMake 3.18+
-- GCC 11+ with C++20 support
-- Linux kernel 5.4+
-- Optional: DPDK 21.11 for kernel bypass
-
-### Building
-```bash
-# Clone the repository
-git clone https://github.com/praveen686/shriven_zenith.git
-cd shriven_zenith
-
-# Build the project
-./scripts/build.sh
-
-# Run tests
-./cmake-build-release/common/lf_queue_example
-./cmake-build-release/common/logging_example
-./cmake-build-release/common/mem_pool_example
+```
+shriven_zenith/
+├── common/          # Core library components
+├── examples/        # Usage examples
+├── tests/          # Unit tests and benchmarks
+├── docs/           # Documentation
+├── scripts/        # Build scripts
+└── cmake/          # Build files
 ```
 
-## 📊 Progress Monitoring
+## Building
 
-### Week-by-Week Milestones
+### Requirements
 
-#### Week 1 (Current)
-- [x] Initial codebase analysis
-- [x] Document current state
-- [ ] Fix lock-free queue
-- [ ] Fix memory pool
+- Linux with x86_64 architecture
+- GCC 13+ or Clang 16+ 
+- CMake 3.20+
+- libnuma-dev
+- googletest (for tests)
 
-#### Week 2
-- [ ] Thread pool implementation
-- [ ] Logger optimization
-- [ ] Initial benchmarks
+### Build Commands
 
-#### Week 3
-- [ ] Time management system
-- [ ] Memory optimizations
-- [ ] Performance testing
+```bash
+# Full build with strict compiler flags
+./scripts/build_strict.sh
 
-#### Week 4
-- [ ] Network stack enhancement
-- [ ] Order book structure
-- [ ] Integration testing
+# Run examples
+./cmake/build-strict-release/examples/examples all
 
-## 🔍 Testing Strategy
+# Run specific example
+./cmake/build-strict-release/examples/examples mem_pool
+./cmake/build-strict-release/examples/examples lf_queue
+./cmake/build-strict-release/examples/examples thread_utils
+```
 
-### Unit Tests
-- Lock-free queue concurrent access
-- Memory pool stress testing
-- Logger throughput benchmarks
+## Components
 
-### Performance Tests
-- Latency measurements (99th percentile)
-- Throughput under load
-- Memory usage patterns
+### Memory Pool
+Pre-allocated memory pools with 26ns allocation latency.
 
-### Integration Tests
-- End-to-end message flow
-- Multi-threaded scenarios
-- Failure recovery
+### Lock-Free Queues
+- SPSC (Single Producer Single Consumer) queue
+- MPMC (Multiple Producer Multiple Consumer) queue
+- 45ns enqueue/dequeue operations
 
-## 📝 Development Guidelines
+### Logging
+Asynchronous logger with 35-235ns overhead per log entry.
 
-### Code Style
-- C++20 standard
-- `constexpr` for compile-time constants
-- `noexcept` for non-throwing functions
-- RAII for resource management
-- No raw `new`/`delete` except placement new
+### Thread Utilities
+CPU affinity, real-time scheduling, and NUMA support.
 
-### Performance Rules
-1. **NO heap allocations in hot path**
-2. **Cache-line align all shared data**
-3. **Use LIKELY/UNLIKELY for branch hints**
-4. **Pre-allocate all memory at startup**
-5. **Pin threads to CPU cores**
+## Testing
 
-## 📚 Documentation
+```bash
+# Run unit tests
+./cmake/build-strict-release/tests/test_mem_pool
+./cmake/build-strict-release/tests/test_lf_queue
+./cmake/build-strict-release/tests/test_logger
+./cmake/build-strict-release/tests/test_thread_utils
+./cmake/build-strict-release/tests/test_zero_policy
 
-### ➡️ **[COMPLETE DOCUMENTATION](shriven_zenith_guide.md)** - **START HERE**
+# Run benchmarks
+./cmake/build-strict-release/tests/benchmark_common
+```
 
-**All documentation has been consolidated into a single, comprehensive guide that includes:**
+## Performance
 
-✅ **Complete System Architecture** - Understanding the platform  
-✅ **Verified API References** - 100% accurate function signatures  
-✅ **Development Guidelines** - Mandatory coding standards  
-✅ **Testing Strategies** - Ultra-low latency testing practices  
-✅ **Performance Specifications** - Latency targets and benchmarks  
-✅ **Build & Deployment** - Complete setup instructions  
-✅ **Lessons Learned** - Critical insights from development  
-✅ **Troubleshooting** - Common issues and solutions  
+Measured latencies on modern x86_64 hardware:
 
-### Critical Reading
-- **[shriven_zenith_guide.md](shriven_zenith_guide.md)** - Complete technical documentation (world-class)
-- **[CLAUDE.md](CLAUDE.md)** - **MANDATORY** design principles and coding standards
+| Operation | Latency |
+|-----------|---------|
+| Memory allocation | 26ns |
+| Queue operation | 45ns |
+| Log entry | 35-235ns |
 
+## Documentation
 
-## 🤝 Contributing
+- [Technical Documentation](docs/technical_documentation.md) - Detailed architecture and design
+- [Common Library](common/README.md) - Core components reference
+- [CLAUDE.md](CLAUDE.md) - Coding standards and requirements
 
-This is a work-in-progress foundation for an ultra low-latency trading platform. Contributions focusing on performance improvements and latency reduction are welcome.
+## Compiler Flags
 
-## 📜 License
+The project enforces strict compilation with:
+```
+-Wall -Wextra -Werror -Wpedantic -Wconversion -Wsign-conversion
+-Wold-style-cast -Wformat-security -Weffc++ -O3 -march=native
+```
 
-Proprietary - All rights reserved
+## License
 
----
+See license file for details.
 
-## State History
+## Author
 
-### State 0 - Foundation (Current)
-- Date: August 31, 2025
-- Commit: Initial foundation with basic components
-- Status: Needs hardening for production use
-- Next: State 1 - Core Infrastructure Hardening
-
----
-
-*This document tracks the evolution of Shriven Zenith from foundation to production-ready ultra low-latency trading platform.*
+Praveen Ayyasola (praveenkumar.avln@gmail.com)

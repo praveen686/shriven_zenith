@@ -5,10 +5,10 @@
 #include <atomic>
 #include <iomanip>
 
-#include "../bldg_blocks/thread_utils.h"
-#include "../bldg_blocks/macros.h"
+#include "../common/thread_utils.h"
+#include "../common/macros.h"
 
-using namespace BldgBlocks;
+using namespace Common;
 using namespace std::chrono;
 
 // Example 1: CPU Affinity Setting

@@ -12,7 +12,7 @@
 #include "logging.h"
 #include "time_utils.h"
 
-using namespace BldgBlocks;
+using namespace Common;
 
 // Base test class with proper setup
 class MemPoolTestBase : public ::testing::Test {
@@ -22,14 +22,14 @@ protected:
         std::string timestamp = std::to_string(std::chrono::duration_cast<std::chrono::nanoseconds>(
             std::chrono::system_clock::now().time_since_epoch()).count());
         std::string log_file = "logs/test_mempool_" + timestamp + ".log";
-        BldgBlocks::initLogging(log_file);
+        Common::initLogging(log_file);
         
         LOG_INFO("=== Starting MemPool Test ===");
     }
     
     void TearDown() override {
         LOG_INFO("=== MemPool Test Completed ===");
-        BldgBlocks::shutdownLogging();
+        Common::shutdownLogging();
     }
     
     // Helper to verify memory is zeroed

@@ -116,8 +116,8 @@ class ResourceOwner {
 ```cpp
 // ✅ MANDATORY PATTERN
 struct TradingStats {
-    BldgBlocks::CacheAligned<std::atomic<uint64_t>> orders_sent;
-    BldgBlocks::CacheAligned<std::atomic<uint64_t>> orders_filled;
+    Common::CacheAligned<std::atomic<uint64_t>> orders_sent;
+    Common::CacheAligned<std::atomic<uint64_t>> orders_filled;
 };
 
 // ❌ INSTANT REJECTION
@@ -157,7 +157,7 @@ void process_order(const Order& order) {
 // AT STARTUP - ONCE
 int main() {
     // 1. Initialize config
-    if (!BldgBlocks::initConfig("config.toml")) {
+    if (!Common::initConfig("config.toml")) {
         std::cerr << "Config failed\n";  // Console only before logger
         return 1;
     }
@@ -167,13 +167,13 @@ int main() {
     std::string timestamp = get_timestamp();
     std::string log_file = config().getLogsDir() + "/" + 
                           module + "_" + timestamp + ".log";
-    BldgBlocks::initLogging(log_file);
+    Common::initLogging(log_file);
     
     // 3. Run application
     run();
     
     // 4. Shutdown logger
-    BldgBlocks::shutdownLogging();
+    Common::shutdownLogging();
 }
 
 // THROUGHOUT APPLICATION
@@ -349,7 +349,7 @@ if (!obj) {
 pool.deallocate(obj);
 
 // Cache-aligned atomic
-BldgBlocks::CacheAligned<std::atomic<uint64_t>> counter{0};
+Common::CacheAligned<std::atomic<uint64_t>> counter{0};
 
 // Lock-free queue
 if (!queue.enqueue(std::move(item))) {

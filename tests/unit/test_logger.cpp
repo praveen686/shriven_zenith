@@ -14,7 +14,7 @@
 #include "logging.h"
 #include "time_utils.h"
 
-using namespace BldgBlocks;
+using namespace Common;
 
 // Base test class with proper setup
 class LoggerTestBase : public ::testing::Test {
@@ -34,15 +34,15 @@ protected:
         test_log_file_ = test_dir_ + "/logger_test.log";
         
         // Ensure any previous logger is shutdown
-        BldgBlocks::shutdownLogging();
-        BldgBlocks::initLogging(test_log_file_);
+        Common::shutdownLogging();
+        Common::initLogging(test_log_file_);
         
         LOG_INFO("=== Starting Logger Test ===");
     }
     
     void TearDown() override {
         LOG_INFO("=== Logger Test Completed ===");
-        BldgBlocks::shutdownLogging();
+        Common::shutdownLogging();
         
         // Small delay to ensure file writes are complete
         std::this_thread::sleep_for(std::chrono::milliseconds(100));
@@ -159,15 +159,15 @@ TEST_F(LoggerTestBase, InitializationAndShutdownContract) {
     std::string custom_log = createTempLogFile();
     
     // Ensure clean state
-    BldgBlocks::shutdownLogging();
-    ASSERT_EQ(BldgBlocks::g_logger, nullptr) << "g_logger should be null before initialization";
+    Common::shutdownLogging();
+    ASSERT_EQ(Common::g_logger, nullptr) << "g_logger should be null before initialization";
     
     // === WHEN (Action) ===
-    BldgBlocks::initLogging(custom_log);
+    Common::initLogging(custom_log);
     
     // === THEN (Output Verification) ===
     // Contract 1: Logger instance created
-    ASSERT_NE(BldgBlocks::g_logger, nullptr) << "initLogging must create valid g_logger instance";
+    ASSERT_NE(Common::g_logger, nullptr) << "initLogging must create valid g_logger instance";
     
     // Contract 2: Log file created and accessible
     ASSERT_TRUE(std::filesystem::exists(custom_log)) << "Log file must be created during initialization";
@@ -183,15 +183,15 @@ TEST_F(LoggerTestBase, InitializationAndShutdownContract) {
         << "Log file should contain our test message";
     
     // Contract 5: Shutdown cleans up properly
-    BldgBlocks::shutdownLogging();
-    ASSERT_EQ(BldgBlocks::g_logger, nullptr) << "shutdownLogging must set g_logger to nullptr";
+    Common::shutdownLogging();
+    ASSERT_EQ(Common::g_logger, nullptr) << "shutdownLogging must set g_logger to nullptr";
     
     // Contract 6: File remains after shutdown
     ASSERT_TRUE(std::filesystem::exists(custom_log)) << "Log file must persist after shutdown";
     
     // Contract 7: Reinitialize works after shutdown
-    BldgBlocks::initLogging(custom_log);
-    ASSERT_NE(BldgBlocks::g_logger, nullptr) << "Reinitialization must work after shutdown";
+    Common::initLogging(custom_log);
+    ASSERT_NE(Common::g_logger, nullptr) << "Reinitialization must work after shutdown";
     
     // Contract 8: Can log after reinitialize
     LOG_WARN("Test reinitialization message");
@@ -202,7 +202,7 @@ TEST_F(LoggerTestBase, InitializationAndShutdownContract) {
         << "Logger must work after reinitialization";
     
     // Final cleanup
-    BldgBlocks::shutdownLogging();
+    Common::shutdownLogging();
     
     LOG_INFO("PASS: Logger initialization and shutdown contract verified");
 }
@@ -240,8 +240,8 @@ TEST_F(LoggerTestBase, LogLevelsAndMacroContract) {
     
     // === GIVEN (Input Contract) ===
     std::string unique_log = createTempLogFile();
-    BldgBlocks::shutdownLogging();
-    BldgBlocks::initLogging(unique_log);
+    Common::shutdownLogging();
+    Common::initLogging(unique_log);
     
     const std::string DEBUG_MSG = "Debug message with value 42";
     const std::string INFO_MSG = "Info message processing order 1001";
@@ -312,7 +312,7 @@ TEST_F(LoggerTestBase, LogLevelsAndMacroContract) {
     
     ASSERT_EQ(level_count, 5) << "Should find exactly 5 log level entries";
     
-    BldgBlocks::shutdownLogging();
+    Common::shutdownLogging();
     
     LOG_INFO("PASS: Log levels and macro contract verified - all levels working correctly");
 }
@@ -354,8 +354,8 @@ TEST_F(LoggerTestBase, MessageFormattingContract) {
     
     // === GIVEN (Input Contract) ===
     std::string format_log = createTempLogFile();
-    BldgBlocks::shutdownLogging();
-    BldgBlocks::initLogging(format_log);
+    Common::shutdownLogging();
+    Common::initLogging(format_log);
     
     // Test values
     const int int_val = 12345;
@@ -428,7 +428,7 @@ TEST_F(LoggerTestBase, MessageFormattingContract) {
     ASSERT_NE(log_content.find("YYYYYYY"), std::string::npos)
         << "Overflow message should contain partial content";
     
-    BldgBlocks::shutdownLogging();
+    Common::shutdownLogging();
     
     LOG_INFO("PASS: Message formatting contract verified - all format types working correctly");
 }
@@ -473,13 +473,13 @@ TEST_F(LoggerTestBase, BufferOverflowHandlingContract) {
     
     // === GIVEN (Input Contract) ===
     std::string overflow_log = createTempLogFile();
-    BldgBlocks::shutdownLogging();
-    BldgBlocks::initLogging(overflow_log);
+    Common::shutdownLogging();
+    Common::initLogging(overflow_log);
     
     const int OVERFLOW_COUNT = 20000;  // Exceed 16K buffer
     
     // Get initial stats
-    auto initial_stats = BldgBlocks::g_logger->getStats();
+    auto initial_stats = Common::g_logger->getStats();
     
     // === WHEN (Action - Overflow Generation) ===
     auto start_time = std::chrono::steady_clock::now();
@@ -501,7 +501,7 @@ TEST_F(LoggerTestBase, BufferOverflowHandlingContract) {
     auto duration = std::chrono::duration_cast<std::chrono::milliseconds>(end_time - start_time);
     
     // === THEN (Output Verification) ===
-    auto final_stats = BldgBlocks::g_logger->getStats();
+    auto final_stats = Common::g_logger->getStats();
     
     // Calculate deltas
     uint64_t messages_written = final_stats.messages_written - initial_stats.messages_written;
@@ -531,7 +531,7 @@ TEST_F(LoggerTestBase, BufferOverflowHandlingContract) {
     ASSERT_GT(log_lines, 0) << "Background thread should have written entries to file";
     
     // Contract 6: System remains stable (no crashes)
-    ASSERT_NE(BldgBlocks::g_logger, nullptr) << "Logger should remain valid after overflow";
+    ASSERT_NE(Common::g_logger, nullptr) << "Logger should remain valid after overflow";
     
     // Contract 7: Recovery possible - test new logging after overflow
     LOG_WARN("Recovery test - logging after overflow");
@@ -547,7 +547,7 @@ TEST_F(LoggerTestBase, BufferOverflowHandlingContract) {
         ASSERT_GT(throughput, 10000) << "Should maintain reasonable throughput during overflow: " << throughput << " entries/sec";
     }
     
-    BldgBlocks::shutdownLogging();
+    Common::shutdownLogging();
     
     // === SUCCESS CRITERIA REPORTING ===
     LOG_INFO("PASS: Buffer overflow handling contract verified");
@@ -594,8 +594,8 @@ TEST_F(LoggerTestBase, LoggingLatencyContract) {
     
     // === GIVEN (Performance Contract) ===
     std::string perf_log = createTempLogFile();
-    BldgBlocks::shutdownLogging();
-    BldgBlocks::initLogging(perf_log);
+    Common::shutdownLogging();
+    Common::initLogging(perf_log);
     
     const int ITERATIONS = 10000;
     const int WARMUP_ITERATIONS = 100;
@@ -684,10 +684,10 @@ TEST_F(LoggerTestBase, LoggingLatencyContract) {
         << "Mean latency " << mean_latency << "ns significantly exceeds typical " << TYPICAL_LATENCY_NS << "ns";
     
     // Contract 7: Verify all log calls succeeded
-    auto stats = BldgBlocks::g_logger->getStats();
+    auto stats = Common::g_logger->getStats();
     EXPECT_EQ(stats.messages_dropped, 0) << "No messages should be dropped during performance test";
     
-    BldgBlocks::shutdownLogging();
+    Common::shutdownLogging();
     
     // === SUCCESS CRITERIA REPORTING ===
     LOG_INFO("PASS: Logging latency contract verified");
@@ -741,8 +741,8 @@ TEST_F(LoggerTestBase, ConcurrentLoggingContract) {
     
     // === GIVEN (Concurrency Contract) ===
     std::string concurrent_log = createTempLogFile();
-    BldgBlocks::shutdownLogging();
-    BldgBlocks::initLogging(concurrent_log);
+    Common::shutdownLogging();
+    Common::initLogging(concurrent_log);
     
     const int NUM_THREADS = 8;
     const int MESSAGES_PER_THREAD = 1000;
@@ -754,7 +754,7 @@ TEST_F(LoggerTestBase, ConcurrentLoggingContract) {
     std::atomic<int> successful_logs{0};
     std::atomic<int> thread_errors{0};
     
-    auto start_stats = BldgBlocks::g_logger->getStats();
+    auto start_stats = Common::g_logger->getStats();
     
     // === WHEN (Concurrent Load Testing) ===
     auto test_start = std::chrono::steady_clock::now();
@@ -805,7 +805,7 @@ TEST_F(LoggerTestBase, ConcurrentLoggingContract) {
     std::this_thread::sleep_for(std::chrono::milliseconds(1000));
     
     auto duration = std::chrono::duration_cast<std::chrono::milliseconds>(test_end - test_start);
-    auto final_stats = BldgBlocks::g_logger->getStats();
+    auto final_stats = Common::g_logger->getStats();
     
     // === THEN (Concurrency Contract Verification) ===
     
@@ -853,7 +853,7 @@ TEST_F(LoggerTestBase, ConcurrentLoggingContract) {
         << "/" << NUM_THREADS << " found)";
     
     // Contract 6: Logger remains valid after stress test
-    ASSERT_NE(BldgBlocks::g_logger, nullptr) << "Logger should remain valid after concurrent stress test";
+    ASSERT_NE(Common::g_logger, nullptr) << "Logger should remain valid after concurrent stress test";
     
     // Contract 7: Recovery test - single log after stress
     LOG_ERROR("Post-stress recovery test message");
@@ -863,7 +863,7 @@ TEST_F(LoggerTestBase, ConcurrentLoggingContract) {
     ASSERT_NE(recovery_content.find("Post-stress recovery test message"), std::string::npos)
         << "Logger should remain functional after concurrent stress test";
     
-    BldgBlocks::shutdownLogging();
+    Common::shutdownLogging();
     
     // === SUCCESS CRITERIA REPORTING ===
     LOG_INFO("PASS: Concurrent logging contract verified");

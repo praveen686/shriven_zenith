@@ -92,8 +92,9 @@ endif()
 find_library(NUMA_LIBRARY numa)
 
 # Add subdirectories
-add_subdirectory(bldg_blocks)
+add_subdirectory(common)
 add_subdirectory(examples)
+
 
 # Add tests
 if(EXISTS "${CMAKE_CURRENT_SOURCE_DIR}/tests/CMakeLists.txt")

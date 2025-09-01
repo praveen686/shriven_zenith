@@ -6,12 +6,12 @@
 #include <atomic>
 #include <memory>
 
-#include "../bldg_blocks/mem_pool.h"
-#include "../bldg_blocks/thread_utils.h"
-#include "../bldg_blocks/macros.h"
-#include "../bldg_blocks/logging.h"
+#include "../common/mem_pool.h"
+#include "../common/thread_utils.h"
+#include "../common/macros.h"
+#include "../common/logging.h"
 
-using namespace BldgBlocks;
+using namespace Common;
 using namespace std::chrono;
 
 // Test object with some data

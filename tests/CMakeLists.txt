@@ -2,10 +2,10 @@ set(CMAKE_CXX_STANDARD 23)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
 
 include_directories(${PROJECT_SOURCE_DIR})
-include_directories(${PROJECT_SOURCE_DIR}/bldg_blocks)
+include_directories(${PROJECT_SOURCE_DIR}/common)
 
 # Libraries needed for tests
-list(APPEND TEST_LIBS BldgBlocksImpl numa atomic)
+list(APPEND TEST_LIBS CommonImpl numa atomic)
 
 # Add Threads using the imported target if available
 if(TARGET Threads::Threads)
@@ -20,8 +20,8 @@ pkg_check_modules(GTEST REQUIRED gtest)
 list(APPEND TEST_LIBS ${GTEST_LIBRARIES})
 
 # Benchmarks
-add_executable(benchmark_enhancements benchmarks/benchmark_enhancements.cpp)
-target_link_libraries(benchmark_enhancements PUBLIC ${TEST_LIBS})
+add_executable(benchmark_common benchmarks/benchmark_common.cpp)
+target_link_libraries(benchmark_common PUBLIC ${TEST_LIBS})
 
 # Unit Tests
 add_executable(test_mem_pool unit/test_mem_pool.cpp)
@@ -44,6 +44,7 @@ add_executable(test_zero_policy unit/test_zero_policy.cpp)
 target_link_libraries(test_zero_policy PUBLIC ${TEST_LIBS})
 target_include_directories(test_zero_policy PRIVATE ${GTEST_INCLUDE_DIRS})
 target_compile_definitions(test_zero_policy PRIVATE TESTING)
+
 
 # Bullet-proof GCC 13 + LTO strict-overflow workaround for std::sort false positive
 # Apply to both compile AND link phases (LTO warnings can reappear at link time)

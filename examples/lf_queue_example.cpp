@@ -4,11 +4,11 @@
 #include <chrono>
 #include <atomic>
 
-#include "../bldg_blocks/lf_queue.h"
-#include "../bldg_blocks/thread_utils.h"
-#include "../bldg_blocks/macros.h"
+#include "../common/lf_queue.h"
+#include "../common/thread_utils.h"
+#include "../common/macros.h"
 
-using namespace BldgBlocks;
+using namespace Common;
 using namespace std::chrono;
 
 // Example 1: Simple SPSC Queue Usage

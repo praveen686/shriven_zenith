@@ -5,9 +5,9 @@
 #include <gtest/gtest.h>
 #include <vector>
 #include <cstring>
-#include "bldg_blocks/mem_pool.h"
+#include "common/mem_pool.h"
 
-using namespace BldgBlocks;
+using namespace Common;
 
 // Helper to check if memory is zeroed
 static bool isZeroed(void* ptr, size_t size) {
