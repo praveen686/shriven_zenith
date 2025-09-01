@@ -1,0 +1,155 @@
+name: Claude Auditor CI
+
+on:
+  push:
+    branches: [ main, develop ]
+  pull_request:
+    branches: [ main ]
+
+jobs:
+  audit:
+    runs-on: ubuntu-latest
+    
+    steps:
+    - uses: actions/checkout@v3
+    
+    - name: Install dependencies
+      run: |
+        sudo apt-get update
+        sudo apt-get install -y \
+          build-essential \
+          cmake \
+          ninja-build \
+          libnuma-dev
+    
+    - name: Build Claude Auditor
+      run: |
+        mkdir -p build
+        cd build
+        cmake .. -G Ninja -DCMAKE_BUILD_TYPE=Release
+        ninja claude_audit
+    
+    - name: Run Static Analysis
+      run: |
+        ./build/auditor/claude_audit \
+          --source . \
+          --junit audit-results.xml \
+          --json violations.json \
+          --fail-on-high
+      continue-on-error: true
+    
+    - name: Upload Audit Results
+      uses: actions/upload-artifact@v3
+      if: always()
+      with:
+        name: audit-results
+        path: |
+          audit-results.xml
+          violations.json
+          audit_report.txt
+    
+    - name: Publish Test Results
+      uses: EnricoMi/publish-unit-test-result-action@v2
+      if: always()
+      with:
+        files: audit-results.xml
+        check_name: Claude Auditor Results
+    
+    - name: Comment PR with Violations
+      if: github.event_name == 'pull_request' && failure()
+      uses: actions/github-script@v6
+      with:
+        script: |
+          const fs = require('fs');
+          const violations = JSON.parse(fs.readFileSync('violations.json', 'utf8'));
+          
+          let comment = '## 🔍 Claude Auditor Report\n\n';
+          comment += `### Summary\n`;
+          comment += `- **Critical**: ${violations.summary.critical}\n`;
+          comment += `- **High**: ${violations.summary.high}\n`;
+          comment += `- **Medium**: ${violations.summary.medium}\n`;
+          comment += `- **Low**: ${violations.summary.low}\n`;
+          comment += `- **Info**: ${violations.summary.info}\n\n`;
+          
+          if (violations.summary.critical > 0 || violations.summary.high > 0) {
+            comment += '### ❌ Build Failed - Critical/High violations detected\n\n';
+            comment += 'Please fix the violations before merging.\n';
+          } else {
+            comment += '### ✅ Build Passed\n';
+          }
+          
+          github.rest.issues.createComment({
+            issue_number: context.issue.number,
+            owner: context.repo.owner,
+            repo: context.repo.repo,
+            body: comment
+          });
+    
+    - name: Check Audit Results
+      run: |
+        if [ -f audit-results.xml ]; then
+          if grep -q 'failures="[1-9]' audit-results.xml; then
+            echo "❌ Audit failed with violations"
+            exit 1
+          fi
+        fi
+        echo "✅ Audit passed"
+
+  performance:
+    runs-on: ubuntu-latest
+    needs: audit
+    
+    steps:
+    - uses: actions/checkout@v3
+    
+    - name: Build with Performance Tracking
+      run: |
+        mkdir -p build
+        cd build
+        cmake .. -G Ninja \
+          -DCMAKE_BUILD_TYPE=Release \
+          -DENABLE_AUDIT=ON
+        ninja
+    
+    - name: Run Performance Tests
+      run: |
+        cd build
+        ./tests/benchmark_common --benchmark_format=json > perf-results.json
+    
+    - name: Check Performance Targets
+      run: |
+        python3 -c "
+import json
+import sys
+
+with open('build/perf-results.json') as f:
+    results = json.load(f)
+
+targets = {
+    'MemoryPool_Allocate': 50,  # 50ns
+    'LFQueue_Enqueue': 100,      # 100ns
+    'LFQueue_Dequeue': 100,      # 100ns
+    'Logger_Log': 100,           # 100ns
+}
+
+failed = False
+for benchmark in results['benchmarks']:
+    name = benchmark['name'].split('/')[0]
+    time_ns = benchmark['real_time']
+    
+    if name in targets:
+        if time_ns > targets[name]:
+            print(f'❌ {name}: {time_ns:.1f}ns > {targets[name]}ns target')
+            failed = True
+        else:
+            print(f'✅ {name}: {time_ns:.1f}ns <= {targets[name]}ns target')
+
+sys.exit(1 if failed else 0)
+"
+    
+    - name: Upload Performance Results
+      uses: actions/upload-artifact@v3
+      if: always()
+      with:
+        name: performance-results
+        path: build/perf-results.json

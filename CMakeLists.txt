@@ -95,6 +95,10 @@ find_library(NUMA_LIBRARY numa)
 add_subdirectory(common)
 add_subdirectory(examples)
 
+# Add auditor
+if(EXISTS "${CMAKE_CURRENT_SOURCE_DIR}/auditor/CMakeLists.txt")
+    add_subdirectory(auditor)
+endif()
 
 # Add tests
 if(EXISTS "${CMAKE_CURRENT_SOURCE_DIR}/tests/CMakeLists.txt")
