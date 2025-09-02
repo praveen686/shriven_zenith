@@ -6,12 +6,13 @@
 #include "common/time_utils.h"
 #include "common/types.h"
 
-#include "config/config_manager.h"
+#include "config/config.h"
 #include "trading/auth/zerodha/zerodha_auth.h"
 #include "trading/market_data/zerodha/zerodha_instrument_fetcher.h"
 
 #include <cstdio>
 #include <cstdlib>
+#include <cstring>
 #include <csignal>
 #include <atomic>
 #include <thread>
@@ -184,12 +185,40 @@ static bool initializeSystem() {
     // TODO: Add thread affinity and priority when ThreadUtils is available
     
     // Step 2: ConfigManager already initialized in main()
-    LOG_INFO("ConfigManager already initialized: env_file=%s", Trading::ConfigManager::getEnvFile());
+    const auto& cfg = Trading::ConfigManager::getConfig();
+    LOG_INFO("ConfigManager already initialized: env_file=%s", cfg.paths.env_file);
     
-    // Step 3: Load environment variables
-    char cmd[512];
-    snprintf(cmd, sizeof(cmd), "source %s 2>/dev/null", Trading::ConfigManager::getEnvFile());
-    system(cmd);  // AUDIT_IGNORE: Init-time only
+    // Step 3: Load environment variables from .env file
+    FILE* env_file = fopen(cfg.paths.env_file, "r");
+    if (env_file) {
+        char line[1024];
+        while (fgets(line, sizeof(line), env_file)) {
+            // Skip comments and empty lines
+            if (line[0] == '#' || line[0] == '\n') continue;
+            
+            // Remove trailing newline
+            size_t len = strlen(line);
+            if (len > 0 && line[len-1] == '\n') {
+                line[len-1] = '\0';
+            }
+            
+            // Find the = separator
+            char* equals = strchr(line, '=');
+            if (equals) {
+                *equals = '\0';
+                const char* key = line;
+                const char* value = equals + 1;
+                
+                // Set the environment variable
+                setenv(key, value, 1);
+                LOG_INFO("Loaded env var: %s", key);
+            }
+        }
+        fclose(env_file);
+        LOG_INFO("Environment variables loaded from %s", cfg.paths.env_file);
+    } else {
+        LOG_WARN("Could not open env file: %s", cfg.paths.env_file);
+    }
     
     // Step 4: Initialize Zerodha authentication
     LOG_INFO("Initializing Zerodha authentication...");
@@ -249,7 +278,7 @@ static bool initializeSystem() {
     time_t now = time(nullptr);
     struct tm* tm_info = localtime(&now);
     snprintf(cache_file, sizeof(cache_file), "%s/instruments_%04d%02d%02d.csv",
-            Trading::ConfigManager::getInstrumentsDataDir(),
+            cfg.paths.data_dir,
             tm_info->tm_year + 1900,
             tm_info->tm_mon + 1,
             tm_info->tm_mday);
@@ -266,8 +295,8 @@ static bool initializeSystem() {
         LOG_INFO("Cache not found, fetching from API...");
         printf("   Fetching from Zerodha API...\n");
         
-        char* buffer = new char[1024 * 1024];  // AUDIT_IGNORE: Init-time only
-        if (fetcher->fetchAllInstruments(buffer, 1024 * 1024)) {
+        char* buffer = new char[10 * 1024 * 1024];  // AUDIT_IGNORE: Init-time only, 10MB for instruments
+        if (fetcher->fetchAllInstruments(buffer, 10 * 1024 * 1024)) {
             LOG_INFO("Fetched %zu instruments from API", fetcher->getInstrumentCount());
             printf("   ✓ Fetched %zu instruments\n", fetcher->getInstrumentCount());
             
@@ -365,15 +394,15 @@ int main(int argc, char* argv[]) {
     displayBanner();
     
     // Initialize ConfigManager first (needed for log directory)
-    const char* master_config = "/home/isoula/om/shriven_zenith/config/master_config.txt";
-    if (!Trading::ConfigManager::init(master_config)) {
+    const char* config_file = "/home/isoula/om/shriven_zenith/config/config.toml";
+    if (!Trading::ConfigManager::init(config_file)) {
         fprintf(stderr, "Failed to initialize ConfigManager\n");
         return 1;
     }
     
     // Initialize logging using ConfigManager's log path
     char log_file[512];
-    Trading::ConfigManager::getLogFilePath(log_file, sizeof(log_file), "trader");
+    snprintf(log_file, sizeof(log_file), "%s/trader_main.log", Trading::ConfigManager::getConfig().paths.logs_dir);
     
     Common::initLogging(log_file);
     

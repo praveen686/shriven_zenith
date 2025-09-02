@@ -4,7 +4,7 @@
 
 #include "trading/auth/binance/binance_auth.h"
 #include "trading/market_data/binance/binance_instrument_fetcher.h"
-#include "config/config_manager.h"
+#include "config/config.h"
 #include "common/logging.h"
 #include <cstdio>
 #include <cstdlib>
@@ -32,7 +32,9 @@ static bool testAuthentication() {
     strncpy(creds.api_secret, api_secret, sizeof(creds.api_secret) - 1);
     
     // Get endpoint from ConfigManager
-    const char* binance_endpoint = Trading::ConfigManager::getBinanceApiEndpoint();
+    const auto& config = Trading::ConfigManager::getConfig();
+    const char* binance_endpoint = config.binance.use_testnet ? 
+        config.binance.testnet_endpoint : config.binance.api_endpoint;
     if (!binance_endpoint || binance_endpoint[0] == '\0') {
         // Fall back to testnet if not configured
         binance_endpoint = "https://testnet.binance.vision";
@@ -180,7 +182,9 @@ static bool testInstrumentFetching() {
     printf("\n2. Fetching symbols from Binance...\n");
     
     bool fetch_success = false;
-    const char* endpoint = Trading::ConfigManager::getBinanceApiEndpoint();
+    const auto& config = Trading::ConfigManager::getConfig();
+    const char* endpoint = config.binance.use_testnet ? 
+        config.binance.testnet_endpoint : config.binance.api_endpoint;
     if (strstr(endpoint, "testnet")) {
         printf("   Using fetchAllSymbols for testnet...\n");
         fetch_success = fetcher->fetchAllSymbols(json_buffer, BUFFER_SIZE);
@@ -244,7 +248,7 @@ static bool testInstrumentFetching() {
         time_t now = time(nullptr);
         struct tm* tm_info = localtime(&now);
         snprintf(cache_file, sizeof(cache_file), "%s/binance_symbols_%04d%02d%02d.csv",
-                Trading::ConfigManager::getInstrumentsDataDir(),
+                config.paths.instruments_dir,
                 tm_info->tm_year + 1900,
                 tm_info->tm_mon + 1,
                 tm_info->tm_mday);
@@ -295,7 +299,9 @@ int main([[maybe_unused]] int argc, [[maybe_unused]] char* argv[]) {
     
     // Initialize logging
     char log_file[512];
-    Trading::ConfigManager::getLogFilePath(log_file, sizeof(log_file), "test_binance");
+    // Build log file path
+    snprintf(log_file, sizeof(log_file), "%s/test_binance.log", 
+             Trading::ConfigManager::getLogsDir());
     Common::initLogging(log_file);
     
     LOG_INFO("Starting Binance API tests");

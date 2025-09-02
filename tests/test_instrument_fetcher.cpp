@@ -1,5 +1,5 @@
 #include "common/logging.h"
-#include "config/config_manager.h"
+#include "config/config.h"
 #include "trading/auth/zerodha/zerodha_auth.h"
 #include "trading/market_data/zerodha/zerodha_instrument_fetcher.h"
 
@@ -14,18 +14,18 @@ int main(int /*argc*/, char* /*argv*/[]) {
     
     // Step 1: Initialize ConfigManager
     printf("1. Initializing ConfigManager...\n");
-    const char* master_config = "/home/isoula/om/shriven_zenith/config/master_config.txt";
-    if (!Trading::ConfigManager::init(master_config)) {
+    if (!Trading::ConfigManager::init("config/config.toml")) {
         fprintf(stderr, "   Failed to initialize ConfigManager\n");
         return 1;
     }
     printf("   ConfigManager initialized successfully\n");
-    printf("   Instruments config: %s\n", Trading::ConfigManager::getInstrumentsConfigFile());
-    printf("   Instruments data dir: %s\n", Trading::ConfigManager::getInstrumentsDataDir());
+    printf("   Instruments config: %s\n", Trading::ConfigManager::getConfig().paths.instruments_dir);
+    printf("   Instruments data dir: %s\n", Trading::ConfigManager::getConfig().paths.instruments_dir);
     
     // Step 2: Initialize logging
     char log_file[512];
-    Trading::ConfigManager::getLogFilePath(log_file, sizeof(log_file), "instrument_test");
+    snprintf(log_file, sizeof(log_file), "%s/instrument_test.log", 
+             Trading::ConfigManager::getLogsDir());
     printf("2. Initializing logging to: %s\n", log_file);
     Common::initLogging(log_file);
     
@@ -87,7 +87,7 @@ int main(int /*argc*/, char* /*argv*/[]) {
     time_t now = time(nullptr);
     struct tm* tm_info = localtime(&now);
     snprintf(cache_file, sizeof(cache_file), "%s/instruments_%04d%02d%02d.csv",
-            Trading::ConfigManager::getInstrumentsDataDir(),
+            Trading::ConfigManager::getConfig().paths.instruments_dir,
             tm_info->tm_year + 1900,
             tm_info->tm_mon + 1,
             tm_info->tm_mday);

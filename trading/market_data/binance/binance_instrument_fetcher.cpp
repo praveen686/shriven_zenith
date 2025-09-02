@@ -3,7 +3,7 @@
 // ============================================================================
 
 #include "trading/market_data/binance/binance_instrument_fetcher.h"
-#include "config/config_manager.h"
+#include "config/config.h"
 #include "common/logging.h"
 #include <cstring>
 #include <cstdio>
@@ -556,7 +556,7 @@ bool fetchAndCacheSymbols(BinanceInstrumentFetcher* fetcher) noexcept {
         struct tm* tm_info = localtime(&now);
         
         snprintf(filename, sizeof(filename), "%s/binance_symbols_%04d%02d%02d.csv",
-                Trading::ConfigManager::getInstrumentsDataDir(),
+                Trading::ConfigManager::getConfig().paths.instruments_dir,
                 tm_info->tm_year + 1900,
                 tm_info->tm_mon + 1,
                 tm_info->tm_mday);
@@ -575,7 +575,7 @@ bool fetchAndCacheSymbols(BinanceInstrumentFetcher* fetcher) noexcept {
         
         // Try today's file first
         snprintf(filename, sizeof(filename), "%s/binance_symbols_%04d%02d%02d.csv",
-                Trading::ConfigManager::getInstrumentsDataDir(),
+                Trading::ConfigManager::getConfig().paths.instruments_dir,
                 tm_info->tm_year + 1900,
                 tm_info->tm_mon + 1,
                 tm_info->tm_mday);
@@ -589,7 +589,7 @@ bool fetchAndCacheSymbols(BinanceInstrumentFetcher* fetcher) noexcept {
             tm_info = localtime(&now);
             
             snprintf(filename, sizeof(filename), "%s/binance_symbols_%04d%02d%02d.csv",
-                    Trading::ConfigManager::getInstrumentsDataDir(),
+                    Trading::ConfigManager::getConfig().paths.instruments_dir,
                     tm_info->tm_year + 1900,
                     tm_info->tm_mon + 1,
                     tm_info->tm_mday);

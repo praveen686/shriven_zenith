@@ -1,5 +1,5 @@
 #include "trading/market_data/zerodha/zerodha_instrument_fetcher.h"
-#include "config/config_manager.h"
+#include "config/config.h"
 #include "common/logging.h"
 #include <curl/curl.h>
 #include <cstring>
@@ -121,7 +121,7 @@ auto fetchAndCacheInstruments(ZerodhaInstrumentFetcher* fetcher) noexcept -> boo
         struct tm* tm_info = localtime(&now);
         
         snprintf(filename, sizeof(filename), "%s/instruments_%04d%02d%02d.csv",
-                Trading::ConfigManager::getInstrumentsDataDir(),
+                Trading::ConfigManager::getConfig().paths.instruments_dir,
                 tm_info->tm_year + 1900,
                 tm_info->tm_mon + 1,
                 tm_info->tm_mday);
@@ -140,7 +140,7 @@ auto fetchAndCacheInstruments(ZerodhaInstrumentFetcher* fetcher) noexcept -> boo
         
         // Try today's file first
         snprintf(filename, sizeof(filename), "%s/instruments_%04d%02d%02d.csv",
-                Trading::ConfigManager::getInstrumentsDataDir(),
+                Trading::ConfigManager::getConfig().paths.instruments_dir,
                 tm_info->tm_year + 1900,
                 tm_info->tm_mon + 1,
                 tm_info->tm_mday);
@@ -154,7 +154,7 @@ auto fetchAndCacheInstruments(ZerodhaInstrumentFetcher* fetcher) noexcept -> boo
             tm_info = localtime(&now);
             
             snprintf(filename, sizeof(filename), "%s/instruments_%04d%02d%02d.csv",
-                    Trading::ConfigManager::getInstrumentsDataDir(),
+                    Trading::ConfigManager::getConfig().paths.instruments_dir,
                     tm_info->tm_year + 1900,
                     tm_info->tm_mon + 1,
                     tm_info->tm_mday);

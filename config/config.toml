@@ -1,0 +1,137 @@
+# Shriven Zenith Trading System Configuration
+# Version: 2.0.0
+# Date: 2025-09-02
+
+[system]
+name = "Shriven Zenith"
+version = "2.0.0"
+environment = "development"  # development, staging, production
+start_date = "2025-09-02"
+
+[paths]
+base_dir = "/home/isoula/om/shriven_zenith"
+logs_dir = "/home/isoula/om/shriven_zenith/logs"
+data_dir = "/home/isoula/om/shriven_zenith/data"
+cache_dir = "/home/isoula/om/shriven_zenith/data/cache"
+session_dir = "/home/isoula/om/shriven_zenith/data/sessions"
+instruments_dir = "/home/isoula/om/shriven_zenith/data/instruments"
+env_file = "/home/isoula/om/shriven_zenith/.env"
+
+[logging]
+level = "INFO"  # DEBUG, INFO, WARN, ERROR
+max_file_size_mb = 100
+rotation_count = 10
+async_enabled = true
+latency_target_ns = 35
+
+[performance]
+# Thread configuration
+thread_count = 8
+cpu_affinity_enabled = true
+realtime_priority = 99
+
+# Memory configuration
+memory_pool_size_mb = 30
+use_huge_pages = false
+numa_aware = false
+
+# Queue sizes (must be power of 2)
+market_data_queue_size = 262144  # 256K
+order_queue_size = 65536          # 64K
+response_queue_size = 65536       # 64K
+
+[trading]
+# Risk limits
+max_position_value = 1000000     # Rs 10 lakh
+max_daily_loss = 50000           # Rs 50k
+max_order_rate_per_sec = 100
+max_order_size = 10000
+position_limit_per_symbol = 100000
+
+# Latency targets (nanoseconds)
+market_data_latency_target_ns = 1000     # 1 microsecond
+order_placement_latency_target_us = 10   # 10 microseconds
+risk_check_latency_target_ns = 100
+
+[zerodha]
+enabled = true
+api_endpoint = "https://api.kite.trade"
+websocket_endpoint = "wss://ws.kite.trade"
+instrument_dump_url = "https://api.kite.trade/instruments"
+
+# Market hours (IST)
+market_open_time = "09:15:00"
+market_close_time = "15:30:00"
+
+# Subscriptions
+max_symbols = 100
+subscription_mode = "full"  # quote, full
+tick_batch_size = 5
+
+# Order configuration  
+order_type_default = "LIMIT"
+product_type = "MIS"  # MIS, CNC, NRML
+exchange = "NSE"
+
+[binance]
+enabled = true
+api_endpoint = "https://api.binance.com"
+testnet_endpoint = "https://testnet.binance.vision"
+websocket_endpoint = "wss://stream.binance.com:9443"
+use_testnet = false
+
+# Rate limits
+weight_limit_per_minute = 1200
+order_limit_per_10s = 100
+order_limit_per_day = 200000
+
+# Market data
+depth_levels = 20
+update_speed_ms = 100  # 100ms for depth updates
+trade_stream_enabled = true
+ticker_stream_enabled = true
+
+# Order configuration
+default_order_type = "LIMIT"
+time_in_force = "GTC"  # GTC, IOC, FOK
+recv_window_ms = 5000
+
+[strategies]
+enabled = ["market_maker", "arbitrage"]
+
+[strategies.market_maker]
+enabled = true
+spread_bps = 10.0           # 10 basis points
+min_edge_bps = 5.0          # Minimum edge to place order
+quote_size = 100            # Default quote size
+inventory_limit = 10000     # Max inventory per side
+quote_lifetime_ms = 1000    # Cancel and replace after 1 second
+skew_enabled = true         # Adjust quotes based on inventory
+
+[strategies.arbitrage]
+enabled = false
+min_spread_bps = 20.0       # Minimum spread to trigger
+execution_threshold_bps = 15.0
+max_exposure = 500000       # Rs 5 lakh
+
+[monitoring]
+prometheus_enabled = false
+prometheus_port = 9090
+health_check_port = 8080
+metrics_interval_seconds = 10
+
+[alerts]
+enabled = true
+email_enabled = false
+slack_enabled = false
+telegram_enabled = false
+
+# Alert thresholds
+pnl_alert_threshold = -10000     # Alert if loss > 10k
+latency_alert_threshold_us = 100  # Alert if latency > 100us
+error_rate_threshold = 0.01       # Alert if error rate > 1%
+
+[testing]
+paper_trading_enabled = true
+backtesting_enabled = false
+simulation_mode = false

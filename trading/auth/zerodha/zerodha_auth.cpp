@@ -1,6 +1,6 @@
 #include "zerodha_auth.h"
 #include "common/time_utils.h"
-#include "config/config_manager.h"
+#include "config/config.h"
 #include <curl/curl.h>
 #include <cstdio>
 #include <cstdlib>
@@ -236,10 +236,11 @@ ZerodhaAuth::ZerodhaAuth() noexcept {
     
     // Use ConfigManager paths if available
     if (Trading::ConfigManager::isInitialized()) {
-        snprintf(cookie_jar_, sizeof(cookie_jar_), "%s/zerodha_cookies", 
-                Trading::ConfigManager::getCacheDir());
-        snprintf(session_file_, sizeof(session_file_), "%s/zerodha_session", 
-                Trading::ConfigManager::getSessionDir());
+        const auto& paths = Trading::ConfigManager::getConfig().paths;
+        snprintf(cookie_jar_, sizeof(cookie_jar_), "%.230s/zerodha_cookies", 
+                paths.cache_dir);
+        snprintf(session_file_, sizeof(session_file_), "%.230s/zerodha_session", 
+                paths.session_dir);
     } else {
         // Fallback to home directory
         const char* home = getenv("HOME");
@@ -348,8 +349,8 @@ auto ZerodhaAuth::loadCachedSession() noexcept -> bool {
     // Ensure we're using the cache directory
     char token_file[512];
     if (Trading::ConfigManager::isInitialized()) {
-        snprintf(token_file, sizeof(token_file), "%s/zerodha_access_token.cache", 
-                Trading::ConfigManager::getCacheDir());
+        snprintf(token_file, sizeof(token_file), "%.450s/zerodha_access_token.cache", 
+                Trading::ConfigManager::getConfig().paths.cache_dir);
     } else {
         strncpy(token_file, session_file_, sizeof(token_file) - 1);
     }
@@ -420,8 +421,8 @@ auto ZerodhaAuth::saveCachedSession() const noexcept -> bool {
     // Ensure we're using the cache directory
     char token_file[512];
     if (Trading::ConfigManager::isInitialized()) {
-        snprintf(token_file, sizeof(token_file), "%s/zerodha_access_token.cache", 
-                Trading::ConfigManager::getCacheDir());
+        snprintf(token_file, sizeof(token_file), "%.450s/zerodha_access_token.cache", 
+                Trading::ConfigManager::getConfig().paths.cache_dir);
     } else {
         strncpy(token_file, session_file_, sizeof(token_file) - 1);
     }

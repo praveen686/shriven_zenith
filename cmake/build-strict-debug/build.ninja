@@ -225,9 +225,9 @@ build common/install/strip: phony common/CMakeFiles/install/strip.util
 
 build cmake_object_order_depends_target_config: phony || cmake_object_order_depends_target_CommonImpl
 
-build config/CMakeFiles/config.dir/config_manager.cpp.o: CXX_COMPILER__config_unscanned_Debug /home/isoula/om/shriven_zenith/config/config_manager.cpp || cmake_object_order_depends_target_config
+build config/CMakeFiles/config.dir/config.cpp.o: CXX_COMPILER__config_unscanned_Debug /home/isoula/om/shriven_zenith/config/config.cpp || cmake_object_order_depends_target_config
   DEFINES = -DPROD_ASSERTS_ON=1
-  DEP_FILE = config/CMakeFiles/config.dir/config_manager.cpp.o.d
+  DEP_FILE = config/CMakeFiles/config.dir/config.cpp.o.d
   FLAGS = -Wall -Wextra -Werror -Wpedantic -Wcast-align -Wcast-qual -Wconversion -Wctor-dtor-privacy -Wdisabled-optimization -Wformat=2 -Winit-self -Wmissing-declarations -Wmissing-include-dirs -Wold-style-cast -Woverloaded-virtual -Wredundant-decls -Wshadow -Wsign-conversion -Wsign-promo -Wstrict-overflow=5 -Wswitch-default -Wundef -Wno-unused -Wno-variadic-macros -Wno-parentheses -fdiagnostics-show-option -Wunreachable-code -Wunused-parameter -Wunused-function -Wunused-variable -Wunused-value -Wwrite-strings -Wno-missing-field-initializers -Wpointer-arith -Wstack-protector -fno-common -fstack-protector-strong -Wdouble-promotion -Wfloat-equal -Wlogical-op -Wplacement-new=2 -O0 -g3 -fsanitize=address -std=c++23 -UNDEBUG -Wall -Wextra -Werror -Wpedantic -Wconversion -Wsign-conversion -Wold-style-cast -Wformat-security -O0 -g3
   INCLUDES = -I/home/isoula/om/shriven_zenith -I/home/isoula/om/shriven_zenith/common -I/home/isoula/om/shriven_zenith/cmake/build-strict-debug/common
   OBJECT_DIR = config/CMakeFiles/config.dir
@@ -241,7 +241,7 @@ build config/CMakeFiles/config.dir/config_manager.cpp.o: CXX_COMPILER__config_un
 #############################################
 # Link the static library config/libconfig.a
 
-build config/libconfig.a: CXX_STATIC_LIBRARY_LINKER__config_Debug config/CMakeFiles/config.dir/config_manager.cpp.o || common/libCommonImpl.so
+build config/libconfig.a: CXX_STATIC_LIBRARY_LINKER__config_Debug config/CMakeFiles/config.dir/config.cpp.o || common/libCommonImpl.so
   LANGUAGE_COMPILE_FLAGS = -Wall -Wextra -Werror -Wpedantic -Wcast-align -Wcast-qual -Wconversion -Wctor-dtor-privacy -Wdisabled-optimization -Wformat=2 -Winit-self -Wmissing-declarations -Wmissing-include-dirs -Wold-style-cast -Woverloaded-virtual -Wredundant-decls -Wshadow -Wsign-conversion -Wsign-promo -Wstrict-overflow=5 -Wswitch-default -Wundef -Wno-unused -Wno-variadic-macros -Wno-parentheses -fdiagnostics-show-option -Wunreachable-code -Wunused-parameter -Wunused-function -Wunused-variable -Wunused-value -Wwrite-strings -Wno-missing-field-initializers -Wpointer-arith -Wstack-protector -fno-common -fstack-protector-strong -Wdouble-promotion -Wfloat-equal -Wlogical-op -Wplacement-new=2 -O0 -g3 -fsanitize=address
   OBJECT_DIR = config/CMakeFiles/config.dir
   POST_BUILD = :

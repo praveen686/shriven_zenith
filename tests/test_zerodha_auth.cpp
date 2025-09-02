@@ -1,5 +1,5 @@
 #include "trading/auth/zerodha/zerodha_auth.h"
-#include "config/config_manager.h"
+#include "config/config.h"
 #include "common/logging.h"
 #include <cstdio>
 #include <cstring>
@@ -18,12 +18,14 @@ int main(int argc, char* argv[]) {
         return 1;
     }
     printf("   ConfigManager initialized successfully\n");
-    printf("   Env file: %s\n", Trading::ConfigManager::getEnvFile());
-    printf("   Auth logs dir: %s\n", Trading::ConfigManager::getAuthLogsDir());
+    const auto& config = Trading::ConfigManager::getConfig();
+    printf("   Env file: %s\n", config.paths.env_file);
+    printf("   Logs dir: %s\n", config.paths.logs_dir);
     
     // Step 2: Initialize logging to auth logs directory
     char log_file[512];
-    if (!Trading::ConfigManager::getLogFilePath(log_file, sizeof(log_file), "auth_test")) {
+    snprintf(log_file, sizeof(log_file), "%s/test_zerodha.log", Trading::ConfigManager::getLogsDir());
+    if (log_file[0] == '\0') {
         fprintf(stderr, "Failed to get log file path\n");
         return 1;
     }

@@ -80,11 +80,13 @@ This codebase follows **PRAVEEN'S FOUR RULES**:
 | Component | Status | Documentation | Tests | Benchmark |
 |-----------|--------|---------------|-------|-----------|
 | Common Utilities | ✅ Complete | ✅ | ✅ | ✅ |
-| Configuration | ✅ Complete | ✅ | ✅ | ✅ |
+| Configuration (TOML) | ✅ Complete | ✅ | ✅ | ✅ |
 | Zerodha Auth | ✅ Complete | ✅ | ✅ | ⏳ |
 | Binance Auth | ✅ Complete | ✅ | ✅ | ⏳ |
 | Instrument Fetcher | ✅ Complete | ✅ | ✅ | ⏳ |
-| Order Management | 🚧 In Progress | ⏳ | ⏳ | ⏳ |
+| WebSocket (Zerodha) | 📋 Planned | ⏳ | ⏳ | ⏳ |
+| WebSocket (Binance) | 📋 Planned | ⏳ | ⏳ | ⏳ |
+| Order Management | 📋 Planned | ⏳ | ⏳ | ⏳ |
 | Risk Management | 📋 Planned | ⏳ | ⏳ | ⏳ |
 | Trade Engine | 📋 Planned | ⏳ | ⏳ | ⏳ |
 

@@ -5,6 +5,7 @@
 #include <cstddef>
 #include <cstdlib>
 #include <array>
+#include <new>
 
 #include "macros.h"
 #include "types.h"
@@ -23,11 +24,20 @@ namespace Common {
     static_assert(MaxElements > 0, "MaxElements must be greater than 0");
   
   public:
-    constexpr SPSCLFQueue() noexcept : 
+    SPSCLFQueue() : 
         capacity_(MaxElements),
         mask_(MaxElements - 1) {
-      // Static initialization - no dynamic allocation
-      // Elements are default-initialized in the array
+      // Allocate aligned memory for cache-line optimization
+      void* mem = std::aligned_alloc(CACHE_LINE_SIZE, sizeof(T) * MaxElements);
+      if (!mem) {
+        throw std::bad_alloc();
+      }
+      store_ = static_cast<T*>(mem);
+      
+      // Construct elements in-place
+      for (std::size_t i = 0; i < capacity_; ++i) {
+        new (&store_[i]) T();
+      }
     }
     
     ~SPSCLFQueue() {

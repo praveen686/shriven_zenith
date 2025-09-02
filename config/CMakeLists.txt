@@ -1,6 +1,6 @@
 # Config library
 add_library(config STATIC
-    config_manager.cpp
+    config.cpp
 )
 
 target_include_directories(config PUBLIC
