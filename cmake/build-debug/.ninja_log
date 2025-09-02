@@ -1,0 +1,8 @@
+# ninja log v5
+2	5	0	clean	a31eedcededa8236
+1	1969	1756811235355063908	trading/CMakeFiles/Trading.dir/config_manager.cpp.o	34a16e6f465ce86
+1	2372	1756811235756076131	tests/CMakeFiles/test_zerodha_auth.dir/test_zerodha_auth.cpp.o	322a20fe9ae23a54
+1	2563	1756811235949586079	auditor/CMakeFiles/claude_audit.dir/audit_main.cpp.o	a22100015e4d0ce7
+1	2574	1756811235959082319	trading/CMakeFiles/Trading.dir/auth/zerodha/zerodha_auth.cpp.o	c24dc9ab77737ee0
+1	2607	1756811235993434503	auditor/CMakeFiles/ClaudeAuditor.dir/claude_auditor.cpp.o	dad8a6bfd48f1512
+1	2678	1756811236063085486	common/CMakeFiles/CommonImpl.dir/logging.cpp.o	848d3fe23131ea9

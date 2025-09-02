@@ -29,3 +29,7 @@ INSTRUMENTS_CONFIG_FILE=/home/isoula/om/shriven_zenith/config/instruments_config
 INSTRUMENTS_DATA_DIR=/home/isoula/om/shriven_zenith/data/instruments
 FETCH_INTERVAL_MINUTES=60
 CACHE_EXPIRY_HOURS=24
+
+# Binance API configuration
+BINANCE_API_ENDPOINT=https://api.binance.com
+# For testnet use: https://testnet.binance.vision

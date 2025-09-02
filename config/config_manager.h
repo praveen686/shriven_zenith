@@ -37,6 +37,9 @@ struct MasterConfig {
     uint32_t fetch_interval_minutes{60};
     uint32_t cache_expiry_hours{24};
     
+    // Binance API config
+    char binance_api_endpoint[256]{};
+    
     // Validation flags
     bool is_valid{false};
 };
@@ -99,6 +102,10 @@ public:
     
     [[nodiscard]] static auto getFetchIntervalMinutes() noexcept -> uint32_t {
         return config_.fetch_interval_minutes;
+    }
+    
+    [[nodiscard]] static auto getBinanceApiEndpoint() noexcept -> const char* {
+        return config_.binance_api_endpoint;
     }
     
     // Check if initialized

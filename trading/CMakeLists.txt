@@ -3,7 +3,9 @@ cmake_minimum_required(VERSION 3.20)
 # Trading library (main implementation)
 add_library(Trading STATIC
     auth/zerodha/zerodha_auth.cpp
+    auth/binance/binance_auth.cpp
     market_data/zerodha/zerodha_instrument_fetcher.cpp
+    market_data/binance/binance_instrument_fetcher.cpp
 )
 
 target_include_directories(Trading PUBLIC
@@ -15,6 +17,8 @@ target_link_libraries(Trading PUBLIC
     CommonImpl
     config
     curl  # For HTTP requests in auth
+    ssl   # For HMAC signatures in Binance
+    crypto # For HMAC signatures in Binance
 )
 
 # Trading types interface (header-only)

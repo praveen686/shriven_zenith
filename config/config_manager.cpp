@@ -96,6 +96,8 @@ auto ConfigManager::parseLine(const char* line) noexcept -> void {
         config_.fetch_interval_minutes = static_cast<uint32_t>(atoi(value));
     } else if (strcmp(key, "CACHE_EXPIRY_HOURS") == 0) {
         config_.cache_expiry_hours = static_cast<uint32_t>(atoi(value));
+    } else if (strcmp(key, "BINANCE_API_ENDPOINT") == 0) {
+        strncpy(config_.binance_api_endpoint, value, sizeof(config_.binance_api_endpoint) - 1);
     }
 }
 
