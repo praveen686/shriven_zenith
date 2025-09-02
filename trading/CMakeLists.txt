@@ -6,6 +6,7 @@ add_library(Trading STATIC
     auth/binance/binance_auth.cpp
     market_data/zerodha/zerodha_instrument_fetcher.cpp
     market_data/binance/binance_instrument_fetcher.cpp
+    market_data/binance/binance_ws_client.cpp
 )
 
 target_include_directories(Trading PUBLIC
@@ -19,6 +20,7 @@ target_link_libraries(Trading PUBLIC
     curl  # For HTTP requests in auth
     ssl   # For HMAC signatures in Binance
     crypto # For HMAC signatures in Binance
+    websockets # For WebSocket connections
 )
 
 # Trading types interface (header-only)

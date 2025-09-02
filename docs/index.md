@@ -41,6 +41,7 @@
 #### Market Data
 - [**Instrument Manager**](components/market_data/instrument_manager_component.md) - Symbol management
 - [**Order Book**](components/market_data/order_book_component.md) - Market depth
+- [**Binance WebSocket**](components/binance_websocket.md) - Real-time Binance data
 
 #### Trading Core
 - [**Order Manager**](components/trading/order_manager_component.md) - Order lifecycle

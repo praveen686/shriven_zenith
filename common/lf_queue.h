@@ -30,7 +30,8 @@ namespace Common {
       // Allocate aligned memory for cache-line optimization
       void* mem = std::aligned_alloc(CACHE_LINE_SIZE, sizeof(T) * MaxElements);
       if (!mem) {
-        throw std::bad_alloc();
+        std::cerr << "FATAL: Failed to allocate memory for LFQueue\n";
+        std::abort();  // Cannot recover from memory allocation failure at init
       }
       store_ = static_cast<T*>(mem);
       
