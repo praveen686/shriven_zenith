@@ -1,0 +1,28 @@
+# Instruments Configuration File
+# Format: SYMBOL|TYPE|EXCHANGE|OPTIONS
+# TYPE: SPOT, FUTURE, OPTIONS
+# OPTIONS: For options, specify strike_count (e.g., 5 for ±5 strikes)
+
+# Index configurations
+NIFTY50|FUTURE|NFO|current_month,next_month
+NIFTY50|SPOT|NSE|
+NIFTY50|OPTIONS|NFO|strike_count=5,weekly=true
+
+BANKNIFTY|FUTURE|NFO|current_month
+BANKNIFTY|SPOT|NSE|
+BANKNIFTY|OPTIONS|NFO|strike_count=10,weekly=true
+
+# Stock futures
+RELIANCE|FUTURE|NFO|current_month
+RELIANCE|SPOT|NSE|
+
+TCS|FUTURE|NFO|current_month
+TCS|SPOT|NSE|
+
+INFY|FUTURE|NFO|current_month
+INFY|SPOT|NSE|
+
+# Configuration parameters
+FETCH_INTERVAL_MINUTES=60
+CACHE_EXPIRY_HOURS=24
+DATA_DIR=/home/isoula/om/shriven_zenith/data/instruments

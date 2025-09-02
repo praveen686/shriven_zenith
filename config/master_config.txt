@@ -1,0 +1,31 @@
+# Master Configuration File for Shriven Zenith Trading System
+# All paths must be absolute
+
+# Environment variables file containing API credentials
+ENV_FILE=/home/isoula/om/shriven_zenith/.env
+
+# Base directories
+LOGS_DIR=/home/isoula/om/shriven_zenith/logs
+DATA_DIR=/home/isoula/om/shriven_zenith/data
+
+# Sub-directories (automatically created if not exist)
+AUTH_LOGS_DIR=/home/isoula/om/shriven_zenith/logs/auth
+MARKET_DATA_LOGS_DIR=/home/isoula/om/shriven_zenith/logs/market_data
+ORDER_GW_LOGS_DIR=/home/isoula/om/shriven_zenith/logs/order_gw
+STRATEGY_LOGS_DIR=/home/isoula/om/shriven_zenith/logs/strategy
+
+# Data storage paths
+CACHE_DIR=/home/isoula/om/shriven_zenith/data/cache
+SESSION_DIR=/home/isoula/om/shriven_zenith/data/sessions
+MARKET_DATA_DIR=/home/isoula/om/shriven_zenith/data/market_data
+
+# Runtime configuration
+MAX_LOG_FILE_SIZE_MB=100
+LOG_ROTATION_COUNT=10
+LOG_LEVEL=INFO
+
+# Instrument fetching configuration
+INSTRUMENTS_CONFIG_FILE=/home/isoula/om/shriven_zenith/config/instruments_config.txt
+INSTRUMENTS_DATA_DIR=/home/isoula/om/shriven_zenith/data/instruments
+FETCH_INTERVAL_MINUTES=60
+CACHE_EXPIRY_HOURS=24

@@ -1,34 +1,42 @@
 cmake_minimum_required(VERSION 3.20)
 
-# Trading library
+# Trading library (main implementation)
+add_library(Trading STATIC
+    config_manager.cpp
+    auth/zerodha/zerodha_auth.cpp
+    market_data/zerodha/zerodha_instrument_fetcher.cpp
+)
+
+target_include_directories(Trading PUBLIC
+    ${CMAKE_CURRENT_SOURCE_DIR}
+    ${CMAKE_SOURCE_DIR}
+)
+
+target_link_libraries(Trading PUBLIC
+    CommonImpl
+    curl  # For HTTP requests in auth
+)
+
+# Trading types interface (header-only)
 add_library(TradingTypes INTERFACE)
 
-# Header-only library
 target_include_directories(TradingTypes INTERFACE
     ${CMAKE_CURRENT_SOURCE_DIR}
     ${CMAKE_SOURCE_DIR}
 )
 
-# Link to Common library
 target_link_libraries(TradingTypes INTERFACE
     CommonImpl
 )
 
-# Add a compilation test to verify headers compile
-add_library(TradingTypesTest STATIC
-    types/types.h
-    types/constants.h
-    types/order.h
-    types/market_data.h
+# Main trading executable
+add_executable(trader_main
+    trader_main.cpp
 )
 
-set_target_properties(TradingTypesTest PROPERTIES LINKER_LANGUAGE CXX)
-
-target_include_directories(TradingTypesTest PRIVATE
-    ${CMAKE_CURRENT_SOURCE_DIR}
-    ${CMAKE_SOURCE_DIR}
-)
-
-target_link_libraries(TradingTypesTest PRIVATE
+target_link_libraries(trader_main
+    Trading
     CommonImpl
+    curl
+    pthread
 )
