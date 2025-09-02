@@ -197,6 +197,41 @@ enum class MessageType : uint8_t {
   HEARTBEAT = 8
 };
 
+/// Order status for trading
+enum class OrderStatus : uint8_t {
+  INVALID = 0,
+  PENDING_NEW = 1,
+  NEW = 2,
+  PARTIALLY_FILLED = 3,
+  FILLED = 4,
+  PENDING_CANCEL = 5,
+  CANCELLED = 6,
+  REJECTED = 7,
+  EXPIRED = 8
+};
+
+/// Exchange type for multi-exchange support
+enum class Exchange : uint8_t {
+  INVALID = 0,
+  NSE = 1,      // National Stock Exchange (India)
+  BSE = 2,      // Bombay Stock Exchange
+  NFO = 3,      // NSE Futures & Options
+  CDS = 4,      // Currency Derivatives
+  MCX = 5,      // Multi Commodity Exchange
+  BINANCE = 10, // Binance crypto
+  COINBASE = 11 // Coinbase crypto
+};
+
+/// Product type (for Indian markets)
+enum class Product : uint8_t {
+  INVALID = 0,
+  CNC = 1,    // Cash and Carry (delivery)
+  MIS = 2,    // Margin Intraday Square-off
+  NRML = 3,   // Normal (F&O)
+  CO = 4,     // Cover Order
+  BO = 5      // Bracket Order
+};
+
 /// High-performance string for symbol names (stack allocated)
 template<size_t N>
 struct alignas(8) FixedString {
@@ -271,6 +306,105 @@ struct alignas(32) Trade {
   uint64_t timestamp;
   ClientId buy_client_id;
   ClientId sell_client_id;
+};
+
+/// Position tracking for trading
+struct alignas(64) Position {
+  TickerId ticker_id{TickerId_INVALID};
+  int32_t position{0};  // Positive=long, negative=short
+  int64_t realized_pnl{0};     // In cents/pips (fixed point)
+  int64_t unrealized_pnl{0};   // In cents/pips (fixed point)
+  int64_t total_pnl{0};         // In cents/pips (fixed point)
+  std::array<int64_t, 2> open_vwap{0, 0};  // [BUY, SELL] VWAP as fixed point
+  Qty volume{0};
+  Price last_price{Price_INVALID};
+  
+  [[nodiscard]] auto isFlat() const noexcept -> bool { return position == 0; }
+  [[nodiscard]] auto isLong() const noexcept -> bool { return position > 0; }
+  [[nodiscard]] auto isShort() const noexcept -> bool { return position < 0; }
+  
+  auto reset() noexcept -> void {
+    ticker_id = TickerId_INVALID;
+    position = 0;
+    realized_pnl = 0;
+    unrealized_pnl = 0;
+    total_pnl = 0;
+    open_vwap[0] = 0;
+    open_vwap[1] = 0;
+    volume = 0;
+    last_price = Price_INVALID;
+  }
+};
+
+/// Order request for sending to exchange
+struct alignas(64) OrderRequest {
+  OrderId order_id{OrderId_INVALID};
+  TickerId ticker_id{TickerId_INVALID};
+  ClientId client_id{ClientId_INVALID};
+  OrderSide side{OrderSide::INVALID};
+  OrderType type{OrderType::INVALID};
+  Price price{Price_INVALID};
+  Price stop_price{Price_INVALID};
+  Qty qty{0};
+  uint64_t timestamp{0};
+  
+  auto reset() noexcept -> void {
+    order_id = OrderId_INVALID;
+    ticker_id = TickerId_INVALID;
+    client_id = ClientId_INVALID;
+    side = OrderSide::INVALID;
+    type = OrderType::INVALID;
+    price = Price_INVALID;
+    stop_price = Price_INVALID;
+    qty = 0;
+    timestamp = 0;
+  }
+};
+
+/// Order response from exchange
+struct alignas(64) OrderResponse {
+  OrderId order_id{OrderId_INVALID};
+  OrderId exchange_order_id{OrderId_INVALID};
+  TickerId ticker_id{TickerId_INVALID};
+  ClientId client_id{ClientId_INVALID};
+  OrderSide side{OrderSide::INVALID};
+  Price exec_price{Price_INVALID};
+  Qty exec_qty{0};
+  Qty leaves_qty{0};
+  MessageType type{MessageType::INVALID};
+  uint64_t timestamp{0};
+  
+  auto reset() noexcept -> void {
+    order_id = OrderId_INVALID;
+    exchange_order_id = OrderId_INVALID;
+    ticker_id = TickerId_INVALID;
+    client_id = ClientId_INVALID;
+    side = OrderSide::INVALID;
+    exec_price = Price_INVALID;
+    exec_qty = 0;
+    leaves_qty = 0;
+    type = MessageType::INVALID;
+    timestamp = 0;
+  }
+};
+
+/// Market update (extends MarketTick with additional fields)
+struct alignas(64) MarketUpdate : public MarketTick {
+  MessageType update_type{MessageType::MARKET_DATA};
+  uint32_t depth_level{0};  // For depth updates
+  
+  auto reset() noexcept -> void {
+    ticker_id = TickerId_INVALID;
+    bid_price = Price_INVALID;
+    ask_price = Price_INVALID;
+    bid_qty = 0;
+    ask_qty = 0;
+    timestamp = 0;
+    sequence_number = 0;
+    flags = 0;
+    update_type = MessageType::MARKET_DATA;
+    depth_level = 0;
+  }
 };
 
 /// NUMA-aware allocator for containers

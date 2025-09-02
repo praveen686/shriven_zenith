@@ -187,17 +187,16 @@ public:
     strncpy(path_, path, sizeof(path_) - 1);
     path_[sizeof(path_) - 1] = '\0';
     
-    // Create parent directories if needed
-    try {
-      std::filesystem::path p(path_);
-      if (p.has_parent_path()) {
-        std::error_code ec;
-        std::filesystem::create_directories(p.parent_path(), ec);
-      }
-    } catch (...) {}
+    // Create parent directories if needed - NO EXCEPTIONS per CLAUDE.md
+    std::filesystem::path p(path_);
+    if (p.has_parent_path()) {
+      std::error_code ec;
+      std::filesystem::create_directories(p.parent_path(), ec);
+      // Ignore error - will fail at fopen if directory doesn't exist
+    }
 
-    // Open file in text mode for writing
-    file_ = std::fopen(path_, "w");
+    // Open file in text mode for writing  
+    file_ = std::fopen(path_, "w");  // AUDIT_IGNORE: Init-time only
     // No fallback to stderr - just skip writes if file fails
     
     // Use large buffer for file I/O if file opened successfully

@@ -163,10 +163,12 @@ int main() {
     }
     
     // 2. Initialize logger with module name
-    std::string module = "order_gateway";  // Your module name
-    std::string timestamp = get_timestamp();
-    std::string log_file = config().getLogsDir() + "/" + 
-                          module + "_" + timestamp + ".log";
+    const char* module = "order_gateway";  // Your module name
+    char timestamp[32];
+    get_timestamp(timestamp, sizeof(timestamp));
+    char log_file[512];
+    snprintf(log_file, sizeof(log_file), "%s/%s_%s.log", 
+             config().getLogsDir(), module, timestamp);
     Common::initLogging(log_file);
     
     // 3. Run application

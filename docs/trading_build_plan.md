@@ -272,6 +272,13 @@ namespace Trading {
 
 ### Key Migration Points
 
+#### PHILOSOPHY: Single Source of Truth
+**CRITICAL CHANGE**: ALL types and infrastructure are in Common library ONLY
+- NO duplicate type definitions anywhere
+- NO Trading::Types namespace
+- Business logic uses Common types directly
+- Common library is the ONLY place for type definitions
+
 #### From Reference → To Production
 
 | Reference Component | Production Component | Changes Required |

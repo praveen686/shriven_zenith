@@ -21,45 +21,53 @@
 ./scripts/build_coverage_gcc.sh  // For coverage analysis
 ```
 
+### PHILOSOPHY: Single Source of Truth
+**CRITICAL**: ALL types, structures, and infrastructure MUST be in Common library ONLY.
+- NO duplicate type definitions
+- NO trading-specific type files
+- EXTEND Common types directly when needed
+- ONE place for all types: `/common/types.h`
+
 ### Namespace Organization
 ```cpp
+// ALL TYPES ARE IN COMMON - NO Trading::Types namespace
+namespace Common {
+    // All base types and structures extended here:
+    struct Order;           // Base order structure
+    struct Position;        // Position tracking
+    struct OrderRequest;    // Order request to exchange
+    struct OrderResponse;   // Response from exchange
+    struct MarketUpdate;    // Market data updates
+    enum class Exchange;    // Exchange identifiers
+    enum class Product;     // Product types
+    enum class OrderStatus; // Order status
+}
+
 namespace Trading {
-    namespace Core {
-        // Core trading engine components
-        class TradeEngine;
-        class OrderManager;
-        class RiskManager;
-        class PositionKeeper;
-    }
+    // ONLY business logic components - NO type definitions
+    class TradeEngine;      // Uses Common types
+    class OrderManager;     // Uses Common::Order
+    class RiskManager;      // Uses Common types
+    class PositionKeeper;   // Uses Common::Position
     
     namespace Connectors {
         namespace Zerodha {
-            class KiteConnector;
-            class AuthManager;
-            class OrderHandler;
-            class MarketDataHandler;
+            class KiteConnector;     // Uses Common types
+            class OrderHandler;      // Uses Common::OrderRequest
+            class MarketDataHandler; // Uses Common::MarketUpdate
         }
         
         namespace Binance {
-            class BinanceConnector;
-            class HmacSigner;
-            class RestClient;
-            class WebSocketClient;
+            class BinanceConnector;  // Uses Common types
+            class RestClient;        // Uses Common::OrderRequest
+            class WebSocketClient;   // Uses Common::MarketUpdate
         }
     }
     
     namespace Strategies {
-        class Strategy;          // Base interface
-        class MarketMaker;
-        class LiquidityTaker;
-        class Arbitrage;
-    }
-    
-    namespace Types {
-        using OrderId = uint64_t;
-        using Price = int64_t;   // Price in paise/satoshi
-        using Quantity = uint32_t;
-        using Symbol = uint32_t; // Symbol ID, not string
+        class Strategy;          // Uses Common types only
+        class MarketMaker;       // No custom types
+        class LiquidityTaker;    // No custom types
     }
 }
 ```
@@ -67,52 +75,50 @@ namespace Trading {
 ### File Structure
 ```
 shriven_zenith/
+├── common/              # SINGLE SOURCE OF TRUTH
+│   ├── types.h         # ALL types defined here
+│   ├── mem_pool.h      # Memory pools used by trading
+│   ├── lf_queue.h      # Lock-free queues used by trading
+│   └── ...
 ├── trading/
-│   ├── core/
-│   │   ├── trade_engine.h
-│   │   ├── trade_engine.cpp
-│   │   ├── order_manager.h
-│   │   ├── order_manager.cpp
-│   │   ├── risk_manager.h
-│   │   ├── risk_manager.cpp
-│   │   ├── position_keeper.h
-│   │   └── position_keeper.cpp
-│   ├── connectors/
+│   ├── trade_engine.h     # Core engine - uses Common types
+│   ├── trade_engine.cpp
+│   ├── order_manager.h    # Uses Common::Order
+│   ├── order_manager.cpp
+│   ├── risk_manager.h     # Uses Common types
+│   ├── risk_manager.cpp
+│   ├── position_keeper.h  # Uses Common::Position
+│   ├── position_keeper.cpp
+│   ├── market_data/       # Market data consumers
 │   │   ├── zerodha/
-│   │   │   ├── kite_connector.h
-│   │   │   ├── kite_connector.cpp
-│   │   │   ├── auth_manager.h
-│   │   │   ├── auth_manager.cpp
-│   │   │   ├── order_handler.h
-│   │   │   ├── order_handler.cpp
-│   │   │   ├── market_data_handler.h
-│   │   │   └── market_data_handler.cpp
+│   │   │   ├── kite_websocket.h
+│   │   │   ├── kite_websocket.cpp
+│   │   │   └── kite_parser.cpp    # Parses to Common::MarketUpdate
 │   │   └── binance/
-│   │       ├── binance_connector.h
-│   │       ├── binance_connector.cpp
-│   │       ├── hmac_signer.h
-│   │       ├── hmac_signer.cpp
-│   │       ├── rest_client.h
-│   │       ├── rest_client.cpp
-│   │       ├── websocket_client.h
-│   │       └── websocket_client.cpp
-│   ├── strategies/
-│   │   ├── strategy.h
-│   │   ├── market_maker.h
-│   │   ├── market_maker.cpp
-│   │   ├── liquidity_taker.h
-│   │   ├── liquidity_taker.cpp
-│   │   ├── arbitrage.h
-│   │   └── arbitrage.cpp
-│   ├── types/
-│   │   ├── order.h
-│   │   ├── position.h
-│   │   ├── market_data.h
-│   │   └── constants.h
-│   └── tests/
-│       ├── unit/
-│       ├── integration/
-│       └── benchmarks/
+│   │       ├── binance_websocket.h
+│   │       ├── binance_websocket.cpp
+│   │       └── binance_parser.cpp  # Parses to Common::MarketUpdate
+│   ├── order_gw/          # Order gateways
+│   │   ├── zerodha/
+│   │   │   ├── kite_order_api.h
+│   │   │   ├── kite_order_api.cpp
+│   │   │   └── kite_auth.cpp       # Authentication
+│   │   └── binance/
+│   │       ├── binance_order_api.h
+│   │       ├── binance_order_api.cpp
+│   │       └── binance_hmac.cpp    # HMAC signing
+│   └── strategies/        # Exchange-agnostic strategies
+│       ├── strategy.h
+│       ├── market_maker.h
+│       ├── market_maker.cpp
+│       ├── liquidity_taker.h
+│       ├── liquidity_taker.cpp
+│       ├── arbitrage.h
+│       └── arbitrage.cpp
+└── tests/                 # ALL tests in one place
+    ├── unit/
+    ├── integration/
+    └── benchmarks/
 ```
 
 ---
@@ -126,44 +132,37 @@ shriven_zenith/
 | Task | File/Component | Owner | Status | Started | Completed | Notes |
 |------|---------------|-------|--------|---------|-----------|-------|
 | Common library setup | `/common/*` | Team | ✅ Done | Jan 1 | Jan 8 | All components tested |
-| Create Trading namespace | `/trading/types/` | - | 🔄 In Progress | Jan 9 | - | Define all types first |
-| Fixed-size containers | `/trading/core/containers.h` | - | ⏸️ Pending | - | - | No std::vector allowed |
-| Memory pools setup | `/trading/core/memory_pools.h` | - | ⏸️ Pending | - | - | Orders, Positions, Updates |
-| Thread management | `/trading/core/thread_manager.h` | - | ⏸️ Pending | - | - | CPU affinity setup |
-| Lock-free queues | `/trading/core/queues.h` | - | ⏸️ Pending | - | - | Order, Response, MarketData |
+| Extend Common types for trading | `/common/types.h` | - | ✅ Done | Jan 9 | Jan 9 | Added Position, OrderRequest, OrderResponse, MarketUpdate |
+| Memory pools (use Common) | `Common::MemoryPool` | - | ✅ Done | - | - | Already exists in Common |
+| Lock-free queues (use Common) | `Common::LFQueue` | - | ✅ Done | - | - | Already exists in Common |
+| Thread management (use Common) | `Common::ThreadUtils` | - | ✅ Done | - | - | Already exists in Common |
 
-### Memory Pool Specifications
+### Infrastructure Usage (ALL from Common)
 ```cpp
-namespace Trading::Core {
-    // Order pool: 10,000 orders max
-    Common::MemoryPool<Order, 10000, Common::ZeroPolicy::None> order_pool;
+// NO Trading::Core namespace for types/infrastructure
+// Trading components directly use Common types:
+
+class TradeEngine {
+private:
+    // Memory pools - using Common types directly
+    Common::MemoryPool<Common::Order, 10000> order_pool_;
+    Common::MemoryPool<Common::Position, 1000> position_pool_;
+    Common::MemoryPool<Common::MarketUpdate, 100000> update_pool_;
+    Common::MemoryPool<Common::OrderResponse, 10000> response_pool_;
     
-    // Position pool: 1,000 positions max
-    Common::MemoryPool<Position, 1000, Common::ZeroPolicy::OnRelease> position_pool;
-    
-    // Market update pool: 100,000 updates
-    Common::MemoryPool<MarketUpdate, 100000, Common::ZeroPolicy::None> update_pool;
-    
-    // Response pool: 10,000 responses
-    Common::MemoryPool<OrderResponse, 10000, Common::ZeroPolicy::None> response_pool;
-}
+    // Lock-free queues - using Common types directly
+    Common::LFQueue<Common::OrderRequest, 65536> order_request_queue_;
+    Common::LFQueue<Common::OrderResponse, 65536> order_response_queue_;
+    Common::LFQueue<Common::MarketUpdate, 262144> market_data_queue_;
+};
 ```
 
-### Queue Specifications
+### Type Aliases (if needed for readability)
 ```cpp
-namespace Trading::Core {
-    // Order request queue: 64K entries
-    using OrderRequestQueue = Common::LFQueue<OrderRequest, 65536>;
-    
-    // Order response queue: 64K entries
-    using OrderResponseQueue = Common::LFQueue<OrderResponse, 65536>;
-    
-    // Market data queue: 256K entries
-    using MarketDataQueue = Common::LFQueue<MarketUpdate, 262144>;
-    
-    // Internal command queue: 1K entries
-    using CommandQueue = Common::LFQueue<Command, 1024>;
-}
+// In implementation files ONLY - not creating new types
+using OrderRequestQueue = Common::LFQueue<Common::OrderRequest, 65536>;
+using OrderResponseQueue = Common::LFQueue<Common::OrderResponse, 65536>;
+using MarketDataQueue = Common::LFQueue<Common::MarketUpdate, 262144>;
 ```
 
 ---
@@ -172,32 +171,28 @@ namespace Trading::Core {
 **Timeline**: Week 2 (Jan 16-22, 2025)  
 **Status**: ⏸️ Pending
 
-### Zerodha Connector Tasks
+### Market Data Components
 
-| Task | Component | Priority | Status | Dependencies | Notes |
-|------|-----------|----------|--------|--------------|-------|
-| TOTP implementation | `auth_manager.cpp` | P0 | ⏸️ Pending | - | RFC 6238 compliant |
-| OAuth2 flow | `auth_manager.cpp` | P0 | ⏸️ Pending | TOTP | Access token management |
-| REST client | `order_handler.cpp` | P0 | ⏸️ Pending | Auth | HTTPS with pre-allocated buffers |
-| WebSocket handler | `market_data_handler.cpp` | P0 | ⏸️ Pending | Auth | Binary mode for speed |
-| Order placement | `order_handler.cpp` | P1 | ⏸️ Pending | REST | Regular, AMO, CO, BO |
-| Order modification | `order_handler.cpp` | P1 | ⏸️ Pending | REST | Price/Qty updates |
-| Order cancellation | `order_handler.cpp` | P1 | ⏸️ Pending | REST | Single/Bulk cancel |
-| Position tracking | `position_tracker.cpp` | P1 | ⏸️ Pending | WebSocket | Real-time positions |
-| Market data parser | `tick_parser.cpp` | P1 | ⏸️ Pending | WebSocket | Binary tick parsing |
+| Component | Location | Priority | Status | Notes |
+|-----------|----------|----------|--------|-------|
+| **Zerodha Market Data** |
+| WebSocket Client | `market_data/zerodha/kite_websocket.cpp` | P0 | ⏸️ Pending | Binary protocol |
+| Tick Parser | `market_data/zerodha/kite_parser.cpp` | P0 | ⏸️ Pending | Parse to Common::MarketUpdate |
+| **Binance Market Data** |
+| WebSocket Streams | `market_data/binance/binance_websocket.cpp` | P0 | ⏸️ Pending | Multiple streams |
+| JSON Parser | `market_data/binance/binance_parser.cpp` | P0 | ⏸️ Pending | Parse to Common::MarketUpdate |
 
-### Binance Connector Tasks
+### Order Gateway Components
 
-| Task | Component | Priority | Status | Dependencies | Notes |
-|------|-----------|----------|--------|--------------|-------|
-| HMAC-SHA256 signer | `hmac_signer.cpp` | P0 | ⏸️ Pending | - | No OpenSSL, custom impl |
-| REST client | `rest_client.cpp` | P0 | ⏸️ Pending | HMAC | Rate limit handling |
-| WebSocket streams | `websocket_client.cpp` | P0 | ⏸️ Pending | - | Multiple stream support |
-| Order placement | `order_handler.cpp` | P1 | ⏸️ Pending | REST | LIMIT, MARKET, STOP |
-| Order cancellation | `order_handler.cpp` | P1 | ⏸️ Pending | REST | By orderId/clientOrderId |
-| Account updates | `account_handler.cpp` | P1 | ⏸️ Pending | WebSocket | Balance updates |
-| Trade updates | `trade_handler.cpp` | P1 | ⏸️ Pending | WebSocket | Execution reports |
-| Market depth | `depth_handler.cpp` | P1 | ⏸️ Pending | WebSocket | Order book updates |
+| Component | Location | Priority | Status | Notes |
+|-----------|----------|----------|--------|-------|
+| **Zerodha Order Gateway** |
+| TOTP Auth | `order_gw/zerodha/kite_auth.cpp` | P0 | ⏸️ Pending | RFC 6238 compliant |
+| OAuth2 Flow | `order_gw/zerodha/kite_auth.cpp` | P0 | ⏸️ Pending | Access token management |
+| Order API | `order_gw/zerodha/kite_order_api.cpp` | P0 | ⏸️ Pending | Place/Modify/Cancel |
+| **Binance Order Gateway** |
+| HMAC Signer | `order_gw/binance/binance_hmac.cpp` | P0 | ⏸️ Pending | SHA256 signing |
+| Order API | `order_gw/binance/binance_order_api.cpp` | P0 | ⏸️ Pending | REST API client |
 
 ### API Specifications
 

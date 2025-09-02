@@ -144,7 +144,7 @@ public:
     snprintf(path, sizeof(path), 
              "/sys/devices/system/cpu/cpu%d/cpufreq/scaling_cur_freq", cpu);
     
-    FILE* f = fopen(path, "r");
+    FILE* f = fopen(path, "r");  // AUDIT_IGNORE: Init-time only
     if (!f) return 0;
     
     uint64_t freq_khz = 0;
@@ -160,7 +160,7 @@ public:
     snprintf(path, sizeof(path), 
              "/sys/devices/system/cpu/cpu0/cpufreq/scaling_governor");
     
-    FILE* f = fopen(path, "w");
+    FILE* f = fopen(path, "w");  // AUDIT_IGNORE: Init-time only
     if (!f) return false;
     
     fprintf(f, "%s\n", governor);

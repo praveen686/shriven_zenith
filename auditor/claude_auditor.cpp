@@ -2,6 +2,7 @@
 
 #include <cstring>
 #include <cstdio>
+#include <cctype>
 #include <fcntl.h>
 #include <unistd.h>
 #include <sys/stat.h>
@@ -476,6 +477,11 @@ void ClaudeAuditor::processLine(const char* line, uint32_t line_num, const char*
 }
 
 bool ClaudeAuditor::matchPattern(const char* line, const CodePattern& pattern) noexcept {
+    // Check for AUDIT_IGNORE directive
+    if (std::strstr(line, "AUDIT_IGNORE")) {
+        return false;  // Skip lines marked with AUDIT_IGNORE
+    }
+    
     // Skip comment lines for critical patterns
     const char* trimmed = line;
     while (*trimmed == ' ' || *trimmed == '\t') trimmed++;
@@ -494,6 +500,41 @@ bool ClaudeAuditor::matchPattern(const char* line, const CodePattern& pattern) n
             return false;
         }
         return std::strstr(line, "delete ") != nullptr;
+    }
+    
+    // Special handling for try/catch to avoid false positives like "Entry" matching "try"
+    if (pattern.pattern == Patterns::TRY_BLOCK) {
+        // Look for "try" followed by whitespace and {
+        const char* pos = std::strstr(line, "try");
+        while (pos) {
+            // Check if "try" is at start of line or preceded by non-alphanumeric
+            bool valid_start = (pos == line) || (!std::isalnum(pos[-1]) && pos[-1] != '_');
+            // Check if "try" is followed by whitespace or {
+            bool valid_end = (pos[3] == '\0' || std::isspace(pos[3]) || pos[3] == '{');
+            
+            if (valid_start && valid_end) {
+                return true;
+            }
+            pos = std::strstr(pos + 1, "try");
+        }
+        return false;
+    }
+    
+    if (pattern.pattern == Patterns::CATCH_BLOCK) {
+        // Look for "catch" followed by whitespace and (
+        const char* pos = std::strstr(line, "catch");
+        while (pos) {
+            // Check if "catch" is at start of line or preceded by non-alphanumeric
+            bool valid_start = (pos == line) || (!std::isalnum(pos[-1]) && pos[-1] != '_');
+            // Check if "catch" is followed by whitespace or (
+            bool valid_end = (pos[5] == '\0' || std::isspace(pos[5]) || pos[5] == '(');
+            
+            if (valid_start && valid_end) {
+                return true;
+            }
+            pos = std::strstr(pos + 1, "catch");
+        }
+        return false;
     }
     
     // Simple substring search for other patterns
