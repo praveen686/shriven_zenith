@@ -1,5 +1,5 @@
 #include "trading/market_data/zerodha/zerodha_instrument_fetcher.h"
-#include "trading/config_manager.h"
+#include "config/config_manager.h"
 #include "common/logging.h"
 #include <curl/curl.h>
 #include <cstring>

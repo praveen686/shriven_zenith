@@ -1,6 +1,6 @@
 #include "zerodha_auth.h"
 #include "common/time_utils.h"
-#include "trading/config_manager.h"
+#include "config/config_manager.h"
 #include <curl/curl.h>
 #include <cstdio>
 #include <cstdlib>

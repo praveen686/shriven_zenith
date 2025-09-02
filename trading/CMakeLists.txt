@@ -2,7 +2,6 @@ cmake_minimum_required(VERSION 3.20)
 
 # Trading library (main implementation)
 add_library(Trading STATIC
-    config_manager.cpp
     auth/zerodha/zerodha_auth.cpp
     market_data/zerodha/zerodha_instrument_fetcher.cpp
 )
@@ -14,6 +13,7 @@ target_include_directories(Trading PUBLIC
 
 target_link_libraries(Trading PUBLIC
     CommonImpl
+    config
     curl  # For HTTP requests in auth
 )
 
@@ -37,6 +37,7 @@ add_executable(trader_main
 target_link_libraries(trader_main
     Trading
     CommonImpl
+    config
     curl
     pthread
 )

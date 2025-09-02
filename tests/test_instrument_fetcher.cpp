@@ -1,5 +1,5 @@
 #include "common/logging.h"
-#include "trading/config_manager.h"
+#include "config/config_manager.h"
 #include "trading/auth/zerodha/zerodha_auth.h"
 #include "trading/market_data/zerodha/zerodha_instrument_fetcher.h"
 

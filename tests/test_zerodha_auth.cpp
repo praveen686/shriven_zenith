@@ -1,5 +1,5 @@
 #include "trading/auth/zerodha/zerodha_auth.h"
-#include "trading/config_manager.h"
+#include "config/config_manager.h"
 #include "common/logging.h"
 #include <cstdio>
 #include <cstring>

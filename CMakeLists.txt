@@ -99,6 +99,7 @@ find_library(NUMA_LIBRARY numa)
 
 # Add subdirectories
 add_subdirectory(common)
+add_subdirectory(config)
 add_subdirectory(trading)
 add_subdirectory(tests)
 
