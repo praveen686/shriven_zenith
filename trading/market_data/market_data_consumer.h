@@ -35,7 +35,13 @@ protected:
     
     // Helper method for derived classes to publish updates
     auto publishUpdate(const Common::MarketUpdate& update) -> bool {
-        return market_updates_queue_->enqueue(update);
+        auto* dest = market_updates_queue_->getNextToWriteTo();
+        if (!dest) {
+            return false;  // Queue full
+        }
+        *dest = update;
+        market_updates_queue_->updateWriteIndex();
+        return true;
     }
 };
 

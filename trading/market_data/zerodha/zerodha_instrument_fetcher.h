@@ -540,6 +540,14 @@ public:
         return instrument_count_;
     }
     
+    // Get instrument by index
+    [[nodiscard]] auto getInstrument(size_t index) const noexcept -> const Instrument* {
+        if (index < instrument_count_) {
+            return &instruments_[index];
+        }
+        return nullptr;
+    }
+    
     // Get last update time
     [[nodiscard]] auto getLastUpdateTime() const noexcept -> uint64_t override {
         return last_update_time_ns_;

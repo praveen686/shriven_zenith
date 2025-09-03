@@ -70,9 +70,28 @@ struct TradingConfig {
         char instrument_dump_url[256];
         char market_open_time[16];
         char market_close_time[16];
+        
+        // Index configuration
+        char indices[10][32];  // Support up to 10 indices
+        uint32_t num_indices;
+        bool fetch_spot;
+        bool fetch_futures;
+        bool fetch_options;
+        uint32_t option_strikes;
+        char futures_expiry[16];  // current, next, far
+        
+        // Subscriptions
         uint32_t max_symbols;
         char subscription_mode[32];
         uint32_t tick_batch_size;
+        
+        // Data persistence
+        bool persist_ticks;
+        bool persist_orderbook;
+        uint32_t tick_file_rotation_mb;
+        uint32_t orderbook_snapshot_interval_s;
+        
+        // Order configuration
         char order_type_default[32];
         char product_type[16];
         char exchange[16];

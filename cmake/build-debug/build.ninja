@@ -122,12 +122,10 @@ build cmake_object_order_depends_target_CommonImpl: phony || common/CMakeFiles/C
 build common/CMakeFiles/CommonImpl.dir/logging.cpp.o: CXX_COMPILER__CommonImpl_unscanned_Debug /home/isoula/om/shriven_zenith/common/logging.cpp || cmake_object_order_depends_target_CommonImpl
   DEFINES = -DCommonImpl_EXPORTS -DPROD_ASSERTS_ON=1
   DEP_FILE = common/CMakeFiles/CommonImpl.dir/logging.cpp.o.d
-  FLAGS = -Wall -Wextra -Werror -Wpedantic -Wcast-align -Wcast-qual -Wconversion -Wctor-dtor-privacy -Wdisabled-optimization -Wformat=2 -Winit-self -Wmissing-declarations -Wmissing-include-dirs -Wold-style-cast -Woverloaded-virtual -Wredundant-decls -Wshadow -Wsign-conversion -Wsign-promo -Wstrict-overflow=5 -Wswitch-default -Wundef -Wno-unused -Wno-variadic-macros -Wno-parentheses -fdiagnostics-show-option -Wunreachable-code -Wunused-parameter -Wunused-function -Wunused-variable -Wunused-value -Wwrite-strings -Wno-missing-field-initializers -Wpointer-arith -Wstack-protector -fno-common -fstack-protector-strong -Wdouble-promotion -Wfloat-equal -Wlogical-op -Wplacement-new=2 -O0 -g3 -fsanitize=address -std=c++23 -fPIC -UNDEBUG -O0 -g3
+  FLAGS = -Wall -Wextra -Werror -Wpedantic -Wcast-align -Wcast-qual -Wconversion -Wctor-dtor-privacy -Wdisabled-optimization -Wformat=2 -Winit-self -Wmissing-declarations -Wmissing-include-dirs -Wold-style-cast -Woverloaded-virtual -Wredundant-decls -Wshadow -Wsign-conversion -Wsign-promo -Wstrict-overflow=1 -Wswitch-default -Wundef -Wno-unused -Wno-variadic-macros -Wno-parentheses -fdiagnostics-show-option -Wunreachable-code -Wunused-parameter -Wunused-function -Wunused-variable -Wunused-value -Wwrite-strings -Wno-missing-field-initializers -Wpointer-arith -Wstack-protector -fno-common -fstack-protector-strong -Wdouble-promotion -Wfloat-equal -Wlogical-op -Wplacement-new=2 -O0 -g3 -fsanitize=address -std=c++23 -fPIC -UNDEBUG -O0 -g3
   INCLUDES = -I/home/isoula/om/shriven_zenith/common -I/home/isoula/om/shriven_zenith/cmake/build-debug/common
   OBJECT_DIR = common/CMakeFiles/CommonImpl.dir
   OBJECT_FILE_DIR = common/CMakeFiles/CommonImpl.dir
-  TARGET_COMPILE_PDB = common/CMakeFiles/CommonImpl.dir/
-  TARGET_PDB = common/libCommonImpl.pdb
 
 
 # =============================================================================
@@ -138,16 +136,15 @@ build common/CMakeFiles/CommonImpl.dir/logging.cpp.o: CXX_COMPILER__CommonImpl_u
 # Link the shared library common/libCommonImpl.so
 
 build common/libCommonImpl.so: CXX_SHARED_LIBRARY_LINKER__CommonImpl_Debug common/CMakeFiles/CommonImpl.dir/logging.cpp.o | /usr/lib/x86_64-linux-gnu/libnuma.so
-  LANGUAGE_COMPILE_FLAGS = -Wall -Wextra -Werror -Wpedantic -Wcast-align -Wcast-qual -Wconversion -Wctor-dtor-privacy -Wdisabled-optimization -Wformat=2 -Winit-self -Wmissing-declarations -Wmissing-include-dirs -Wold-style-cast -Woverloaded-virtual -Wredundant-decls -Wshadow -Wsign-conversion -Wsign-promo -Wstrict-overflow=5 -Wswitch-default -Wundef -Wno-unused -Wno-variadic-macros -Wno-parentheses -fdiagnostics-show-option -Wunreachable-code -Wunused-parameter -Wunused-function -Wunused-variable -Wunused-value -Wwrite-strings -Wno-missing-field-initializers -Wpointer-arith -Wstack-protector -fno-common -fstack-protector-strong -Wdouble-promotion -Wfloat-equal -Wlogical-op -Wplacement-new=2 -O0 -g3 -fsanitize=address
+  LANGUAGE_COMPILE_FLAGS = -Wall -Wextra -Werror -Wpedantic -Wcast-align -Wcast-qual -Wconversion -Wctor-dtor-privacy -Wdisabled-optimization -Wformat=2 -Winit-self -Wmissing-declarations -Wmissing-include-dirs -Wold-style-cast -Woverloaded-virtual -Wredundant-decls -Wshadow -Wsign-conversion -Wsign-promo -Wstrict-overflow=1 -Wswitch-default -Wundef -Wno-unused -Wno-variadic-macros -Wno-parentheses -fdiagnostics-show-option -Wunreachable-code -Wunused-parameter -Wunused-function -Wunused-variable -Wunused-value -Wwrite-strings -Wno-missing-field-initializers -Wpointer-arith -Wstack-protector -fno-common -fstack-protector-strong -Wdouble-promotion -Wfloat-equal -Wlogical-op -Wplacement-new=2 -O0 -g3 -fsanitize=address
   LINK_LIBRARIES = /usr/lib/x86_64-linux-gnu/libnuma.so
   OBJECT_DIR = common/CMakeFiles/CommonImpl.dir
   POST_BUILD = :
   PRE_LINK = :
   SONAME = libCommonImpl.so
   SONAME_FLAG = -Wl,-soname,
-  TARGET_COMPILE_PDB = common/CMakeFiles/CommonImpl.dir/
   TARGET_FILE = common/libCommonImpl.so
-  TARGET_PDB = common/libCommonImpl.pdb
+  TARGET_PDB = CommonImpl.so.dbg
 
 
 #############################################
@@ -220,33 +217,164 @@ build common/install/strip: phony common/CMakeFiles/install/strip.util
 # =============================================================================
 
 # =============================================================================
+# Object build statements for STATIC_LIBRARY target config
+
+
+#############################################
+# Order-only phony target for config
+
+build cmake_object_order_depends_target_config: phony || cmake_object_order_depends_target_CommonImpl
+
+build config/CMakeFiles/config.dir/config.cpp.o: CXX_COMPILER__config_unscanned_Debug /home/isoula/om/shriven_zenith/config/config.cpp || cmake_object_order_depends_target_config
+  DEFINES = -DPROD_ASSERTS_ON=1
+  DEP_FILE = config/CMakeFiles/config.dir/config.cpp.o.d
+  FLAGS = -Wall -Wextra -Werror -Wpedantic -Wcast-align -Wcast-qual -Wconversion -Wctor-dtor-privacy -Wdisabled-optimization -Wformat=2 -Winit-self -Wmissing-declarations -Wmissing-include-dirs -Wold-style-cast -Woverloaded-virtual -Wredundant-decls -Wshadow -Wsign-conversion -Wsign-promo -Wstrict-overflow=1 -Wswitch-default -Wundef -Wno-unused -Wno-variadic-macros -Wno-parentheses -fdiagnostics-show-option -Wunreachable-code -Wunused-parameter -Wunused-function -Wunused-variable -Wunused-value -Wwrite-strings -Wno-missing-field-initializers -Wpointer-arith -Wstack-protector -fno-common -fstack-protector-strong -Wdouble-promotion -Wfloat-equal -Wlogical-op -Wplacement-new=2 -O0 -g3 -fsanitize=address -std=c++23 -UNDEBUG -Wall -Wextra -Werror -Wpedantic -Wconversion -Wsign-conversion -Wold-style-cast -Wformat-security -O0 -g3
+  INCLUDES = -I/home/isoula/om/shriven_zenith -I/home/isoula/om/shriven_zenith/common -I/home/isoula/om/shriven_zenith/cmake/build-debug/common
+  OBJECT_DIR = config/CMakeFiles/config.dir
+  OBJECT_FILE_DIR = config/CMakeFiles/config.dir
+
+
+# =============================================================================
+# Link build statements for STATIC_LIBRARY target config
+
+
+#############################################
+# Link the static library config/libconfig.a
+
+build config/libconfig.a: CXX_STATIC_LIBRARY_LINKER__config_Debug config/CMakeFiles/config.dir/config.cpp.o || common/libCommonImpl.so
+  LANGUAGE_COMPILE_FLAGS = -Wall -Wextra -Werror -Wpedantic -Wcast-align -Wcast-qual -Wconversion -Wctor-dtor-privacy -Wdisabled-optimization -Wformat=2 -Winit-self -Wmissing-declarations -Wmissing-include-dirs -Wold-style-cast -Woverloaded-virtual -Wredundant-decls -Wshadow -Wsign-conversion -Wsign-promo -Wstrict-overflow=1 -Wswitch-default -Wundef -Wno-unused -Wno-variadic-macros -Wno-parentheses -fdiagnostics-show-option -Wunreachable-code -Wunused-parameter -Wunused-function -Wunused-variable -Wunused-value -Wwrite-strings -Wno-missing-field-initializers -Wpointer-arith -Wstack-protector -fno-common -fstack-protector-strong -Wdouble-promotion -Wfloat-equal -Wlogical-op -Wplacement-new=2 -O0 -g3 -fsanitize=address
+  OBJECT_DIR = config/CMakeFiles/config.dir
+  POST_BUILD = :
+  PRE_LINK = :
+  TARGET_FILE = config/libconfig.a
+  TARGET_PDB = config.a.dbg
+
+
+#############################################
+# Utility command for edit_cache
+
+build config/CMakeFiles/edit_cache.util: CUSTOM_COMMAND
+  COMMAND = cd /home/isoula/om/shriven_zenith/cmake/build-debug/config && /usr/bin/cmake -E echo No\ interactive\ CMake\ dialog\ available.
+  DESC = No interactive CMake dialog available...
+  restat = 1
+
+build config/edit_cache: phony config/CMakeFiles/edit_cache.util
+
+
+#############################################
+# Utility command for rebuild_cache
+
+build config/CMakeFiles/rebuild_cache.util: CUSTOM_COMMAND
+  COMMAND = cd /home/isoula/om/shriven_zenith/cmake/build-debug/config && /usr/bin/cmake --regenerate-during-build -S/home/isoula/om/shriven_zenith -B/home/isoula/om/shriven_zenith/cmake/build-debug
+  DESC = Running CMake to regenerate build system...
+  pool = console
+  restat = 1
+
+build config/rebuild_cache: phony config/CMakeFiles/rebuild_cache.util
+
+
+#############################################
+# Utility command for list_install_components
+
+build config/list_install_components: phony
+
+
+#############################################
+# Utility command for install
+
+build config/CMakeFiles/install.util: CUSTOM_COMMAND config/all
+  COMMAND = cd /home/isoula/om/shriven_zenith/cmake/build-debug/config && /usr/bin/cmake -P cmake_install.cmake
+  DESC = Install the project...
+  pool = console
+  restat = 1
+
+build config/install: phony config/CMakeFiles/install.util
+
+
+#############################################
+# Utility command for install/local
+
+build config/CMakeFiles/install/local.util: CUSTOM_COMMAND config/all
+  COMMAND = cd /home/isoula/om/shriven_zenith/cmake/build-debug/config && /usr/bin/cmake -DCMAKE_INSTALL_LOCAL_ONLY=1 -P cmake_install.cmake
+  DESC = Installing only the local directory...
+  pool = console
+  restat = 1
+
+build config/install/local: phony config/CMakeFiles/install/local.util
+
+
+#############################################
+# Utility command for install/strip
+
+build config/CMakeFiles/install/strip.util: CUSTOM_COMMAND config/all
+  COMMAND = cd /home/isoula/om/shriven_zenith/cmake/build-debug/config && /usr/bin/cmake -DCMAKE_INSTALL_DO_STRIP=1 -P cmake_install.cmake
+  DESC = Installing the project stripped...
+  pool = console
+  restat = 1
+
+build config/install/strip: phony config/CMakeFiles/install/strip.util
+
+# =============================================================================
+# Write statements declared in CMakeLists.txt:
+# /home/isoula/om/shriven_zenith/CMakeLists.txt
+# =============================================================================
+
+# =============================================================================
 # Object build statements for STATIC_LIBRARY target Trading
 
 
 #############################################
 # Order-only phony target for Trading
 
-build cmake_object_order_depends_target_Trading: phony || cmake_object_order_depends_target_CommonImpl
-
-build trading/CMakeFiles/Trading.dir/config_manager.cpp.o: CXX_COMPILER__Trading_unscanned_Debug /home/isoula/om/shriven_zenith/trading/config_manager.cpp || cmake_object_order_depends_target_Trading
-  DEFINES = -DPROD_ASSERTS_ON=1
-  DEP_FILE = trading/CMakeFiles/Trading.dir/config_manager.cpp.o.d
-  FLAGS = -Wall -Wextra -Werror -Wpedantic -Wcast-align -Wcast-qual -Wconversion -Wctor-dtor-privacy -Wdisabled-optimization -Wformat=2 -Winit-self -Wmissing-declarations -Wmissing-include-dirs -Wold-style-cast -Woverloaded-virtual -Wredundant-decls -Wshadow -Wsign-conversion -Wsign-promo -Wstrict-overflow=5 -Wswitch-default -Wundef -Wno-unused -Wno-variadic-macros -Wno-parentheses -fdiagnostics-show-option -Wunreachable-code -Wunused-parameter -Wunused-function -Wunused-variable -Wunused-value -Wwrite-strings -Wno-missing-field-initializers -Wpointer-arith -Wstack-protector -fno-common -fstack-protector-strong -Wdouble-promotion -Wfloat-equal -Wlogical-op -Wplacement-new=2 -O0 -g3 -fsanitize=address -std=c++23 -UNDEBUG -O0 -g3
-  INCLUDES = -I/home/isoula/om/shriven_zenith/trading -I/home/isoula/om/shriven_zenith -I/home/isoula/om/shriven_zenith/common -I/home/isoula/om/shriven_zenith/cmake/build-debug/common
-  OBJECT_DIR = trading/CMakeFiles/Trading.dir
-  OBJECT_FILE_DIR = trading/CMakeFiles/Trading.dir
-  TARGET_COMPILE_PDB = trading/CMakeFiles/Trading.dir/Trading.pdb
-  TARGET_PDB = trading/libTrading.pdb
+build cmake_object_order_depends_target_Trading: phony || cmake_object_order_depends_target_CommonImpl cmake_object_order_depends_target_config
 
 build trading/CMakeFiles/Trading.dir/auth/zerodha/zerodha_auth.cpp.o: CXX_COMPILER__Trading_unscanned_Debug /home/isoula/om/shriven_zenith/trading/auth/zerodha/zerodha_auth.cpp || cmake_object_order_depends_target_Trading
   DEFINES = -DPROD_ASSERTS_ON=1
   DEP_FILE = trading/CMakeFiles/Trading.dir/auth/zerodha/zerodha_auth.cpp.o.d
-  FLAGS = -Wall -Wextra -Werror -Wpedantic -Wcast-align -Wcast-qual -Wconversion -Wctor-dtor-privacy -Wdisabled-optimization -Wformat=2 -Winit-self -Wmissing-declarations -Wmissing-include-dirs -Wold-style-cast -Woverloaded-virtual -Wredundant-decls -Wshadow -Wsign-conversion -Wsign-promo -Wstrict-overflow=5 -Wswitch-default -Wundef -Wno-unused -Wno-variadic-macros -Wno-parentheses -fdiagnostics-show-option -Wunreachable-code -Wunused-parameter -Wunused-function -Wunused-variable -Wunused-value -Wwrite-strings -Wno-missing-field-initializers -Wpointer-arith -Wstack-protector -fno-common -fstack-protector-strong -Wdouble-promotion -Wfloat-equal -Wlogical-op -Wplacement-new=2 -O0 -g3 -fsanitize=address -std=c++23 -UNDEBUG -O0 -g3
+  FLAGS = -Wall -Wextra -Werror -Wpedantic -Wcast-align -Wcast-qual -Wconversion -Wctor-dtor-privacy -Wdisabled-optimization -Wformat=2 -Winit-self -Wmissing-declarations -Wmissing-include-dirs -Wold-style-cast -Woverloaded-virtual -Wredundant-decls -Wshadow -Wsign-conversion -Wsign-promo -Wstrict-overflow=1 -Wswitch-default -Wundef -Wno-unused -Wno-variadic-macros -Wno-parentheses -fdiagnostics-show-option -Wunreachable-code -Wunused-parameter -Wunused-function -Wunused-variable -Wunused-value -Wwrite-strings -Wno-missing-field-initializers -Wpointer-arith -Wstack-protector -fno-common -fstack-protector-strong -Wdouble-promotion -Wfloat-equal -Wlogical-op -Wplacement-new=2 -O0 -g3 -fsanitize=address -std=c++23 -UNDEBUG -O0 -g3
   INCLUDES = -I/home/isoula/om/shriven_zenith/trading -I/home/isoula/om/shriven_zenith -I/home/isoula/om/shriven_zenith/common -I/home/isoula/om/shriven_zenith/cmake/build-debug/common
   OBJECT_DIR = trading/CMakeFiles/Trading.dir
   OBJECT_FILE_DIR = trading/CMakeFiles/Trading.dir/auth/zerodha
-  TARGET_COMPILE_PDB = trading/CMakeFiles/Trading.dir/Trading.pdb
-  TARGET_PDB = trading/libTrading.pdb
+
+build trading/CMakeFiles/Trading.dir/auth/binance/binance_auth.cpp.o: CXX_COMPILER__Trading_unscanned_Debug /home/isoula/om/shriven_zenith/trading/auth/binance/binance_auth.cpp || cmake_object_order_depends_target_Trading
+  DEFINES = -DPROD_ASSERTS_ON=1
+  DEP_FILE = trading/CMakeFiles/Trading.dir/auth/binance/binance_auth.cpp.o.d
+  FLAGS = -Wall -Wextra -Werror -Wpedantic -Wcast-align -Wcast-qual -Wconversion -Wctor-dtor-privacy -Wdisabled-optimization -Wformat=2 -Winit-self -Wmissing-declarations -Wmissing-include-dirs -Wold-style-cast -Woverloaded-virtual -Wredundant-decls -Wshadow -Wsign-conversion -Wsign-promo -Wstrict-overflow=1 -Wswitch-default -Wundef -Wno-unused -Wno-variadic-macros -Wno-parentheses -fdiagnostics-show-option -Wunreachable-code -Wunused-parameter -Wunused-function -Wunused-variable -Wunused-value -Wwrite-strings -Wno-missing-field-initializers -Wpointer-arith -Wstack-protector -fno-common -fstack-protector-strong -Wdouble-promotion -Wfloat-equal -Wlogical-op -Wplacement-new=2 -O0 -g3 -fsanitize=address -std=c++23 -UNDEBUG -O0 -g3
+  INCLUDES = -I/home/isoula/om/shriven_zenith/trading -I/home/isoula/om/shriven_zenith -I/home/isoula/om/shriven_zenith/common -I/home/isoula/om/shriven_zenith/cmake/build-debug/common
+  OBJECT_DIR = trading/CMakeFiles/Trading.dir
+  OBJECT_FILE_DIR = trading/CMakeFiles/Trading.dir/auth/binance
+
+build trading/CMakeFiles/Trading.dir/market_data/zerodha/zerodha_instrument_fetcher.cpp.o: CXX_COMPILER__Trading_unscanned_Debug /home/isoula/om/shriven_zenith/trading/market_data/zerodha/zerodha_instrument_fetcher.cpp || cmake_object_order_depends_target_Trading
+  DEFINES = -DPROD_ASSERTS_ON=1
+  DEP_FILE = trading/CMakeFiles/Trading.dir/market_data/zerodha/zerodha_instrument_fetcher.cpp.o.d
+  FLAGS = -Wall -Wextra -Werror -Wpedantic -Wcast-align -Wcast-qual -Wconversion -Wctor-dtor-privacy -Wdisabled-optimization -Wformat=2 -Winit-self -Wmissing-declarations -Wmissing-include-dirs -Wold-style-cast -Woverloaded-virtual -Wredundant-decls -Wshadow -Wsign-conversion -Wsign-promo -Wstrict-overflow=1 -Wswitch-default -Wundef -Wno-unused -Wno-variadic-macros -Wno-parentheses -fdiagnostics-show-option -Wunreachable-code -Wunused-parameter -Wunused-function -Wunused-variable -Wunused-value -Wwrite-strings -Wno-missing-field-initializers -Wpointer-arith -Wstack-protector -fno-common -fstack-protector-strong -Wdouble-promotion -Wfloat-equal -Wlogical-op -Wplacement-new=2 -O0 -g3 -fsanitize=address -std=c++23 -UNDEBUG -O0 -g3
+  INCLUDES = -I/home/isoula/om/shriven_zenith/trading -I/home/isoula/om/shriven_zenith -I/home/isoula/om/shriven_zenith/common -I/home/isoula/om/shriven_zenith/cmake/build-debug/common
+  OBJECT_DIR = trading/CMakeFiles/Trading.dir
+  OBJECT_FILE_DIR = trading/CMakeFiles/Trading.dir/market_data/zerodha
+
+build trading/CMakeFiles/Trading.dir/market_data/zerodha/kite_ws_client.cpp.o: CXX_COMPILER__Trading_unscanned_Debug /home/isoula/om/shriven_zenith/trading/market_data/zerodha/kite_ws_client.cpp || cmake_object_order_depends_target_Trading
+  DEFINES = -DPROD_ASSERTS_ON=1
+  DEP_FILE = trading/CMakeFiles/Trading.dir/market_data/zerodha/kite_ws_client.cpp.o.d
+  FLAGS = -Wall -Wextra -Werror -Wpedantic -Wcast-align -Wcast-qual -Wconversion -Wctor-dtor-privacy -Wdisabled-optimization -Wformat=2 -Winit-self -Wmissing-declarations -Wmissing-include-dirs -Wold-style-cast -Woverloaded-virtual -Wredundant-decls -Wshadow -Wsign-conversion -Wsign-promo -Wstrict-overflow=1 -Wswitch-default -Wundef -Wno-unused -Wno-variadic-macros -Wno-parentheses -fdiagnostics-show-option -Wunreachable-code -Wunused-parameter -Wunused-function -Wunused-variable -Wunused-value -Wwrite-strings -Wno-missing-field-initializers -Wpointer-arith -Wstack-protector -fno-common -fstack-protector-strong -Wdouble-promotion -Wfloat-equal -Wlogical-op -Wplacement-new=2 -O0 -g3 -fsanitize=address -std=c++23 -UNDEBUG -O0 -g3
+  INCLUDES = -I/home/isoula/om/shriven_zenith/trading -I/home/isoula/om/shriven_zenith -I/home/isoula/om/shriven_zenith/common -I/home/isoula/om/shriven_zenith/cmake/build-debug/common
+  OBJECT_DIR = trading/CMakeFiles/Trading.dir
+  OBJECT_FILE_DIR = trading/CMakeFiles/Trading.dir/market_data/zerodha
+
+build trading/CMakeFiles/Trading.dir/market_data/binance/binance_instrument_fetcher.cpp.o: CXX_COMPILER__Trading_unscanned_Debug /home/isoula/om/shriven_zenith/trading/market_data/binance/binance_instrument_fetcher.cpp || cmake_object_order_depends_target_Trading
+  DEFINES = -DPROD_ASSERTS_ON=1
+  DEP_FILE = trading/CMakeFiles/Trading.dir/market_data/binance/binance_instrument_fetcher.cpp.o.d
+  FLAGS = -Wall -Wextra -Werror -Wpedantic -Wcast-align -Wcast-qual -Wconversion -Wctor-dtor-privacy -Wdisabled-optimization -Wformat=2 -Winit-self -Wmissing-declarations -Wmissing-include-dirs -Wold-style-cast -Woverloaded-virtual -Wredundant-decls -Wshadow -Wsign-conversion -Wsign-promo -Wstrict-overflow=1 -Wswitch-default -Wundef -Wno-unused -Wno-variadic-macros -Wno-parentheses -fdiagnostics-show-option -Wunreachable-code -Wunused-parameter -Wunused-function -Wunused-variable -Wunused-value -Wwrite-strings -Wno-missing-field-initializers -Wpointer-arith -Wstack-protector -fno-common -fstack-protector-strong -Wdouble-promotion -Wfloat-equal -Wlogical-op -Wplacement-new=2 -O0 -g3 -fsanitize=address -std=c++23 -UNDEBUG -O0 -g3
+  INCLUDES = -I/home/isoula/om/shriven_zenith/trading -I/home/isoula/om/shriven_zenith -I/home/isoula/om/shriven_zenith/common -I/home/isoula/om/shriven_zenith/cmake/build-debug/common
+  OBJECT_DIR = trading/CMakeFiles/Trading.dir
+  OBJECT_FILE_DIR = trading/CMakeFiles/Trading.dir/market_data/binance
+
+build trading/CMakeFiles/Trading.dir/market_data/binance/binance_ws_client.cpp.o: CXX_COMPILER__Trading_unscanned_Debug /home/isoula/om/shriven_zenith/trading/market_data/binance/binance_ws_client.cpp || cmake_object_order_depends_target_Trading
+  DEFINES = -DPROD_ASSERTS_ON=1
+  DEP_FILE = trading/CMakeFiles/Trading.dir/market_data/binance/binance_ws_client.cpp.o.d
+  FLAGS = -Wall -Wextra -Werror -Wpedantic -Wcast-align -Wcast-qual -Wconversion -Wctor-dtor-privacy -Wdisabled-optimization -Wformat=2 -Winit-self -Wmissing-declarations -Wmissing-include-dirs -Wold-style-cast -Woverloaded-virtual -Wredundant-decls -Wshadow -Wsign-conversion -Wsign-promo -Wstrict-overflow=1 -Wswitch-default -Wundef -Wno-unused -Wno-variadic-macros -Wno-parentheses -fdiagnostics-show-option -Wunreachable-code -Wunused-parameter -Wunused-function -Wunused-variable -Wunused-value -Wwrite-strings -Wno-missing-field-initializers -Wpointer-arith -Wstack-protector -fno-common -fstack-protector-strong -Wdouble-promotion -Wfloat-equal -Wlogical-op -Wplacement-new=2 -O0 -g3 -fsanitize=address -std=c++23 -UNDEBUG -O0 -g3
+  INCLUDES = -I/home/isoula/om/shriven_zenith/trading -I/home/isoula/om/shriven_zenith -I/home/isoula/om/shriven_zenith/common -I/home/isoula/om/shriven_zenith/cmake/build-debug/common
+  OBJECT_DIR = trading/CMakeFiles/Trading.dir
+  OBJECT_FILE_DIR = trading/CMakeFiles/Trading.dir/market_data/binance
 
 
 # =============================================================================
@@ -256,14 +384,47 @@ build trading/CMakeFiles/Trading.dir/auth/zerodha/zerodha_auth.cpp.o: CXX_COMPIL
 #############################################
 # Link the static library trading/libTrading.a
 
-build trading/libTrading.a: CXX_STATIC_LIBRARY_LINKER__Trading_Debug trading/CMakeFiles/Trading.dir/config_manager.cpp.o trading/CMakeFiles/Trading.dir/auth/zerodha/zerodha_auth.cpp.o || common/libCommonImpl.so
-  LANGUAGE_COMPILE_FLAGS = -Wall -Wextra -Werror -Wpedantic -Wcast-align -Wcast-qual -Wconversion -Wctor-dtor-privacy -Wdisabled-optimization -Wformat=2 -Winit-self -Wmissing-declarations -Wmissing-include-dirs -Wold-style-cast -Woverloaded-virtual -Wredundant-decls -Wshadow -Wsign-conversion -Wsign-promo -Wstrict-overflow=5 -Wswitch-default -Wundef -Wno-unused -Wno-variadic-macros -Wno-parentheses -fdiagnostics-show-option -Wunreachable-code -Wunused-parameter -Wunused-function -Wunused-variable -Wunused-value -Wwrite-strings -Wno-missing-field-initializers -Wpointer-arith -Wstack-protector -fno-common -fstack-protector-strong -Wdouble-promotion -Wfloat-equal -Wlogical-op -Wplacement-new=2 -O0 -g3 -fsanitize=address
+build trading/libTrading.a: CXX_STATIC_LIBRARY_LINKER__Trading_Debug trading/CMakeFiles/Trading.dir/auth/zerodha/zerodha_auth.cpp.o trading/CMakeFiles/Trading.dir/auth/binance/binance_auth.cpp.o trading/CMakeFiles/Trading.dir/market_data/zerodha/zerodha_instrument_fetcher.cpp.o trading/CMakeFiles/Trading.dir/market_data/zerodha/kite_ws_client.cpp.o trading/CMakeFiles/Trading.dir/market_data/binance/binance_instrument_fetcher.cpp.o trading/CMakeFiles/Trading.dir/market_data/binance/binance_ws_client.cpp.o || common/libCommonImpl.so config/libconfig.a
+  LANGUAGE_COMPILE_FLAGS = -Wall -Wextra -Werror -Wpedantic -Wcast-align -Wcast-qual -Wconversion -Wctor-dtor-privacy -Wdisabled-optimization -Wformat=2 -Winit-self -Wmissing-declarations -Wmissing-include-dirs -Wold-style-cast -Woverloaded-virtual -Wredundant-decls -Wshadow -Wsign-conversion -Wsign-promo -Wstrict-overflow=1 -Wswitch-default -Wundef -Wno-unused -Wno-variadic-macros -Wno-parentheses -fdiagnostics-show-option -Wunreachable-code -Wunused-parameter -Wunused-function -Wunused-variable -Wunused-value -Wwrite-strings -Wno-missing-field-initializers -Wpointer-arith -Wstack-protector -fno-common -fstack-protector-strong -Wdouble-promotion -Wfloat-equal -Wlogical-op -Wplacement-new=2 -O0 -g3 -fsanitize=address
   OBJECT_DIR = trading/CMakeFiles/Trading.dir
   POST_BUILD = :
   PRE_LINK = :
-  TARGET_COMPILE_PDB = trading/CMakeFiles/Trading.dir/Trading.pdb
   TARGET_FILE = trading/libTrading.a
-  TARGET_PDB = trading/libTrading.pdb
+  TARGET_PDB = Trading.a.dbg
+
+# =============================================================================
+# Object build statements for EXECUTABLE target trader_main
+
+
+#############################################
+# Order-only phony target for trader_main
+
+build cmake_object_order_depends_target_trader_main: phony || cmake_object_order_depends_target_CommonImpl cmake_object_order_depends_target_Trading cmake_object_order_depends_target_config
+
+build trading/CMakeFiles/trader_main.dir/trader_main.cpp.o: CXX_COMPILER__trader_main_unscanned_Debug /home/isoula/om/shriven_zenith/trading/trader_main.cpp || cmake_object_order_depends_target_trader_main
+  DEFINES = -DPROD_ASSERTS_ON=1
+  DEP_FILE = trading/CMakeFiles/trader_main.dir/trader_main.cpp.o.d
+  FLAGS = -Wall -Wextra -Werror -Wpedantic -Wcast-align -Wcast-qual -Wconversion -Wctor-dtor-privacy -Wdisabled-optimization -Wformat=2 -Winit-self -Wmissing-declarations -Wmissing-include-dirs -Wold-style-cast -Woverloaded-virtual -Wredundant-decls -Wshadow -Wsign-conversion -Wsign-promo -Wstrict-overflow=1 -Wswitch-default -Wundef -Wno-unused -Wno-variadic-macros -Wno-parentheses -fdiagnostics-show-option -Wunreachable-code -Wunused-parameter -Wunused-function -Wunused-variable -Wunused-value -Wwrite-strings -Wno-missing-field-initializers -Wpointer-arith -Wstack-protector -fno-common -fstack-protector-strong -Wdouble-promotion -Wfloat-equal -Wlogical-op -Wplacement-new=2 -O0 -g3 -fsanitize=address -std=c++23 -UNDEBUG -O0 -g3
+  INCLUDES = -I/home/isoula/om/shriven_zenith/trading -I/home/isoula/om/shriven_zenith -I/home/isoula/om/shriven_zenith/common -I/home/isoula/om/shriven_zenith/cmake/build-debug/common
+  OBJECT_DIR = trading/CMakeFiles/trader_main.dir
+  OBJECT_FILE_DIR = trading/CMakeFiles/trader_main.dir
+
+
+# =============================================================================
+# Link build statements for EXECUTABLE target trader_main
+
+
+#############################################
+# Link the executable trading/trader_main
+
+build trading/trader_main: CXX_EXECUTABLE_LINKER__trader_main_Debug trading/CMakeFiles/trader_main.dir/trader_main.cpp.o | trading/libTrading.a config/libconfig.a common/libCommonImpl.so /usr/lib/x86_64-linux-gnu/libnuma.so || common/libCommonImpl.so config/libconfig.a trading/libTrading.a
+  FLAGS = -Wall -Wextra -Werror -Wpedantic -Wcast-align -Wcast-qual -Wconversion -Wctor-dtor-privacy -Wdisabled-optimization -Wformat=2 -Winit-self -Wmissing-declarations -Wmissing-include-dirs -Wold-style-cast -Woverloaded-virtual -Wredundant-decls -Wshadow -Wsign-conversion -Wsign-promo -Wstrict-overflow=1 -Wswitch-default -Wundef -Wno-unused -Wno-variadic-macros -Wno-parentheses -fdiagnostics-show-option -Wunreachable-code -Wunused-parameter -Wunused-function -Wunused-variable -Wunused-value -Wwrite-strings -Wno-missing-field-initializers -Wpointer-arith -Wstack-protector -fno-common -fstack-protector-strong -Wdouble-promotion -Wfloat-equal -Wlogical-op -Wplacement-new=2 -O0 -g3 -fsanitize=address
+  LINK_LIBRARIES = -Wl,-rpath,/home/isoula/om/shriven_zenith/cmake/build-debug/common  trading/libTrading.a  config/libconfig.a  -lcurl  -lpthread  common/libCommonImpl.so  /usr/lib/x86_64-linux-gnu/libnuma.so  -lssl  -lcrypto  -lwebsockets
+  OBJECT_DIR = trading/CMakeFiles/trader_main.dir
+  POST_BUILD = :
+  PRE_LINK = :
+  TARGET_FILE = trading/trader_main
+  TARGET_PDB = trader_main.dbg
 
 
 #############################################
@@ -342,17 +503,15 @@ build trading/install/strip: phony trading/CMakeFiles/install/strip.util
 #############################################
 # Order-only phony target for test_zerodha_auth
 
-build cmake_object_order_depends_target_test_zerodha_auth: phony || cmake_object_order_depends_target_CommonImpl cmake_object_order_depends_target_Trading
+build cmake_object_order_depends_target_test_zerodha_auth: phony || cmake_object_order_depends_target_CommonImpl cmake_object_order_depends_target_Trading cmake_object_order_depends_target_config
 
 build tests/CMakeFiles/test_zerodha_auth.dir/test_zerodha_auth.cpp.o: CXX_COMPILER__test_zerodha_auth_unscanned_Debug /home/isoula/om/shriven_zenith/tests/test_zerodha_auth.cpp || cmake_object_order_depends_target_test_zerodha_auth
   DEFINES = -DPROD_ASSERTS_ON=1
   DEP_FILE = tests/CMakeFiles/test_zerodha_auth.dir/test_zerodha_auth.cpp.o.d
-  FLAGS = -Wall -Wextra -Werror -Wpedantic -Wcast-align -Wcast-qual -Wconversion -Wctor-dtor-privacy -Wdisabled-optimization -Wformat=2 -Winit-self -Wmissing-declarations -Wmissing-include-dirs -Wold-style-cast -Woverloaded-virtual -Wredundant-decls -Wshadow -Wsign-conversion -Wsign-promo -Wstrict-overflow=5 -Wswitch-default -Wundef -Wno-unused -Wno-variadic-macros -Wno-parentheses -fdiagnostics-show-option -Wunreachable-code -Wunused-parameter -Wunused-function -Wunused-variable -Wunused-value -Wwrite-strings -Wno-missing-field-initializers -Wpointer-arith -Wstack-protector -fno-common -fstack-protector-strong -Wdouble-promotion -Wfloat-equal -Wlogical-op -Wplacement-new=2 -O0 -g3 -fsanitize=address -std=c++23 -UNDEBUG -O0 -g3
+  FLAGS = -Wall -Wextra -Werror -Wpedantic -Wcast-align -Wcast-qual -Wconversion -Wctor-dtor-privacy -Wdisabled-optimization -Wformat=2 -Winit-self -Wmissing-declarations -Wmissing-include-dirs -Wold-style-cast -Woverloaded-virtual -Wredundant-decls -Wshadow -Wsign-conversion -Wsign-promo -Wstrict-overflow=1 -Wswitch-default -Wundef -Wno-unused -Wno-variadic-macros -Wno-parentheses -fdiagnostics-show-option -Wunreachable-code -Wunused-parameter -Wunused-function -Wunused-variable -Wunused-value -Wwrite-strings -Wno-missing-field-initializers -Wpointer-arith -Wstack-protector -fno-common -fstack-protector-strong -Wdouble-promotion -Wfloat-equal -Wlogical-op -Wplacement-new=2 -O0 -g3 -fsanitize=address -std=c++23 -UNDEBUG -O0 -g3
   INCLUDES = -I/home/isoula/om/shriven_zenith -I/home/isoula/om/shriven_zenith/trading -I/home/isoula/om/shriven_zenith/common -I/home/isoula/om/shriven_zenith/cmake/build-debug/common
   OBJECT_DIR = tests/CMakeFiles/test_zerodha_auth.dir
   OBJECT_FILE_DIR = tests/CMakeFiles/test_zerodha_auth.dir
-  TARGET_COMPILE_PDB = tests/CMakeFiles/test_zerodha_auth.dir/
-  TARGET_PDB = tests/test_zerodha_auth.pdb
 
 
 # =============================================================================
@@ -362,15 +521,116 @@ build tests/CMakeFiles/test_zerodha_auth.dir/test_zerodha_auth.cpp.o: CXX_COMPIL
 #############################################
 # Link the executable tests/test_zerodha_auth
 
-build tests/test_zerodha_auth: CXX_EXECUTABLE_LINKER__test_zerodha_auth_Debug tests/CMakeFiles/test_zerodha_auth.dir/test_zerodha_auth.cpp.o | trading/libTrading.a common/libCommonImpl.so /usr/lib/x86_64-linux-gnu/libnuma.so || common/libCommonImpl.so trading/libTrading.a
-  FLAGS = -Wall -Wextra -Werror -Wpedantic -Wcast-align -Wcast-qual -Wconversion -Wctor-dtor-privacy -Wdisabled-optimization -Wformat=2 -Winit-self -Wmissing-declarations -Wmissing-include-dirs -Wold-style-cast -Woverloaded-virtual -Wredundant-decls -Wshadow -Wsign-conversion -Wsign-promo -Wstrict-overflow=5 -Wswitch-default -Wundef -Wno-unused -Wno-variadic-macros -Wno-parentheses -fdiagnostics-show-option -Wunreachable-code -Wunused-parameter -Wunused-function -Wunused-variable -Wunused-value -Wwrite-strings -Wno-missing-field-initializers -Wpointer-arith -Wstack-protector -fno-common -fstack-protector-strong -Wdouble-promotion -Wfloat-equal -Wlogical-op -Wplacement-new=2 -O0 -g3 -fsanitize=address
-  LINK_LIBRARIES = -Wl,-rpath,/home/isoula/om/shriven_zenith/cmake/build-debug/common  trading/libTrading.a  common/libCommonImpl.so  -lcurl  /usr/lib/x86_64-linux-gnu/libnuma.so
+build tests/test_zerodha_auth: CXX_EXECUTABLE_LINKER__test_zerodha_auth_Debug tests/CMakeFiles/test_zerodha_auth.dir/test_zerodha_auth.cpp.o | trading/libTrading.a config/libconfig.a common/libCommonImpl.so /usr/lib/x86_64-linux-gnu/libnuma.so || common/libCommonImpl.so config/libconfig.a trading/libTrading.a
+  FLAGS = -Wall -Wextra -Werror -Wpedantic -Wcast-align -Wcast-qual -Wconversion -Wctor-dtor-privacy -Wdisabled-optimization -Wformat=2 -Winit-self -Wmissing-declarations -Wmissing-include-dirs -Wold-style-cast -Woverloaded-virtual -Wredundant-decls -Wshadow -Wsign-conversion -Wsign-promo -Wstrict-overflow=1 -Wswitch-default -Wundef -Wno-unused -Wno-variadic-macros -Wno-parentheses -fdiagnostics-show-option -Wunreachable-code -Wunused-parameter -Wunused-function -Wunused-variable -Wunused-value -Wwrite-strings -Wno-missing-field-initializers -Wpointer-arith -Wstack-protector -fno-common -fstack-protector-strong -Wdouble-promotion -Wfloat-equal -Wlogical-op -Wplacement-new=2 -O0 -g3 -fsanitize=address
+  LINK_LIBRARIES = -Wl,-rpath,/home/isoula/om/shriven_zenith/cmake/build-debug/common  trading/libTrading.a  -lcurl  config/libconfig.a  common/libCommonImpl.so  /usr/lib/x86_64-linux-gnu/libnuma.so  -lssl  -lcrypto  -lwebsockets
   OBJECT_DIR = tests/CMakeFiles/test_zerodha_auth.dir
   POST_BUILD = :
   PRE_LINK = :
-  TARGET_COMPILE_PDB = tests/CMakeFiles/test_zerodha_auth.dir/
   TARGET_FILE = tests/test_zerodha_auth
-  TARGET_PDB = tests/test_zerodha_auth.pdb
+  TARGET_PDB = test_zerodha_auth.dbg
+
+# =============================================================================
+# Object build statements for EXECUTABLE target test_instrument_fetcher
+
+
+#############################################
+# Order-only phony target for test_instrument_fetcher
+
+build cmake_object_order_depends_target_test_instrument_fetcher: phony || cmake_object_order_depends_target_CommonImpl cmake_object_order_depends_target_Trading cmake_object_order_depends_target_config
+
+build tests/CMakeFiles/test_instrument_fetcher.dir/test_instrument_fetcher.cpp.o: CXX_COMPILER__test_instrument_fetcher_unscanned_Debug /home/isoula/om/shriven_zenith/tests/test_instrument_fetcher.cpp || cmake_object_order_depends_target_test_instrument_fetcher
+  DEFINES = -DPROD_ASSERTS_ON=1
+  DEP_FILE = tests/CMakeFiles/test_instrument_fetcher.dir/test_instrument_fetcher.cpp.o.d
+  FLAGS = -Wall -Wextra -Werror -Wpedantic -Wcast-align -Wcast-qual -Wconversion -Wctor-dtor-privacy -Wdisabled-optimization -Wformat=2 -Winit-self -Wmissing-declarations -Wmissing-include-dirs -Wold-style-cast -Woverloaded-virtual -Wredundant-decls -Wshadow -Wsign-conversion -Wsign-promo -Wstrict-overflow=1 -Wswitch-default -Wundef -Wno-unused -Wno-variadic-macros -Wno-parentheses -fdiagnostics-show-option -Wunreachable-code -Wunused-parameter -Wunused-function -Wunused-variable -Wunused-value -Wwrite-strings -Wno-missing-field-initializers -Wpointer-arith -Wstack-protector -fno-common -fstack-protector-strong -Wdouble-promotion -Wfloat-equal -Wlogical-op -Wplacement-new=2 -O0 -g3 -fsanitize=address -std=c++23 -UNDEBUG -O0 -g3
+  INCLUDES = -I/home/isoula/om/shriven_zenith -I/home/isoula/om/shriven_zenith/trading -I/home/isoula/om/shriven_zenith/common -I/home/isoula/om/shriven_zenith/cmake/build-debug/common
+  OBJECT_DIR = tests/CMakeFiles/test_instrument_fetcher.dir
+  OBJECT_FILE_DIR = tests/CMakeFiles/test_instrument_fetcher.dir
+
+
+# =============================================================================
+# Link build statements for EXECUTABLE target test_instrument_fetcher
+
+
+#############################################
+# Link the executable tests/test_instrument_fetcher
+
+build tests/test_instrument_fetcher: CXX_EXECUTABLE_LINKER__test_instrument_fetcher_Debug tests/CMakeFiles/test_instrument_fetcher.dir/test_instrument_fetcher.cpp.o | trading/libTrading.a config/libconfig.a common/libCommonImpl.so /usr/lib/x86_64-linux-gnu/libnuma.so || common/libCommonImpl.so config/libconfig.a trading/libTrading.a
+  FLAGS = -Wall -Wextra -Werror -Wpedantic -Wcast-align -Wcast-qual -Wconversion -Wctor-dtor-privacy -Wdisabled-optimization -Wformat=2 -Winit-self -Wmissing-declarations -Wmissing-include-dirs -Wold-style-cast -Woverloaded-virtual -Wredundant-decls -Wshadow -Wsign-conversion -Wsign-promo -Wstrict-overflow=1 -Wswitch-default -Wundef -Wno-unused -Wno-variadic-macros -Wno-parentheses -fdiagnostics-show-option -Wunreachable-code -Wunused-parameter -Wunused-function -Wunused-variable -Wunused-value -Wwrite-strings -Wno-missing-field-initializers -Wpointer-arith -Wstack-protector -fno-common -fstack-protector-strong -Wdouble-promotion -Wfloat-equal -Wlogical-op -Wplacement-new=2 -O0 -g3 -fsanitize=address
+  LINK_LIBRARIES = -Wl,-rpath,/home/isoula/om/shriven_zenith/cmake/build-debug/common  trading/libTrading.a  -lcurl  config/libconfig.a  common/libCommonImpl.so  /usr/lib/x86_64-linux-gnu/libnuma.so  -lssl  -lcrypto  -lwebsockets
+  OBJECT_DIR = tests/CMakeFiles/test_instrument_fetcher.dir
+  POST_BUILD = :
+  PRE_LINK = :
+  TARGET_FILE = tests/test_instrument_fetcher
+  TARGET_PDB = test_instrument_fetcher.dbg
+
+# =============================================================================
+# Object build statements for EXECUTABLE target test_binance
+
+
+#############################################
+# Order-only phony target for test_binance
+
+build cmake_object_order_depends_target_test_binance: phony || cmake_object_order_depends_target_CommonImpl cmake_object_order_depends_target_Trading cmake_object_order_depends_target_config
+
+build tests/CMakeFiles/test_binance.dir/test_binance.cpp.o: CXX_COMPILER__test_binance_unscanned_Debug /home/isoula/om/shriven_zenith/tests/test_binance.cpp || cmake_object_order_depends_target_test_binance
+  DEFINES = -DPROD_ASSERTS_ON=1
+  DEP_FILE = tests/CMakeFiles/test_binance.dir/test_binance.cpp.o.d
+  FLAGS = -Wall -Wextra -Werror -Wpedantic -Wcast-align -Wcast-qual -Wconversion -Wctor-dtor-privacy -Wdisabled-optimization -Wformat=2 -Winit-self -Wmissing-declarations -Wmissing-include-dirs -Wold-style-cast -Woverloaded-virtual -Wredundant-decls -Wshadow -Wsign-conversion -Wsign-promo -Wstrict-overflow=1 -Wswitch-default -Wundef -Wno-unused -Wno-variadic-macros -Wno-parentheses -fdiagnostics-show-option -Wunreachable-code -Wunused-parameter -Wunused-function -Wunused-variable -Wunused-value -Wwrite-strings -Wno-missing-field-initializers -Wpointer-arith -Wstack-protector -fno-common -fstack-protector-strong -Wdouble-promotion -Wfloat-equal -Wlogical-op -Wplacement-new=2 -O0 -g3 -fsanitize=address -std=c++23 -UNDEBUG -O0 -g3
+  INCLUDES = -I/home/isoula/om/shriven_zenith -I/home/isoula/om/shriven_zenith/trading -I/home/isoula/om/shriven_zenith/common -I/home/isoula/om/shriven_zenith/cmake/build-debug/common
+  OBJECT_DIR = tests/CMakeFiles/test_binance.dir
+  OBJECT_FILE_DIR = tests/CMakeFiles/test_binance.dir
+
+
+# =============================================================================
+# Link build statements for EXECUTABLE target test_binance
+
+
+#############################################
+# Link the executable tests/test_binance
+
+build tests/test_binance: CXX_EXECUTABLE_LINKER__test_binance_Debug tests/CMakeFiles/test_binance.dir/test_binance.cpp.o | trading/libTrading.a config/libconfig.a common/libCommonImpl.so /usr/lib/x86_64-linux-gnu/libnuma.so || common/libCommonImpl.so config/libconfig.a trading/libTrading.a
+  FLAGS = -Wall -Wextra -Werror -Wpedantic -Wcast-align -Wcast-qual -Wconversion -Wctor-dtor-privacy -Wdisabled-optimization -Wformat=2 -Winit-self -Wmissing-declarations -Wmissing-include-dirs -Wold-style-cast -Woverloaded-virtual -Wredundant-decls -Wshadow -Wsign-conversion -Wsign-promo -Wstrict-overflow=1 -Wswitch-default -Wundef -Wno-unused -Wno-variadic-macros -Wno-parentheses -fdiagnostics-show-option -Wunreachable-code -Wunused-parameter -Wunused-function -Wunused-variable -Wunused-value -Wwrite-strings -Wno-missing-field-initializers -Wpointer-arith -Wstack-protector -fno-common -fstack-protector-strong -Wdouble-promotion -Wfloat-equal -Wlogical-op -Wplacement-new=2 -O0 -g3 -fsanitize=address
+  LINK_LIBRARIES = -Wl,-rpath,/home/isoula/om/shriven_zenith/cmake/build-debug/common  trading/libTrading.a  config/libconfig.a  -lcurl  -lssl  -lcrypto  common/libCommonImpl.so  /usr/lib/x86_64-linux-gnu/libnuma.so  -lwebsockets
+  OBJECT_DIR = tests/CMakeFiles/test_binance.dir
+  POST_BUILD = :
+  PRE_LINK = :
+  TARGET_FILE = tests/test_binance
+  TARGET_PDB = test_binance.dbg
+
+# =============================================================================
+# Object build statements for EXECUTABLE target test_kite_ws
+
+
+#############################################
+# Order-only phony target for test_kite_ws
+
+build cmake_object_order_depends_target_test_kite_ws: phony || cmake_object_order_depends_target_CommonImpl cmake_object_order_depends_target_Trading cmake_object_order_depends_target_config
+
+build tests/CMakeFiles/test_kite_ws.dir/test_kite_ws.cpp.o: CXX_COMPILER__test_kite_ws_unscanned_Debug /home/isoula/om/shriven_zenith/tests/test_kite_ws.cpp || cmake_object_order_depends_target_test_kite_ws
+  DEFINES = -DPROD_ASSERTS_ON=1
+  DEP_FILE = tests/CMakeFiles/test_kite_ws.dir/test_kite_ws.cpp.o.d
+  FLAGS = -Wall -Wextra -Werror -Wpedantic -Wcast-align -Wcast-qual -Wconversion -Wctor-dtor-privacy -Wdisabled-optimization -Wformat=2 -Winit-self -Wmissing-declarations -Wmissing-include-dirs -Wold-style-cast -Woverloaded-virtual -Wredundant-decls -Wshadow -Wsign-conversion -Wsign-promo -Wstrict-overflow=1 -Wswitch-default -Wundef -Wno-unused -Wno-variadic-macros -Wno-parentheses -fdiagnostics-show-option -Wunreachable-code -Wunused-parameter -Wunused-function -Wunused-variable -Wunused-value -Wwrite-strings -Wno-missing-field-initializers -Wpointer-arith -Wstack-protector -fno-common -fstack-protector-strong -Wdouble-promotion -Wfloat-equal -Wlogical-op -Wplacement-new=2 -O0 -g3 -fsanitize=address -std=c++23 -UNDEBUG -O0 -g3
+  INCLUDES = -I/home/isoula/om/shriven_zenith -I/home/isoula/om/shriven_zenith/trading -I/home/isoula/om/shriven_zenith/common -I/home/isoula/om/shriven_zenith/cmake/build-debug/common
+  OBJECT_DIR = tests/CMakeFiles/test_kite_ws.dir
+  OBJECT_FILE_DIR = tests/CMakeFiles/test_kite_ws.dir
+
+
+# =============================================================================
+# Link build statements for EXECUTABLE target test_kite_ws
+
+
+#############################################
+# Link the executable tests/test_kite_ws
+
+build tests/test_kite_ws: CXX_EXECUTABLE_LINKER__test_kite_ws_Debug tests/CMakeFiles/test_kite_ws.dir/test_kite_ws.cpp.o | trading/libTrading.a config/libconfig.a common/libCommonImpl.so /usr/lib/x86_64-linux-gnu/libnuma.so || common/libCommonImpl.so config/libconfig.a trading/libTrading.a
+  FLAGS = -Wall -Wextra -Werror -Wpedantic -Wcast-align -Wcast-qual -Wconversion -Wctor-dtor-privacy -Wdisabled-optimization -Wformat=2 -Winit-self -Wmissing-declarations -Wmissing-include-dirs -Wold-style-cast -Woverloaded-virtual -Wredundant-decls -Wshadow -Wsign-conversion -Wsign-promo -Wstrict-overflow=1 -Wswitch-default -Wundef -Wno-unused -Wno-variadic-macros -Wno-parentheses -fdiagnostics-show-option -Wunreachable-code -Wunused-parameter -Wunused-function -Wunused-variable -Wunused-value -Wwrite-strings -Wno-missing-field-initializers -Wpointer-arith -Wstack-protector -fno-common -fstack-protector-strong -Wdouble-promotion -Wfloat-equal -Wlogical-op -Wplacement-new=2 -O0 -g3 -fsanitize=address
+  LINK_LIBRARIES = -Wl,-rpath,/home/isoula/om/shriven_zenith/cmake/build-debug/common  trading/libTrading.a  config/libconfig.a  -lcurl  -lssl  -lcrypto  -lwebsockets  common/libCommonImpl.so  /usr/lib/x86_64-linux-gnu/libnuma.so
+  OBJECT_DIR = tests/CMakeFiles/test_kite_ws.dir
+  POST_BUILD = :
+  PRE_LINK = :
+  TARGET_FILE = tests/test_kite_ws
+  TARGET_PDB = test_kite_ws.dbg
 
 
 #############################################
@@ -454,12 +714,10 @@ build cmake_object_order_depends_target_ClaudeAuditor: phony || cmake_object_ord
 build auditor/CMakeFiles/ClaudeAuditor.dir/claude_auditor.cpp.o: CXX_COMPILER__ClaudeAuditor_unscanned_Debug /home/isoula/om/shriven_zenith/auditor/claude_auditor.cpp || cmake_object_order_depends_target_ClaudeAuditor
   DEFINES = -DPROD_ASSERTS_ON=1
   DEP_FILE = auditor/CMakeFiles/ClaudeAuditor.dir/claude_auditor.cpp.o.d
-  FLAGS = -Wall -Wextra -Werror -Wpedantic -Wcast-align -Wcast-qual -Wconversion -Wctor-dtor-privacy -Wdisabled-optimization -Wformat=2 -Winit-self -Wmissing-declarations -Wmissing-include-dirs -Wold-style-cast -Woverloaded-virtual -Wredundant-decls -Wshadow -Wsign-conversion -Wsign-promo -Wstrict-overflow=5 -Wswitch-default -Wundef -Wno-unused -Wno-variadic-macros -Wno-parentheses -fdiagnostics-show-option -Wunreachable-code -Wunused-parameter -Wunused-function -Wunused-variable -Wunused-value -Wwrite-strings -Wno-missing-field-initializers -Wpointer-arith -Wstack-protector -fno-common -fstack-protector-strong -Wdouble-promotion -Wfloat-equal -Wlogical-op -Wplacement-new=2 -O0 -g3 -fsanitize=address -std=c++23 -UNDEBUG -Wall -Wextra -Werror -Wpedantic -Wconversion -Wsign-conversion -Wold-style-cast -Wformat-security -Weffc++ -Wno-unused -march=native -O3 -O0 -g3
+  FLAGS = -Wall -Wextra -Werror -Wpedantic -Wcast-align -Wcast-qual -Wconversion -Wctor-dtor-privacy -Wdisabled-optimization -Wformat=2 -Winit-self -Wmissing-declarations -Wmissing-include-dirs -Wold-style-cast -Woverloaded-virtual -Wredundant-decls -Wshadow -Wsign-conversion -Wsign-promo -Wstrict-overflow=1 -Wswitch-default -Wundef -Wno-unused -Wno-variadic-macros -Wno-parentheses -fdiagnostics-show-option -Wunreachable-code -Wunused-parameter -Wunused-function -Wunused-variable -Wunused-value -Wwrite-strings -Wno-missing-field-initializers -Wpointer-arith -Wstack-protector -fno-common -fstack-protector-strong -Wdouble-promotion -Wfloat-equal -Wlogical-op -Wplacement-new=2 -O0 -g3 -fsanitize=address -std=c++23 -UNDEBUG -Wall -Wextra -Werror -Wpedantic -Wconversion -Wsign-conversion -Wold-style-cast -Wformat-security -Weffc++ -Wno-unused -march=native -O3 -O0 -g3
   INCLUDES = -I/home/isoula/om/shriven_zenith/auditor -I/home/isoula/om/shriven_zenith -I/home/isoula/om/shriven_zenith/common -I/home/isoula/om/shriven_zenith/cmake/build-debug/common
   OBJECT_DIR = auditor/CMakeFiles/ClaudeAuditor.dir
   OBJECT_FILE_DIR = auditor/CMakeFiles/ClaudeAuditor.dir
-  TARGET_COMPILE_PDB = auditor/CMakeFiles/ClaudeAuditor.dir/ClaudeAuditor.pdb
-  TARGET_PDB = auditor/libClaudeAuditor.pdb
 
 
 # =============================================================================
@@ -470,13 +728,12 @@ build auditor/CMakeFiles/ClaudeAuditor.dir/claude_auditor.cpp.o: CXX_COMPILER__C
 # Link the static library auditor/libClaudeAuditor.a
 
 build auditor/libClaudeAuditor.a: CXX_STATIC_LIBRARY_LINKER__ClaudeAuditor_Debug auditor/CMakeFiles/ClaudeAuditor.dir/claude_auditor.cpp.o || common/libCommonImpl.so
-  LANGUAGE_COMPILE_FLAGS = -Wall -Wextra -Werror -Wpedantic -Wcast-align -Wcast-qual -Wconversion -Wctor-dtor-privacy -Wdisabled-optimization -Wformat=2 -Winit-self -Wmissing-declarations -Wmissing-include-dirs -Wold-style-cast -Woverloaded-virtual -Wredundant-decls -Wshadow -Wsign-conversion -Wsign-promo -Wstrict-overflow=5 -Wswitch-default -Wundef -Wno-unused -Wno-variadic-macros -Wno-parentheses -fdiagnostics-show-option -Wunreachable-code -Wunused-parameter -Wunused-function -Wunused-variable -Wunused-value -Wwrite-strings -Wno-missing-field-initializers -Wpointer-arith -Wstack-protector -fno-common -fstack-protector-strong -Wdouble-promotion -Wfloat-equal -Wlogical-op -Wplacement-new=2 -O0 -g3 -fsanitize=address
+  LANGUAGE_COMPILE_FLAGS = -Wall -Wextra -Werror -Wpedantic -Wcast-align -Wcast-qual -Wconversion -Wctor-dtor-privacy -Wdisabled-optimization -Wformat=2 -Winit-self -Wmissing-declarations -Wmissing-include-dirs -Wold-style-cast -Woverloaded-virtual -Wredundant-decls -Wshadow -Wsign-conversion -Wsign-promo -Wstrict-overflow=1 -Wswitch-default -Wundef -Wno-unused -Wno-variadic-macros -Wno-parentheses -fdiagnostics-show-option -Wunreachable-code -Wunused-parameter -Wunused-function -Wunused-variable -Wunused-value -Wwrite-strings -Wno-missing-field-initializers -Wpointer-arith -Wstack-protector -fno-common -fstack-protector-strong -Wdouble-promotion -Wfloat-equal -Wlogical-op -Wplacement-new=2 -O0 -g3 -fsanitize=address
   OBJECT_DIR = auditor/CMakeFiles/ClaudeAuditor.dir
   POST_BUILD = :
   PRE_LINK = :
-  TARGET_COMPILE_PDB = auditor/CMakeFiles/ClaudeAuditor.dir/ClaudeAuditor.pdb
   TARGET_FILE = auditor/libClaudeAuditor.a
-  TARGET_PDB = auditor/libClaudeAuditor.pdb
+  TARGET_PDB = ClaudeAuditor.a.dbg
 
 # =============================================================================
 # Object build statements for EXECUTABLE target claude_audit
@@ -490,12 +747,10 @@ build cmake_object_order_depends_target_claude_audit: phony || cmake_object_orde
 build auditor/CMakeFiles/claude_audit.dir/audit_main.cpp.o: CXX_COMPILER__claude_audit_unscanned_Debug /home/isoula/om/shriven_zenith/auditor/audit_main.cpp || cmake_object_order_depends_target_claude_audit
   DEFINES = -DPROD_ASSERTS_ON=1
   DEP_FILE = auditor/CMakeFiles/claude_audit.dir/audit_main.cpp.o.d
-  FLAGS = -Wall -Wextra -Werror -Wpedantic -Wcast-align -Wcast-qual -Wconversion -Wctor-dtor-privacy -Wdisabled-optimization -Wformat=2 -Winit-self -Wmissing-declarations -Wmissing-include-dirs -Wold-style-cast -Woverloaded-virtual -Wredundant-decls -Wshadow -Wsign-conversion -Wsign-promo -Wstrict-overflow=5 -Wswitch-default -Wundef -Wno-unused -Wno-variadic-macros -Wno-parentheses -fdiagnostics-show-option -Wunreachable-code -Wunused-parameter -Wunused-function -Wunused-variable -Wunused-value -Wwrite-strings -Wno-missing-field-initializers -Wpointer-arith -Wstack-protector -fno-common -fstack-protector-strong -Wdouble-promotion -Wfloat-equal -Wlogical-op -Wplacement-new=2 -O0 -g3 -fsanitize=address -std=c++23 -UNDEBUG -O0 -g3
+  FLAGS = -Wall -Wextra -Werror -Wpedantic -Wcast-align -Wcast-qual -Wconversion -Wctor-dtor-privacy -Wdisabled-optimization -Wformat=2 -Winit-self -Wmissing-declarations -Wmissing-include-dirs -Wold-style-cast -Woverloaded-virtual -Wredundant-decls -Wshadow -Wsign-conversion -Wsign-promo -Wstrict-overflow=1 -Wswitch-default -Wundef -Wno-unused -Wno-variadic-macros -Wno-parentheses -fdiagnostics-show-option -Wunreachable-code -Wunused-parameter -Wunused-function -Wunused-variable -Wunused-value -Wwrite-strings -Wno-missing-field-initializers -Wpointer-arith -Wstack-protector -fno-common -fstack-protector-strong -Wdouble-promotion -Wfloat-equal -Wlogical-op -Wplacement-new=2 -O0 -g3 -fsanitize=address -std=c++23 -UNDEBUG -O0 -g3
   INCLUDES = -I/home/isoula/om/shriven_zenith/auditor -I/home/isoula/om/shriven_zenith -I/home/isoula/om/shriven_zenith/common -I/home/isoula/om/shriven_zenith/cmake/build-debug/common
   OBJECT_DIR = auditor/CMakeFiles/claude_audit.dir
   OBJECT_FILE_DIR = auditor/CMakeFiles/claude_audit.dir
-  TARGET_COMPILE_PDB = auditor/CMakeFiles/claude_audit.dir/
-  TARGET_PDB = auditor/claude_audit.pdb
 
 
 # =============================================================================
@@ -506,14 +761,13 @@ build auditor/CMakeFiles/claude_audit.dir/audit_main.cpp.o: CXX_COMPILER__claude
 # Link the executable auditor/claude_audit
 
 build auditor/claude_audit: CXX_EXECUTABLE_LINKER__claude_audit_Debug auditor/CMakeFiles/claude_audit.dir/audit_main.cpp.o | auditor/libClaudeAuditor.a common/libCommonImpl.so /usr/lib/x86_64-linux-gnu/libnuma.so || auditor/libClaudeAuditor.a common/libCommonImpl.so
-  FLAGS = -Wall -Wextra -Werror -Wpedantic -Wcast-align -Wcast-qual -Wconversion -Wctor-dtor-privacy -Wdisabled-optimization -Wformat=2 -Winit-self -Wmissing-declarations -Wmissing-include-dirs -Wold-style-cast -Woverloaded-virtual -Wredundant-decls -Wshadow -Wsign-conversion -Wsign-promo -Wstrict-overflow=5 -Wswitch-default -Wundef -Wno-unused -Wno-variadic-macros -Wno-parentheses -fdiagnostics-show-option -Wunreachable-code -Wunused-parameter -Wunused-function -Wunused-variable -Wunused-value -Wwrite-strings -Wno-missing-field-initializers -Wpointer-arith -Wstack-protector -fno-common -fstack-protector-strong -Wdouble-promotion -Wfloat-equal -Wlogical-op -Wplacement-new=2 -O0 -g3 -fsanitize=address
+  FLAGS = -Wall -Wextra -Werror -Wpedantic -Wcast-align -Wcast-qual -Wconversion -Wctor-dtor-privacy -Wdisabled-optimization -Wformat=2 -Winit-self -Wmissing-declarations -Wmissing-include-dirs -Wold-style-cast -Woverloaded-virtual -Wredundant-decls -Wshadow -Wsign-conversion -Wsign-promo -Wstrict-overflow=1 -Wswitch-default -Wundef -Wno-unused -Wno-variadic-macros -Wno-parentheses -fdiagnostics-show-option -Wunreachable-code -Wunused-parameter -Wunused-function -Wunused-variable -Wunused-value -Wwrite-strings -Wno-missing-field-initializers -Wpointer-arith -Wstack-protector -fno-common -fstack-protector-strong -Wdouble-promotion -Wfloat-equal -Wlogical-op -Wplacement-new=2 -O0 -g3 -fsanitize=address
   LINK_LIBRARIES = -Wl,-rpath,/home/isoula/om/shriven_zenith/cmake/build-debug/common:  auditor/libClaudeAuditor.a  common/libCommonImpl.so  -lpthread  /usr/lib/x86_64-linux-gnu/libnuma.so
   OBJECT_DIR = auditor/CMakeFiles/claude_audit.dir
   POST_BUILD = :
   PRE_LINK = :
-  TARGET_COMPILE_PDB = auditor/CMakeFiles/claude_audit.dir/
   TARGET_FILE = auditor/claude_audit
-  TARGET_PDB = auditor/claude_audit.pdb
+  TARGET_PDB = claude_audit.dbg
 
 
 #############################################
@@ -607,13 +861,25 @@ build audit: phony auditor/audit
 
 build claude_audit: phony auditor/claude_audit
 
+build config: phony config/libconfig.a
+
 build libClaudeAuditor.a: phony auditor/libClaudeAuditor.a
 
 build libCommonImpl.so: phony common/libCommonImpl.so
 
 build libTrading.a: phony trading/libTrading.a
 
+build libconfig.a: phony config/libconfig.a
+
+build test_binance: phony tests/test_binance
+
+build test_instrument_fetcher: phony tests/test_instrument_fetcher
+
+build test_kite_ws: phony tests/test_kite_ws
+
 build test_zerodha_auth: phony tests/test_zerodha_auth
+
+build trader_main: phony trading/trader_main
 
 # =============================================================================
 # Folder targets.
@@ -623,7 +889,7 @@ build test_zerodha_auth: phony tests/test_zerodha_auth
 #############################################
 # Folder: /home/isoula/om/shriven_zenith/cmake/build-debug
 
-build all: phony common/all trading/all tests/all auditor/all
+build all: phony common/all config/all trading/all tests/all auditor/all
 
 # =============================================================================
 
@@ -642,16 +908,23 @@ build common/all: phony common/libCommonImpl.so
 # =============================================================================
 
 #############################################
+# Folder: /home/isoula/om/shriven_zenith/cmake/build-debug/config
+
+build config/all: phony config/libconfig.a
+
+# =============================================================================
+
+#############################################
 # Folder: /home/isoula/om/shriven_zenith/cmake/build-debug/tests
 
-build tests/all: phony tests/test_zerodha_auth
+build tests/all: phony tests/test_zerodha_auth tests/test_instrument_fetcher tests/test_binance tests/test_kite_ws
 
 # =============================================================================
 
 #############################################
 # Folder: /home/isoula/om/shriven_zenith/cmake/build-debug/trading
 
-build trading/all: phony trading/libTrading.a
+build trading/all: phony trading/libTrading.a trading/trader_main
 
 # =============================================================================
 # Built-in targets
@@ -660,14 +933,14 @@ build trading/all: phony trading/libTrading.a
 #############################################
 # Re-run CMake if any of its inputs changed.
 
-build build.ninja: RERUN_CMAKE | /home/isoula/om/shriven_zenith/CMakeLists.txt /home/isoula/om/shriven_zenith/auditor/CMakeLists.txt /home/isoula/om/shriven_zenith/common/CMakeLists.txt /home/isoula/om/shriven_zenith/common/CommonConfig.cmake.in /home/isoula/om/shriven_zenith/common/config.h.in /home/isoula/om/shriven_zenith/tests/CMakeLists.txt /home/isoula/om/shriven_zenith/trading/CMakeLists.txt /usr/share/cmake-3.28/Modules/BasicConfigVersion-AnyNewerVersion.cmake.in /usr/share/cmake-3.28/Modules/CMakeCXXCompiler.cmake.in /usr/share/cmake-3.28/Modules/CMakeCXXCompilerABI.cpp /usr/share/cmake-3.28/Modules/CMakeCXXInformation.cmake /usr/share/cmake-3.28/Modules/CMakeCommonLanguageInclude.cmake /usr/share/cmake-3.28/Modules/CMakeCompilerIdDetection.cmake /usr/share/cmake-3.28/Modules/CMakeDetermineCXXCompiler.cmake /usr/share/cmake-3.28/Modules/CMakeDetermineCompileFeatures.cmake /usr/share/cmake-3.28/Modules/CMakeDetermineCompiler.cmake /usr/share/cmake-3.28/Modules/CMakeDetermineCompilerABI.cmake /usr/share/cmake-3.28/Modules/CMakeDetermineCompilerId.cmake /usr/share/cmake-3.28/Modules/CMakeDetermineSystem.cmake /usr/share/cmake-3.28/Modules/CMakeFindBinUtils.cmake /usr/share/cmake-3.28/Modules/CMakeGenericSystem.cmake /usr/share/cmake-3.28/Modules/CMakeInitializeConfigs.cmake /usr/share/cmake-3.28/Modules/CMakeLanguageInformation.cmake /usr/share/cmake-3.28/Modules/CMakePackageConfigHelpers.cmake /usr/share/cmake-3.28/Modules/CMakeParseImplicitIncludeInfo.cmake /usr/share/cmake-3.28/Modules/CMakeParseImplicitLinkInfo.cmake /usr/share/cmake-3.28/Modules/CMakeParseLibraryArchitecture.cmake /usr/share/cmake-3.28/Modules/CMakeSystem.cmake.in /usr/share/cmake-3.28/Modules/CMakeSystemSpecificInformation.cmake /usr/share/cmake-3.28/Modules/CMakeSystemSpecificInitialize.cmake /usr/share/cmake-3.28/Modules/CMakeTestCXXCompiler.cmake /usr/share/cmake-3.28/Modules/CMakeTestCompilerCommon.cmake /usr/share/cmake-3.28/Modules/CheckCXXSourceCompiles.cmake /usr/share/cmake-3.28/Modules/CheckIncludeFileCXX.cmake /usr/share/cmake-3.28/Modules/CheckLibraryExists.cmake /usr/share/cmake-3.28/Modules/Compiler/ADSP-DetermineCompiler.cmake /usr/share/cmake-3.28/Modules/Compiler/ARMCC-DetermineCompiler.cmake /usr/share/cmake-3.28/Modules/Compiler/ARMClang-DetermineCompiler.cmake /usr/share/cmake-3.28/Modules/Compiler/AppleClang-DetermineCompiler.cmake /usr/share/cmake-3.28/Modules/Compiler/Borland-DetermineCompiler.cmake /usr/share/cmake-3.28/Modules/Compiler/CMakeCommonCompilerMacros.cmake /usr/share/cmake-3.28/Modules/Compiler/Clang-DetermineCompiler.cmake /usr/share/cmake-3.28/Modules/Compiler/Clang-DetermineCompilerInternal.cmake /usr/share/cmake-3.28/Modules/Compiler/Comeau-CXX-DetermineCompiler.cmake /usr/share/cmake-3.28/Modules/Compiler/Compaq-CXX-DetermineCompiler.cmake /usr/share/cmake-3.28/Modules/Compiler/Cray-DetermineCompiler.cmake /usr/share/cmake-3.28/Modules/Compiler/CrayClang-DetermineCompiler.cmake /usr/share/cmake-3.28/Modules/Compiler/Embarcadero-DetermineCompiler.cmake /usr/share/cmake-3.28/Modules/Compiler/Fujitsu-DetermineCompiler.cmake /usr/share/cmake-3.28/Modules/Compiler/FujitsuClang-DetermineCompiler.cmake /usr/share/cmake-3.28/Modules/Compiler/GHS-DetermineCompiler.cmake /usr/share/cmake-3.28/Modules/Compiler/GNU-CXX-DetermineCompiler.cmake /usr/share/cmake-3.28/Modules/Compiler/GNU-CXX.cmake /usr/share/cmake-3.28/Modules/Compiler/GNU-FindBinUtils.cmake /usr/share/cmake-3.28/Modules/Compiler/GNU.cmake /usr/share/cmake-3.28/Modules/Compiler/HP-CXX-DetermineCompiler.cmake /usr/share/cmake-3.28/Modules/Compiler/IAR-DetermineCompiler.cmake /usr/share/cmake-3.28/Modules/Compiler/IBMCPP-CXX-DetermineVersionInternal.cmake /usr/share/cmake-3.28/Modules/Compiler/IBMClang-CXX-DetermineCompiler.cmake /usr/share/cmake-3.28/Modules/Compiler/Intel-DetermineCompiler.cmake /usr/share/cmake-3.28/Modules/Compiler/IntelLLVM-DetermineCompiler.cmake /usr/share/cmake-3.28/Modules/Compiler/LCC-CXX-DetermineCompiler.cmake /usr/share/cmake-3.28/Modules/Compiler/MSVC-DetermineCompiler.cmake /usr/share/cmake-3.28/Modules/Compiler/NVHPC-DetermineCompiler.cmake /usr/share/cmake-3.28/Modules/Compiler/NVIDIA-DetermineCompiler.cmake /usr/share/cmake-3.28/Modules/Compiler/OpenWatcom-DetermineCompiler.cmake /usr/share/cmake-3.28/Modules/Compiler/OrangeC-DetermineCompiler.cmake /usr/share/cmake-3.28/Modules/Compiler/PGI-DetermineCompiler.cmake /usr/share/cmake-3.28/Modules/Compiler/PathScale-DetermineCompiler.cmake /usr/share/cmake-3.28/Modules/Compiler/SCO-DetermineCompiler.cmake /usr/share/cmake-3.28/Modules/Compiler/SunPro-CXX-DetermineCompiler.cmake /usr/share/cmake-3.28/Modules/Compiler/TI-DetermineCompiler.cmake /usr/share/cmake-3.28/Modules/Compiler/Tasking-DetermineCompiler.cmake /usr/share/cmake-3.28/Modules/Compiler/VisualAge-CXX-DetermineCompiler.cmake /usr/share/cmake-3.28/Modules/Compiler/Watcom-DetermineCompiler.cmake /usr/share/cmake-3.28/Modules/Compiler/XL-CXX-DetermineCompiler.cmake /usr/share/cmake-3.28/Modules/Compiler/XLClang-CXX-DetermineCompiler.cmake /usr/share/cmake-3.28/Modules/Compiler/zOS-CXX-DetermineCompiler.cmake /usr/share/cmake-3.28/Modules/FindPackageHandleStandardArgs.cmake /usr/share/cmake-3.28/Modules/FindPackageMessage.cmake /usr/share/cmake-3.28/Modules/FindThreads.cmake /usr/share/cmake-3.28/Modules/Internal/CheckSourceCompiles.cmake /usr/share/cmake-3.28/Modules/Internal/FeatureTesting.cmake /usr/share/cmake-3.28/Modules/Platform/Linux-Determine-CXX.cmake /usr/share/cmake-3.28/Modules/Platform/Linux-GNU-CXX.cmake /usr/share/cmake-3.28/Modules/Platform/Linux-GNU.cmake /usr/share/cmake-3.28/Modules/Platform/Linux-Initialize.cmake /usr/share/cmake-3.28/Modules/Platform/Linux.cmake /usr/share/cmake-3.28/Modules/Platform/UnixPaths.cmake /usr/share/cmake-3.28/Modules/WriteBasicConfigVersionFile.cmake CMakeCache.txt CMakeFiles/3.28.3/CMakeCXXCompiler.cmake CMakeFiles/3.28.3/CMakeSystem.cmake
+build build.ninja: RERUN_CMAKE | /home/isoula/om/shriven_zenith/CMakeLists.txt /home/isoula/om/shriven_zenith/auditor/CMakeLists.txt /home/isoula/om/shriven_zenith/common/CMakeLists.txt /home/isoula/om/shriven_zenith/common/CommonConfig.cmake.in /home/isoula/om/shriven_zenith/common/config.h.in /home/isoula/om/shriven_zenith/config/CMakeLists.txt /home/isoula/om/shriven_zenith/tests/CMakeLists.txt /home/isoula/om/shriven_zenith/trading/CMakeLists.txt /usr/share/cmake-3.28/Modules/BasicConfigVersion-AnyNewerVersion.cmake.in /usr/share/cmake-3.28/Modules/CMakeCXXInformation.cmake /usr/share/cmake-3.28/Modules/CMakeCommonLanguageInclude.cmake /usr/share/cmake-3.28/Modules/CMakeGenericSystem.cmake /usr/share/cmake-3.28/Modules/CMakeInitializeConfigs.cmake /usr/share/cmake-3.28/Modules/CMakeLanguageInformation.cmake /usr/share/cmake-3.28/Modules/CMakePackageConfigHelpers.cmake /usr/share/cmake-3.28/Modules/CMakeSystemSpecificInformation.cmake /usr/share/cmake-3.28/Modules/CMakeSystemSpecificInitialize.cmake /usr/share/cmake-3.28/Modules/CheckCXXSourceCompiles.cmake /usr/share/cmake-3.28/Modules/CheckIncludeFileCXX.cmake /usr/share/cmake-3.28/Modules/CheckLibraryExists.cmake /usr/share/cmake-3.28/Modules/Compiler/CMakeCommonCompilerMacros.cmake /usr/share/cmake-3.28/Modules/Compiler/GNU-CXX.cmake /usr/share/cmake-3.28/Modules/Compiler/GNU.cmake /usr/share/cmake-3.28/Modules/FindPackageHandleStandardArgs.cmake /usr/share/cmake-3.28/Modules/FindPackageMessage.cmake /usr/share/cmake-3.28/Modules/FindThreads.cmake /usr/share/cmake-3.28/Modules/Internal/CheckSourceCompiles.cmake /usr/share/cmake-3.28/Modules/Platform/Linux-GNU-CXX.cmake /usr/share/cmake-3.28/Modules/Platform/Linux-GNU.cmake /usr/share/cmake-3.28/Modules/Platform/Linux-Initialize.cmake /usr/share/cmake-3.28/Modules/Platform/Linux.cmake /usr/share/cmake-3.28/Modules/Platform/UnixPaths.cmake /usr/share/cmake-3.28/Modules/WriteBasicConfigVersionFile.cmake CMakeCache.txt CMakeFiles/3.28.3/CMakeCXXCompiler.cmake CMakeFiles/3.28.3/CMakeSystem.cmake
   pool = console
 
 
 #############################################
 # A missing CMake input file is not an error.
 
-build /home/isoula/om/shriven_zenith/CMakeLists.txt /home/isoula/om/shriven_zenith/auditor/CMakeLists.txt /home/isoula/om/shriven_zenith/common/CMakeLists.txt /home/isoula/om/shriven_zenith/common/CommonConfig.cmake.in /home/isoula/om/shriven_zenith/common/config.h.in /home/isoula/om/shriven_zenith/tests/CMakeLists.txt /home/isoula/om/shriven_zenith/trading/CMakeLists.txt /usr/share/cmake-3.28/Modules/BasicConfigVersion-AnyNewerVersion.cmake.in /usr/share/cmake-3.28/Modules/CMakeCXXCompiler.cmake.in /usr/share/cmake-3.28/Modules/CMakeCXXCompilerABI.cpp /usr/share/cmake-3.28/Modules/CMakeCXXInformation.cmake /usr/share/cmake-3.28/Modules/CMakeCommonLanguageInclude.cmake /usr/share/cmake-3.28/Modules/CMakeCompilerIdDetection.cmake /usr/share/cmake-3.28/Modules/CMakeDetermineCXXCompiler.cmake /usr/share/cmake-3.28/Modules/CMakeDetermineCompileFeatures.cmake /usr/share/cmake-3.28/Modules/CMakeDetermineCompiler.cmake /usr/share/cmake-3.28/Modules/CMakeDetermineCompilerABI.cmake /usr/share/cmake-3.28/Modules/CMakeDetermineCompilerId.cmake /usr/share/cmake-3.28/Modules/CMakeDetermineSystem.cmake /usr/share/cmake-3.28/Modules/CMakeFindBinUtils.cmake /usr/share/cmake-3.28/Modules/CMakeGenericSystem.cmake /usr/share/cmake-3.28/Modules/CMakeInitializeConfigs.cmake /usr/share/cmake-3.28/Modules/CMakeLanguageInformation.cmake /usr/share/cmake-3.28/Modules/CMakePackageConfigHelpers.cmake /usr/share/cmake-3.28/Modules/CMakeParseImplicitIncludeInfo.cmake /usr/share/cmake-3.28/Modules/CMakeParseImplicitLinkInfo.cmake /usr/share/cmake-3.28/Modules/CMakeParseLibraryArchitecture.cmake /usr/share/cmake-3.28/Modules/CMakeSystem.cmake.in /usr/share/cmake-3.28/Modules/CMakeSystemSpecificInformation.cmake /usr/share/cmake-3.28/Modules/CMakeSystemSpecificInitialize.cmake /usr/share/cmake-3.28/Modules/CMakeTestCXXCompiler.cmake /usr/share/cmake-3.28/Modules/CMakeTestCompilerCommon.cmake /usr/share/cmake-3.28/Modules/CheckCXXSourceCompiles.cmake /usr/share/cmake-3.28/Modules/CheckIncludeFileCXX.cmake /usr/share/cmake-3.28/Modules/CheckLibraryExists.cmake /usr/share/cmake-3.28/Modules/Compiler/ADSP-DetermineCompiler.cmake /usr/share/cmake-3.28/Modules/Compiler/ARMCC-DetermineCompiler.cmake /usr/share/cmake-3.28/Modules/Compiler/ARMClang-DetermineCompiler.cmake /usr/share/cmake-3.28/Modules/Compiler/AppleClang-DetermineCompiler.cmake /usr/share/cmake-3.28/Modules/Compiler/Borland-DetermineCompiler.cmake /usr/share/cmake-3.28/Modules/Compiler/CMakeCommonCompilerMacros.cmake /usr/share/cmake-3.28/Modules/Compiler/Clang-DetermineCompiler.cmake /usr/share/cmake-3.28/Modules/Compiler/Clang-DetermineCompilerInternal.cmake /usr/share/cmake-3.28/Modules/Compiler/Comeau-CXX-DetermineCompiler.cmake /usr/share/cmake-3.28/Modules/Compiler/Compaq-CXX-DetermineCompiler.cmake /usr/share/cmake-3.28/Modules/Compiler/Cray-DetermineCompiler.cmake /usr/share/cmake-3.28/Modules/Compiler/CrayClang-DetermineCompiler.cmake /usr/share/cmake-3.28/Modules/Compiler/Embarcadero-DetermineCompiler.cmake /usr/share/cmake-3.28/Modules/Compiler/Fujitsu-DetermineCompiler.cmake /usr/share/cmake-3.28/Modules/Compiler/FujitsuClang-DetermineCompiler.cmake /usr/share/cmake-3.28/Modules/Compiler/GHS-DetermineCompiler.cmake /usr/share/cmake-3.28/Modules/Compiler/GNU-CXX-DetermineCompiler.cmake /usr/share/cmake-3.28/Modules/Compiler/GNU-CXX.cmake /usr/share/cmake-3.28/Modules/Compiler/GNU-FindBinUtils.cmake /usr/share/cmake-3.28/Modules/Compiler/GNU.cmake /usr/share/cmake-3.28/Modules/Compiler/HP-CXX-DetermineCompiler.cmake /usr/share/cmake-3.28/Modules/Compiler/IAR-DetermineCompiler.cmake /usr/share/cmake-3.28/Modules/Compiler/IBMCPP-CXX-DetermineVersionInternal.cmake /usr/share/cmake-3.28/Modules/Compiler/IBMClang-CXX-DetermineCompiler.cmake /usr/share/cmake-3.28/Modules/Compiler/Intel-DetermineCompiler.cmake /usr/share/cmake-3.28/Modules/Compiler/IntelLLVM-DetermineCompiler.cmake /usr/share/cmake-3.28/Modules/Compiler/LCC-CXX-DetermineCompiler.cmake /usr/share/cmake-3.28/Modules/Compiler/MSVC-DetermineCompiler.cmake /usr/share/cmake-3.28/Modules/Compiler/NVHPC-DetermineCompiler.cmake /usr/share/cmake-3.28/Modules/Compiler/NVIDIA-DetermineCompiler.cmake /usr/share/cmake-3.28/Modules/Compiler/OpenWatcom-DetermineCompiler.cmake /usr/share/cmake-3.28/Modules/Compiler/OrangeC-DetermineCompiler.cmake /usr/share/cmake-3.28/Modules/Compiler/PGI-DetermineCompiler.cmake /usr/share/cmake-3.28/Modules/Compiler/PathScale-DetermineCompiler.cmake /usr/share/cmake-3.28/Modules/Compiler/SCO-DetermineCompiler.cmake /usr/share/cmake-3.28/Modules/Compiler/SunPro-CXX-DetermineCompiler.cmake /usr/share/cmake-3.28/Modules/Compiler/TI-DetermineCompiler.cmake /usr/share/cmake-3.28/Modules/Compiler/Tasking-DetermineCompiler.cmake /usr/share/cmake-3.28/Modules/Compiler/VisualAge-CXX-DetermineCompiler.cmake /usr/share/cmake-3.28/Modules/Compiler/Watcom-DetermineCompiler.cmake /usr/share/cmake-3.28/Modules/Compiler/XL-CXX-DetermineCompiler.cmake /usr/share/cmake-3.28/Modules/Compiler/XLClang-CXX-DetermineCompiler.cmake /usr/share/cmake-3.28/Modules/Compiler/zOS-CXX-DetermineCompiler.cmake /usr/share/cmake-3.28/Modules/FindPackageHandleStandardArgs.cmake /usr/share/cmake-3.28/Modules/FindPackageMessage.cmake /usr/share/cmake-3.28/Modules/FindThreads.cmake /usr/share/cmake-3.28/Modules/Internal/CheckSourceCompiles.cmake /usr/share/cmake-3.28/Modules/Internal/FeatureTesting.cmake /usr/share/cmake-3.28/Modules/Platform/Linux-Determine-CXX.cmake /usr/share/cmake-3.28/Modules/Platform/Linux-GNU-CXX.cmake /usr/share/cmake-3.28/Modules/Platform/Linux-GNU.cmake /usr/share/cmake-3.28/Modules/Platform/Linux-Initialize.cmake /usr/share/cmake-3.28/Modules/Platform/Linux.cmake /usr/share/cmake-3.28/Modules/Platform/UnixPaths.cmake /usr/share/cmake-3.28/Modules/WriteBasicConfigVersionFile.cmake CMakeCache.txt CMakeFiles/3.28.3/CMakeCXXCompiler.cmake CMakeFiles/3.28.3/CMakeSystem.cmake: phony
+build /home/isoula/om/shriven_zenith/CMakeLists.txt /home/isoula/om/shriven_zenith/auditor/CMakeLists.txt /home/isoula/om/shriven_zenith/common/CMakeLists.txt /home/isoula/om/shriven_zenith/common/CommonConfig.cmake.in /home/isoula/om/shriven_zenith/common/config.h.in /home/isoula/om/shriven_zenith/config/CMakeLists.txt /home/isoula/om/shriven_zenith/tests/CMakeLists.txt /home/isoula/om/shriven_zenith/trading/CMakeLists.txt /usr/share/cmake-3.28/Modules/BasicConfigVersion-AnyNewerVersion.cmake.in /usr/share/cmake-3.28/Modules/CMakeCXXInformation.cmake /usr/share/cmake-3.28/Modules/CMakeCommonLanguageInclude.cmake /usr/share/cmake-3.28/Modules/CMakeGenericSystem.cmake /usr/share/cmake-3.28/Modules/CMakeInitializeConfigs.cmake /usr/share/cmake-3.28/Modules/CMakeLanguageInformation.cmake /usr/share/cmake-3.28/Modules/CMakePackageConfigHelpers.cmake /usr/share/cmake-3.28/Modules/CMakeSystemSpecificInformation.cmake /usr/share/cmake-3.28/Modules/CMakeSystemSpecificInitialize.cmake /usr/share/cmake-3.28/Modules/CheckCXXSourceCompiles.cmake /usr/share/cmake-3.28/Modules/CheckIncludeFileCXX.cmake /usr/share/cmake-3.28/Modules/CheckLibraryExists.cmake /usr/share/cmake-3.28/Modules/Compiler/CMakeCommonCompilerMacros.cmake /usr/share/cmake-3.28/Modules/Compiler/GNU-CXX.cmake /usr/share/cmake-3.28/Modules/Compiler/GNU.cmake /usr/share/cmake-3.28/Modules/FindPackageHandleStandardArgs.cmake /usr/share/cmake-3.28/Modules/FindPackageMessage.cmake /usr/share/cmake-3.28/Modules/FindThreads.cmake /usr/share/cmake-3.28/Modules/Internal/CheckSourceCompiles.cmake /usr/share/cmake-3.28/Modules/Platform/Linux-GNU-CXX.cmake /usr/share/cmake-3.28/Modules/Platform/Linux-GNU.cmake /usr/share/cmake-3.28/Modules/Platform/Linux-Initialize.cmake /usr/share/cmake-3.28/Modules/Platform/Linux.cmake /usr/share/cmake-3.28/Modules/Platform/UnixPaths.cmake /usr/share/cmake-3.28/Modules/WriteBasicConfigVersionFile.cmake CMakeCache.txt CMakeFiles/3.28.3/CMakeCXXCompiler.cmake CMakeFiles/3.28.3/CMakeSystem.cmake: phony
 
 
 #############################################

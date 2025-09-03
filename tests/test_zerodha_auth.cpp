@@ -3,6 +3,7 @@
 #include "common/logging.h"
 #include <cstdio>
 #include <cstring>
+#include <cstdlib>
 #include <unistd.h>
 
 int main(int argc, char* argv[]) {
@@ -13,7 +14,7 @@ int main(int argc, char* argv[]) {
     
     // Step 1: Initialize ConfigManager
     printf("1. Initializing ConfigManager...\n");
-    if (!Trading::ConfigManager::init()) {
+    if (!Trading::ConfigManager::init("/home/isoula/om/shriven_zenith/config/config.toml")) {
         fprintf(stderr, "Failed to initialize ConfigManager\n");
         return 1;
     }
@@ -22,20 +23,54 @@ int main(int argc, char* argv[]) {
     printf("   Env file: %s\n", config.paths.env_file);
     printf("   Logs dir: %s\n", config.paths.logs_dir);
     
-    // Step 2: Initialize logging to auth logs directory
+    // Step 2: Load environment variables from .env file
+    printf("2. Loading environment variables from %s...\n", config.paths.env_file);
+    FILE* env_file = fopen(config.paths.env_file, "r");
+    if (env_file) {
+        char line[1024];
+        while (fgets(line, sizeof(line), env_file)) {
+            // Skip comments and empty lines
+            if (line[0] == '#' || line[0] == '\n') continue;
+            
+            // Remove trailing newline
+            size_t len = strlen(line);
+            if (len > 0 && line[len-1] == '\n') {
+                line[len-1] = '\0';
+            }
+            
+            // Find the = separator
+            char* equals = strchr(line, '=');
+            if (equals) {
+                *equals = '\0';
+                const char* key = line;
+                const char* value = equals + 1;
+                
+                // Set the environment variable
+                setenv(key, value, 1);
+                printf("   Loaded: %s\n", key);
+            }
+        }
+        fclose(env_file);
+        printf("   Environment variables loaded successfully\n");
+    } else {
+        fprintf(stderr, "Could not open env file: %s\n", config.paths.env_file);
+        return 1;
+    }
+    
+    // Step 3: Initialize logging to auth logs directory
     char log_file[512];
     snprintf(log_file, sizeof(log_file), "%s/test_zerodha.log", Trading::ConfigManager::getLogsDir());
     if (log_file[0] == '\0') {
         fprintf(stderr, "Failed to get log file path\n");
         return 1;
     }
-    printf("2. Initializing logging to: %s\n", log_file);
+    printf("3. Initializing logging to: %s\n", log_file);
     Common::initLogging(log_file);
     
     LOG_INFO("=== Starting Zerodha Authentication Test ===");
     
-    // Step 3: Load credentials from environment (loaded by ConfigManager)
-    printf("3. Loading credentials from environment...\n");
+    // Step 4: Load credentials from environment (loaded by ConfigManager)
+    printf("4. Loading credentials from environment...\n");
     Trading::Zerodha::Credentials creds{};
     
     const char* user_id = getenv("ZERODHA_USER_ID");

@@ -72,10 +72,24 @@ instrument_dump_url = "https://api.kite.trade/instruments"
 market_open_time = "09:15:00"
 market_close_time = "15:30:00"
 
+# Index Configuration
+indices = ["NIFTY50"]  # Supported: NIFTY50, BANKNIFTY, FINNIFTY
+fetch_spot = true       # Fetch underlying spot data
+fetch_futures = true    # Fetch nearest expiry futures
+fetch_options = true    # Fetch option chain
+option_strikes = 10     # Number of strikes on each side (ITM/OTM)
+futures_expiry = "current"  # current, next, far
+
 # Subscriptions
 max_symbols = 100
 subscription_mode = "full"  # quote, full
 tick_batch_size = 5
+
+# Data Persistence
+persist_ticks = true
+persist_orderbook = true
+tick_file_rotation_mb = 100
+orderbook_snapshot_interval_s = 60
 
 # Order configuration  
 order_type_default = "LIMIT"

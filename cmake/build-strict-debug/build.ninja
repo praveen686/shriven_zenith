@@ -352,6 +352,14 @@ build trading/CMakeFiles/Trading.dir/market_data/zerodha/zerodha_instrument_fetc
   OBJECT_DIR = trading/CMakeFiles/Trading.dir
   OBJECT_FILE_DIR = trading/CMakeFiles/Trading.dir/market_data/zerodha
 
+build trading/CMakeFiles/Trading.dir/market_data/zerodha/kite_ws_client.cpp.o: CXX_COMPILER__Trading_unscanned_Debug /home/isoula/om/shriven_zenith/trading/market_data/zerodha/kite_ws_client.cpp || cmake_object_order_depends_target_Trading
+  DEFINES = -DPROD_ASSERTS_ON=1
+  DEP_FILE = trading/CMakeFiles/Trading.dir/market_data/zerodha/kite_ws_client.cpp.o.d
+  FLAGS = -Wall -Wextra -Werror -Wpedantic -Wcast-align -Wcast-qual -Wconversion -Wctor-dtor-privacy -Wdisabled-optimization -Wformat=2 -Winit-self -Wmissing-declarations -Wmissing-include-dirs -Wold-style-cast -Woverloaded-virtual -Wredundant-decls -Wshadow -Wsign-conversion -Wsign-promo -Wstrict-overflow=5 -Wswitch-default -Wundef -Wno-unused -Wno-variadic-macros -Wno-parentheses -fdiagnostics-show-option -Wunreachable-code -Wunused-parameter -Wunused-function -Wunused-variable -Wunused-value -Wwrite-strings -Wno-missing-field-initializers -Wpointer-arith -Wstack-protector -fno-common -fstack-protector-strong -Wdouble-promotion -Wfloat-equal -Wlogical-op -Wplacement-new=2 -O0 -g3 -fsanitize=address -std=c++23 -UNDEBUG -O0 -g3
+  INCLUDES = -I/home/isoula/om/shriven_zenith/trading -I/home/isoula/om/shriven_zenith -I/home/isoula/om/shriven_zenith/common -I/home/isoula/om/shriven_zenith/cmake/build-strict-debug/common
+  OBJECT_DIR = trading/CMakeFiles/Trading.dir
+  OBJECT_FILE_DIR = trading/CMakeFiles/Trading.dir/market_data/zerodha
+
 build trading/CMakeFiles/Trading.dir/market_data/binance/binance_instrument_fetcher.cpp.o: CXX_COMPILER__Trading_unscanned_Debug /home/isoula/om/shriven_zenith/trading/market_data/binance/binance_instrument_fetcher.cpp || cmake_object_order_depends_target_Trading
   DEFINES = -DPROD_ASSERTS_ON=1
   DEP_FILE = trading/CMakeFiles/Trading.dir/market_data/binance/binance_instrument_fetcher.cpp.o.d
@@ -359,6 +367,70 @@ build trading/CMakeFiles/Trading.dir/market_data/binance/binance_instrument_fetc
   INCLUDES = -I/home/isoula/om/shriven_zenith/trading -I/home/isoula/om/shriven_zenith -I/home/isoula/om/shriven_zenith/common -I/home/isoula/om/shriven_zenith/cmake/build-strict-debug/common
   OBJECT_DIR = trading/CMakeFiles/Trading.dir
   OBJECT_FILE_DIR = trading/CMakeFiles/Trading.dir/market_data/binance
+
+build trading/CMakeFiles/Trading.dir/market_data/binance/binance_ws_client.cpp.o: CXX_COMPILER__Trading_unscanned_Debug /home/isoula/om/shriven_zenith/trading/market_data/binance/binance_ws_client.cpp || cmake_object_order_depends_target_Trading
+  DEFINES = -DPROD_ASSERTS_ON=1
+  DEP_FILE = trading/CMakeFiles/Trading.dir/market_data/binance/binance_ws_client.cpp.o.d
+  FLAGS = -Wall -Wextra -Werror -Wpedantic -Wcast-align -Wcast-qual -Wconversion -Wctor-dtor-privacy -Wdisabled-optimization -Wformat=2 -Winit-self -Wmissing-declarations -Wmissing-include-dirs -Wold-style-cast -Woverloaded-virtual -Wredundant-decls -Wshadow -Wsign-conversion -Wsign-promo -Wstrict-overflow=5 -Wswitch-default -Wundef -Wno-unused -Wno-variadic-macros -Wno-parentheses -fdiagnostics-show-option -Wunreachable-code -Wunused-parameter -Wunused-function -Wunused-variable -Wunused-value -Wwrite-strings -Wno-missing-field-initializers -Wpointer-arith -Wstack-protector -fno-common -fstack-protector-strong -Wdouble-promotion -Wfloat-equal -Wlogical-op -Wplacement-new=2 -O0 -g3 -fsanitize=address -std=c++23 -UNDEBUG -O0 -g3
+  INCLUDES = -I/home/isoula/om/shriven_zenith/trading -I/home/isoula/om/shriven_zenith -I/home/isoula/om/shriven_zenith/common -I/home/isoula/om/shriven_zenith/cmake/build-strict-debug/common
+  OBJECT_DIR = trading/CMakeFiles/Trading.dir
+  OBJECT_FILE_DIR = trading/CMakeFiles/Trading.dir/market_data/binance
+
+build trading/CMakeFiles/Trading.dir/strategy/trade_engine.cpp.o: CXX_COMPILER__Trading_unscanned_Debug /home/isoula/om/shriven_zenith/trading/strategy/trade_engine.cpp || cmake_object_order_depends_target_Trading
+  DEFINES = -DPROD_ASSERTS_ON=1
+  DEP_FILE = trading/CMakeFiles/Trading.dir/strategy/trade_engine.cpp.o.d
+  FLAGS = -Wall -Wextra -Werror -Wpedantic -Wcast-align -Wcast-qual -Wconversion -Wctor-dtor-privacy -Wdisabled-optimization -Wformat=2 -Winit-self -Wmissing-declarations -Wmissing-include-dirs -Wold-style-cast -Woverloaded-virtual -Wredundant-decls -Wshadow -Wsign-conversion -Wsign-promo -Wstrict-overflow=5 -Wswitch-default -Wundef -Wno-unused -Wno-variadic-macros -Wno-parentheses -fdiagnostics-show-option -Wunreachable-code -Wunused-parameter -Wunused-function -Wunused-variable -Wunused-value -Wwrite-strings -Wno-missing-field-initializers -Wpointer-arith -Wstack-protector -fno-common -fstack-protector-strong -Wdouble-promotion -Wfloat-equal -Wlogical-op -Wplacement-new=2 -O0 -g3 -fsanitize=address -std=c++23 -UNDEBUG -O0 -g3
+  INCLUDES = -I/home/isoula/om/shriven_zenith/trading -I/home/isoula/om/shriven_zenith -I/home/isoula/om/shriven_zenith/common -I/home/isoula/om/shriven_zenith/cmake/build-strict-debug/common
+  OBJECT_DIR = trading/CMakeFiles/Trading.dir
+  OBJECT_FILE_DIR = trading/CMakeFiles/Trading.dir/strategy
+
+build trading/CMakeFiles/Trading.dir/strategy/order_manager.cpp.o: CXX_COMPILER__Trading_unscanned_Debug /home/isoula/om/shriven_zenith/trading/strategy/order_manager.cpp || cmake_object_order_depends_target_Trading
+  DEFINES = -DPROD_ASSERTS_ON=1
+  DEP_FILE = trading/CMakeFiles/Trading.dir/strategy/order_manager.cpp.o.d
+  FLAGS = -Wall -Wextra -Werror -Wpedantic -Wcast-align -Wcast-qual -Wconversion -Wctor-dtor-privacy -Wdisabled-optimization -Wformat=2 -Winit-self -Wmissing-declarations -Wmissing-include-dirs -Wold-style-cast -Woverloaded-virtual -Wredundant-decls -Wshadow -Wsign-conversion -Wsign-promo -Wstrict-overflow=5 -Wswitch-default -Wundef -Wno-unused -Wno-variadic-macros -Wno-parentheses -fdiagnostics-show-option -Wunreachable-code -Wunused-parameter -Wunused-function -Wunused-variable -Wunused-value -Wwrite-strings -Wno-missing-field-initializers -Wpointer-arith -Wstack-protector -fno-common -fstack-protector-strong -Wdouble-promotion -Wfloat-equal -Wlogical-op -Wplacement-new=2 -O0 -g3 -fsanitize=address -std=c++23 -UNDEBUG -O0 -g3
+  INCLUDES = -I/home/isoula/om/shriven_zenith/trading -I/home/isoula/om/shriven_zenith -I/home/isoula/om/shriven_zenith/common -I/home/isoula/om/shriven_zenith/cmake/build-strict-debug/common
+  OBJECT_DIR = trading/CMakeFiles/Trading.dir
+  OBJECT_FILE_DIR = trading/CMakeFiles/Trading.dir/strategy
+
+build trading/CMakeFiles/Trading.dir/strategy/risk_manager.cpp.o: CXX_COMPILER__Trading_unscanned_Debug /home/isoula/om/shriven_zenith/trading/strategy/risk_manager.cpp || cmake_object_order_depends_target_Trading
+  DEFINES = -DPROD_ASSERTS_ON=1
+  DEP_FILE = trading/CMakeFiles/Trading.dir/strategy/risk_manager.cpp.o.d
+  FLAGS = -Wall -Wextra -Werror -Wpedantic -Wcast-align -Wcast-qual -Wconversion -Wctor-dtor-privacy -Wdisabled-optimization -Wformat=2 -Winit-self -Wmissing-declarations -Wmissing-include-dirs -Wold-style-cast -Woverloaded-virtual -Wredundant-decls -Wshadow -Wsign-conversion -Wsign-promo -Wstrict-overflow=5 -Wswitch-default -Wundef -Wno-unused -Wno-variadic-macros -Wno-parentheses -fdiagnostics-show-option -Wunreachable-code -Wunused-parameter -Wunused-function -Wunused-variable -Wunused-value -Wwrite-strings -Wno-missing-field-initializers -Wpointer-arith -Wstack-protector -fno-common -fstack-protector-strong -Wdouble-promotion -Wfloat-equal -Wlogical-op -Wplacement-new=2 -O0 -g3 -fsanitize=address -std=c++23 -UNDEBUG -O0 -g3
+  INCLUDES = -I/home/isoula/om/shriven_zenith/trading -I/home/isoula/om/shriven_zenith -I/home/isoula/om/shriven_zenith/common -I/home/isoula/om/shriven_zenith/cmake/build-strict-debug/common
+  OBJECT_DIR = trading/CMakeFiles/Trading.dir
+  OBJECT_FILE_DIR = trading/CMakeFiles/Trading.dir/strategy
+
+build trading/CMakeFiles/Trading.dir/strategy/position_keeper.cpp.o: CXX_COMPILER__Trading_unscanned_Debug /home/isoula/om/shriven_zenith/trading/strategy/position_keeper.cpp || cmake_object_order_depends_target_Trading
+  DEFINES = -DPROD_ASSERTS_ON=1
+  DEP_FILE = trading/CMakeFiles/Trading.dir/strategy/position_keeper.cpp.o.d
+  FLAGS = -Wall -Wextra -Werror -Wpedantic -Wcast-align -Wcast-qual -Wconversion -Wctor-dtor-privacy -Wdisabled-optimization -Wformat=2 -Winit-self -Wmissing-declarations -Wmissing-include-dirs -Wold-style-cast -Woverloaded-virtual -Wredundant-decls -Wshadow -Wsign-conversion -Wsign-promo -Wstrict-overflow=5 -Wswitch-default -Wundef -Wno-unused -Wno-variadic-macros -Wno-parentheses -fdiagnostics-show-option -Wunreachable-code -Wunused-parameter -Wunused-function -Wunused-variable -Wunused-value -Wwrite-strings -Wno-missing-field-initializers -Wpointer-arith -Wstack-protector -fno-common -fstack-protector-strong -Wdouble-promotion -Wfloat-equal -Wlogical-op -Wplacement-new=2 -O0 -g3 -fsanitize=address -std=c++23 -UNDEBUG -O0 -g3
+  INCLUDES = -I/home/isoula/om/shriven_zenith/trading -I/home/isoula/om/shriven_zenith -I/home/isoula/om/shriven_zenith/common -I/home/isoula/om/shriven_zenith/cmake/build-strict-debug/common
+  OBJECT_DIR = trading/CMakeFiles/Trading.dir
+  OBJECT_FILE_DIR = trading/CMakeFiles/Trading.dir/strategy
+
+build trading/CMakeFiles/Trading.dir/strategy/feature_engine.cpp.o: CXX_COMPILER__Trading_unscanned_Debug /home/isoula/om/shriven_zenith/trading/strategy/feature_engine.cpp || cmake_object_order_depends_target_Trading
+  DEFINES = -DPROD_ASSERTS_ON=1
+  DEP_FILE = trading/CMakeFiles/Trading.dir/strategy/feature_engine.cpp.o.d
+  FLAGS = -Wall -Wextra -Werror -Wpedantic -Wcast-align -Wcast-qual -Wconversion -Wctor-dtor-privacy -Wdisabled-optimization -Wformat=2 -Winit-self -Wmissing-declarations -Wmissing-include-dirs -Wold-style-cast -Woverloaded-virtual -Wredundant-decls -Wshadow -Wsign-conversion -Wsign-promo -Wstrict-overflow=5 -Wswitch-default -Wundef -Wno-unused -Wno-variadic-macros -Wno-parentheses -fdiagnostics-show-option -Wunreachable-code -Wunused-parameter -Wunused-function -Wunused-variable -Wunused-value -Wwrite-strings -Wno-missing-field-initializers -Wpointer-arith -Wstack-protector -fno-common -fstack-protector-strong -Wdouble-promotion -Wfloat-equal -Wlogical-op -Wplacement-new=2 -O0 -g3 -fsanitize=address -std=c++23 -UNDEBUG -O0 -g3
+  INCLUDES = -I/home/isoula/om/shriven_zenith/trading -I/home/isoula/om/shriven_zenith -I/home/isoula/om/shriven_zenith/common -I/home/isoula/om/shriven_zenith/cmake/build-strict-debug/common
+  OBJECT_DIR = trading/CMakeFiles/Trading.dir
+  OBJECT_FILE_DIR = trading/CMakeFiles/Trading.dir/strategy
+
+build trading/CMakeFiles/Trading.dir/strategy/market_maker.cpp.o: CXX_COMPILER__Trading_unscanned_Debug /home/isoula/om/shriven_zenith/trading/strategy/market_maker.cpp || cmake_object_order_depends_target_Trading
+  DEFINES = -DPROD_ASSERTS_ON=1
+  DEP_FILE = trading/CMakeFiles/Trading.dir/strategy/market_maker.cpp.o.d
+  FLAGS = -Wall -Wextra -Werror -Wpedantic -Wcast-align -Wcast-qual -Wconversion -Wctor-dtor-privacy -Wdisabled-optimization -Wformat=2 -Winit-self -Wmissing-declarations -Wmissing-include-dirs -Wold-style-cast -Woverloaded-virtual -Wredundant-decls -Wshadow -Wsign-conversion -Wsign-promo -Wstrict-overflow=5 -Wswitch-default -Wundef -Wno-unused -Wno-variadic-macros -Wno-parentheses -fdiagnostics-show-option -Wunreachable-code -Wunused-parameter -Wunused-function -Wunused-variable -Wunused-value -Wwrite-strings -Wno-missing-field-initializers -Wpointer-arith -Wstack-protector -fno-common -fstack-protector-strong -Wdouble-promotion -Wfloat-equal -Wlogical-op -Wplacement-new=2 -O0 -g3 -fsanitize=address -std=c++23 -UNDEBUG -O0 -g3
+  INCLUDES = -I/home/isoula/om/shriven_zenith/trading -I/home/isoula/om/shriven_zenith -I/home/isoula/om/shriven_zenith/common -I/home/isoula/om/shriven_zenith/cmake/build-strict-debug/common
+  OBJECT_DIR = trading/CMakeFiles/Trading.dir
+  OBJECT_FILE_DIR = trading/CMakeFiles/Trading.dir/strategy
+
+build trading/CMakeFiles/Trading.dir/strategy/liquidity_taker.cpp.o: CXX_COMPILER__Trading_unscanned_Debug /home/isoula/om/shriven_zenith/trading/strategy/liquidity_taker.cpp || cmake_object_order_depends_target_Trading
+  DEFINES = -DPROD_ASSERTS_ON=1
+  DEP_FILE = trading/CMakeFiles/Trading.dir/strategy/liquidity_taker.cpp.o.d
+  FLAGS = -Wall -Wextra -Werror -Wpedantic -Wcast-align -Wcast-qual -Wconversion -Wctor-dtor-privacy -Wdisabled-optimization -Wformat=2 -Winit-self -Wmissing-declarations -Wmissing-include-dirs -Wold-style-cast -Woverloaded-virtual -Wredundant-decls -Wshadow -Wsign-conversion -Wsign-promo -Wstrict-overflow=5 -Wswitch-default -Wundef -Wno-unused -Wno-variadic-macros -Wno-parentheses -fdiagnostics-show-option -Wunreachable-code -Wunused-parameter -Wunused-function -Wunused-variable -Wunused-value -Wwrite-strings -Wno-missing-field-initializers -Wpointer-arith -Wstack-protector -fno-common -fstack-protector-strong -Wdouble-promotion -Wfloat-equal -Wlogical-op -Wplacement-new=2 -O0 -g3 -fsanitize=address -std=c++23 -UNDEBUG -O0 -g3
+  INCLUDES = -I/home/isoula/om/shriven_zenith/trading -I/home/isoula/om/shriven_zenith -I/home/isoula/om/shriven_zenith/common -I/home/isoula/om/shriven_zenith/cmake/build-strict-debug/common
+  OBJECT_DIR = trading/CMakeFiles/Trading.dir
+  OBJECT_FILE_DIR = trading/CMakeFiles/Trading.dir/strategy
 
 
 # =============================================================================
@@ -368,7 +440,7 @@ build trading/CMakeFiles/Trading.dir/market_data/binance/binance_instrument_fetc
 #############################################
 # Link the static library trading/libTrading.a
 
-build trading/libTrading.a: CXX_STATIC_LIBRARY_LINKER__Trading_Debug trading/CMakeFiles/Trading.dir/auth/zerodha/zerodha_auth.cpp.o trading/CMakeFiles/Trading.dir/auth/binance/binance_auth.cpp.o trading/CMakeFiles/Trading.dir/market_data/zerodha/zerodha_instrument_fetcher.cpp.o trading/CMakeFiles/Trading.dir/market_data/binance/binance_instrument_fetcher.cpp.o || common/libCommonImpl.so config/libconfig.a
+build trading/libTrading.a: CXX_STATIC_LIBRARY_LINKER__Trading_Debug trading/CMakeFiles/Trading.dir/auth/zerodha/zerodha_auth.cpp.o trading/CMakeFiles/Trading.dir/auth/binance/binance_auth.cpp.o trading/CMakeFiles/Trading.dir/market_data/zerodha/zerodha_instrument_fetcher.cpp.o trading/CMakeFiles/Trading.dir/market_data/zerodha/kite_ws_client.cpp.o trading/CMakeFiles/Trading.dir/market_data/binance/binance_instrument_fetcher.cpp.o trading/CMakeFiles/Trading.dir/market_data/binance/binance_ws_client.cpp.o trading/CMakeFiles/Trading.dir/strategy/trade_engine.cpp.o trading/CMakeFiles/Trading.dir/strategy/order_manager.cpp.o trading/CMakeFiles/Trading.dir/strategy/risk_manager.cpp.o trading/CMakeFiles/Trading.dir/strategy/position_keeper.cpp.o trading/CMakeFiles/Trading.dir/strategy/feature_engine.cpp.o trading/CMakeFiles/Trading.dir/strategy/market_maker.cpp.o trading/CMakeFiles/Trading.dir/strategy/liquidity_taker.cpp.o || common/libCommonImpl.so config/libconfig.a
   LANGUAGE_COMPILE_FLAGS = -Wall -Wextra -Werror -Wpedantic -Wcast-align -Wcast-qual -Wconversion -Wctor-dtor-privacy -Wdisabled-optimization -Wformat=2 -Winit-self -Wmissing-declarations -Wmissing-include-dirs -Wold-style-cast -Woverloaded-virtual -Wredundant-decls -Wshadow -Wsign-conversion -Wsign-promo -Wstrict-overflow=5 -Wswitch-default -Wundef -Wno-unused -Wno-variadic-macros -Wno-parentheses -fdiagnostics-show-option -Wunreachable-code -Wunused-parameter -Wunused-function -Wunused-variable -Wunused-value -Wwrite-strings -Wno-missing-field-initializers -Wpointer-arith -Wstack-protector -fno-common -fstack-protector-strong -Wdouble-promotion -Wfloat-equal -Wlogical-op -Wplacement-new=2 -O0 -g3 -fsanitize=address
   OBJECT_DIR = trading/CMakeFiles/Trading.dir
   POST_BUILD = :
@@ -403,7 +475,7 @@ build trading/CMakeFiles/trader_main.dir/trader_main.cpp.o: CXX_COMPILER__trader
 
 build trading/trader_main: CXX_EXECUTABLE_LINKER__trader_main_Debug trading/CMakeFiles/trader_main.dir/trader_main.cpp.o | trading/libTrading.a config/libconfig.a common/libCommonImpl.so /usr/lib/x86_64-linux-gnu/libnuma.so || common/libCommonImpl.so config/libconfig.a trading/libTrading.a
   FLAGS = -Wall -Wextra -Werror -Wpedantic -Wcast-align -Wcast-qual -Wconversion -Wctor-dtor-privacy -Wdisabled-optimization -Wformat=2 -Winit-self -Wmissing-declarations -Wmissing-include-dirs -Wold-style-cast -Woverloaded-virtual -Wredundant-decls -Wshadow -Wsign-conversion -Wsign-promo -Wstrict-overflow=5 -Wswitch-default -Wundef -Wno-unused -Wno-variadic-macros -Wno-parentheses -fdiagnostics-show-option -Wunreachable-code -Wunused-parameter -Wunused-function -Wunused-variable -Wunused-value -Wwrite-strings -Wno-missing-field-initializers -Wpointer-arith -Wstack-protector -fno-common -fstack-protector-strong -Wdouble-promotion -Wfloat-equal -Wlogical-op -Wplacement-new=2 -O0 -g3 -fsanitize=address
-  LINK_LIBRARIES = -Wl,-rpath,/home/isoula/om/shriven_zenith/cmake/build-strict-debug/common  trading/libTrading.a  config/libconfig.a  -lcurl  -lpthread  common/libCommonImpl.so  /usr/lib/x86_64-linux-gnu/libnuma.so  -lssl  -lcrypto
+  LINK_LIBRARIES = -Wl,-rpath,/home/isoula/om/shriven_zenith/cmake/build-strict-debug/common  trading/libTrading.a  config/libconfig.a  -lcurl  -lpthread  common/libCommonImpl.so  /usr/lib/x86_64-linux-gnu/libnuma.so  -lssl  -lcrypto  -lwebsockets
   OBJECT_DIR = trading/CMakeFiles/trader_main.dir
   POST_BUILD = :
   PRE_LINK = :
@@ -507,7 +579,7 @@ build tests/CMakeFiles/test_zerodha_auth.dir/test_zerodha_auth.cpp.o: CXX_COMPIL
 
 build tests/test_zerodha_auth: CXX_EXECUTABLE_LINKER__test_zerodha_auth_Debug tests/CMakeFiles/test_zerodha_auth.dir/test_zerodha_auth.cpp.o | trading/libTrading.a config/libconfig.a common/libCommonImpl.so /usr/lib/x86_64-linux-gnu/libnuma.so || common/libCommonImpl.so config/libconfig.a trading/libTrading.a
   FLAGS = -Wall -Wextra -Werror -Wpedantic -Wcast-align -Wcast-qual -Wconversion -Wctor-dtor-privacy -Wdisabled-optimization -Wformat=2 -Winit-self -Wmissing-declarations -Wmissing-include-dirs -Wold-style-cast -Woverloaded-virtual -Wredundant-decls -Wshadow -Wsign-conversion -Wsign-promo -Wstrict-overflow=5 -Wswitch-default -Wundef -Wno-unused -Wno-variadic-macros -Wno-parentheses -fdiagnostics-show-option -Wunreachable-code -Wunused-parameter -Wunused-function -Wunused-variable -Wunused-value -Wwrite-strings -Wno-missing-field-initializers -Wpointer-arith -Wstack-protector -fno-common -fstack-protector-strong -Wdouble-promotion -Wfloat-equal -Wlogical-op -Wplacement-new=2 -O0 -g3 -fsanitize=address
-  LINK_LIBRARIES = -Wl,-rpath,/home/isoula/om/shriven_zenith/cmake/build-strict-debug/common  trading/libTrading.a  -lcurl  config/libconfig.a  common/libCommonImpl.so  /usr/lib/x86_64-linux-gnu/libnuma.so  -lssl  -lcrypto
+  LINK_LIBRARIES = -Wl,-rpath,/home/isoula/om/shriven_zenith/cmake/build-strict-debug/common  trading/libTrading.a  -lcurl  config/libconfig.a  common/libCommonImpl.so  /usr/lib/x86_64-linux-gnu/libnuma.so  -lssl  -lcrypto  -lwebsockets
   OBJECT_DIR = tests/CMakeFiles/test_zerodha_auth.dir
   POST_BUILD = :
   PRE_LINK = :
@@ -541,7 +613,7 @@ build tests/CMakeFiles/test_instrument_fetcher.dir/test_instrument_fetcher.cpp.o
 
 build tests/test_instrument_fetcher: CXX_EXECUTABLE_LINKER__test_instrument_fetcher_Debug tests/CMakeFiles/test_instrument_fetcher.dir/test_instrument_fetcher.cpp.o | trading/libTrading.a config/libconfig.a common/libCommonImpl.so /usr/lib/x86_64-linux-gnu/libnuma.so || common/libCommonImpl.so config/libconfig.a trading/libTrading.a
   FLAGS = -Wall -Wextra -Werror -Wpedantic -Wcast-align -Wcast-qual -Wconversion -Wctor-dtor-privacy -Wdisabled-optimization -Wformat=2 -Winit-self -Wmissing-declarations -Wmissing-include-dirs -Wold-style-cast -Woverloaded-virtual -Wredundant-decls -Wshadow -Wsign-conversion -Wsign-promo -Wstrict-overflow=5 -Wswitch-default -Wundef -Wno-unused -Wno-variadic-macros -Wno-parentheses -fdiagnostics-show-option -Wunreachable-code -Wunused-parameter -Wunused-function -Wunused-variable -Wunused-value -Wwrite-strings -Wno-missing-field-initializers -Wpointer-arith -Wstack-protector -fno-common -fstack-protector-strong -Wdouble-promotion -Wfloat-equal -Wlogical-op -Wplacement-new=2 -O0 -g3 -fsanitize=address
-  LINK_LIBRARIES = -Wl,-rpath,/home/isoula/om/shriven_zenith/cmake/build-strict-debug/common  trading/libTrading.a  -lcurl  config/libconfig.a  common/libCommonImpl.so  /usr/lib/x86_64-linux-gnu/libnuma.so  -lssl  -lcrypto
+  LINK_LIBRARIES = -Wl,-rpath,/home/isoula/om/shriven_zenith/cmake/build-strict-debug/common  trading/libTrading.a  -lcurl  config/libconfig.a  common/libCommonImpl.so  /usr/lib/x86_64-linux-gnu/libnuma.so  -lssl  -lcrypto  -lwebsockets
   OBJECT_DIR = tests/CMakeFiles/test_instrument_fetcher.dir
   POST_BUILD = :
   PRE_LINK = :
@@ -575,12 +647,46 @@ build tests/CMakeFiles/test_binance.dir/test_binance.cpp.o: CXX_COMPILER__test_b
 
 build tests/test_binance: CXX_EXECUTABLE_LINKER__test_binance_Debug tests/CMakeFiles/test_binance.dir/test_binance.cpp.o | trading/libTrading.a config/libconfig.a common/libCommonImpl.so /usr/lib/x86_64-linux-gnu/libnuma.so || common/libCommonImpl.so config/libconfig.a trading/libTrading.a
   FLAGS = -Wall -Wextra -Werror -Wpedantic -Wcast-align -Wcast-qual -Wconversion -Wctor-dtor-privacy -Wdisabled-optimization -Wformat=2 -Winit-self -Wmissing-declarations -Wmissing-include-dirs -Wold-style-cast -Woverloaded-virtual -Wredundant-decls -Wshadow -Wsign-conversion -Wsign-promo -Wstrict-overflow=5 -Wswitch-default -Wundef -Wno-unused -Wno-variadic-macros -Wno-parentheses -fdiagnostics-show-option -Wunreachable-code -Wunused-parameter -Wunused-function -Wunused-variable -Wunused-value -Wwrite-strings -Wno-missing-field-initializers -Wpointer-arith -Wstack-protector -fno-common -fstack-protector-strong -Wdouble-promotion -Wfloat-equal -Wlogical-op -Wplacement-new=2 -O0 -g3 -fsanitize=address
-  LINK_LIBRARIES = -Wl,-rpath,/home/isoula/om/shriven_zenith/cmake/build-strict-debug/common  trading/libTrading.a  config/libconfig.a  -lcurl  -lssl  -lcrypto  common/libCommonImpl.so  /usr/lib/x86_64-linux-gnu/libnuma.so
+  LINK_LIBRARIES = -Wl,-rpath,/home/isoula/om/shriven_zenith/cmake/build-strict-debug/common  trading/libTrading.a  config/libconfig.a  -lcurl  -lssl  -lcrypto  common/libCommonImpl.so  /usr/lib/x86_64-linux-gnu/libnuma.so  -lwebsockets
   OBJECT_DIR = tests/CMakeFiles/test_binance.dir
   POST_BUILD = :
   PRE_LINK = :
   TARGET_FILE = tests/test_binance
   TARGET_PDB = test_binance.dbg
+
+# =============================================================================
+# Object build statements for EXECUTABLE target test_kite_ws
+
+
+#############################################
+# Order-only phony target for test_kite_ws
+
+build cmake_object_order_depends_target_test_kite_ws: phony || cmake_object_order_depends_target_CommonImpl cmake_object_order_depends_target_Trading cmake_object_order_depends_target_config
+
+build tests/CMakeFiles/test_kite_ws.dir/test_kite_ws.cpp.o: CXX_COMPILER__test_kite_ws_unscanned_Debug /home/isoula/om/shriven_zenith/tests/test_kite_ws.cpp || cmake_object_order_depends_target_test_kite_ws
+  DEFINES = -DPROD_ASSERTS_ON=1
+  DEP_FILE = tests/CMakeFiles/test_kite_ws.dir/test_kite_ws.cpp.o.d
+  FLAGS = -Wall -Wextra -Werror -Wpedantic -Wcast-align -Wcast-qual -Wconversion -Wctor-dtor-privacy -Wdisabled-optimization -Wformat=2 -Winit-self -Wmissing-declarations -Wmissing-include-dirs -Wold-style-cast -Woverloaded-virtual -Wredundant-decls -Wshadow -Wsign-conversion -Wsign-promo -Wstrict-overflow=5 -Wswitch-default -Wundef -Wno-unused -Wno-variadic-macros -Wno-parentheses -fdiagnostics-show-option -Wunreachable-code -Wunused-parameter -Wunused-function -Wunused-variable -Wunused-value -Wwrite-strings -Wno-missing-field-initializers -Wpointer-arith -Wstack-protector -fno-common -fstack-protector-strong -Wdouble-promotion -Wfloat-equal -Wlogical-op -Wplacement-new=2 -O0 -g3 -fsanitize=address -std=c++23 -UNDEBUG -O0 -g3
+  INCLUDES = -I/home/isoula/om/shriven_zenith -I/home/isoula/om/shriven_zenith/trading -I/home/isoula/om/shriven_zenith/common -I/home/isoula/om/shriven_zenith/cmake/build-strict-debug/common
+  OBJECT_DIR = tests/CMakeFiles/test_kite_ws.dir
+  OBJECT_FILE_DIR = tests/CMakeFiles/test_kite_ws.dir
+
+
+# =============================================================================
+# Link build statements for EXECUTABLE target test_kite_ws
+
+
+#############################################
+# Link the executable tests/test_kite_ws
+
+build tests/test_kite_ws: CXX_EXECUTABLE_LINKER__test_kite_ws_Debug tests/CMakeFiles/test_kite_ws.dir/test_kite_ws.cpp.o | trading/libTrading.a config/libconfig.a common/libCommonImpl.so /usr/lib/x86_64-linux-gnu/libnuma.so || common/libCommonImpl.so config/libconfig.a trading/libTrading.a
+  FLAGS = -Wall -Wextra -Werror -Wpedantic -Wcast-align -Wcast-qual -Wconversion -Wctor-dtor-privacy -Wdisabled-optimization -Wformat=2 -Winit-self -Wmissing-declarations -Wmissing-include-dirs -Wold-style-cast -Woverloaded-virtual -Wredundant-decls -Wshadow -Wsign-conversion -Wsign-promo -Wstrict-overflow=5 -Wswitch-default -Wundef -Wno-unused -Wno-variadic-macros -Wno-parentheses -fdiagnostics-show-option -Wunreachable-code -Wunused-parameter -Wunused-function -Wunused-variable -Wunused-value -Wwrite-strings -Wno-missing-field-initializers -Wpointer-arith -Wstack-protector -fno-common -fstack-protector-strong -Wdouble-promotion -Wfloat-equal -Wlogical-op -Wplacement-new=2 -O0 -g3 -fsanitize=address
+  LINK_LIBRARIES = -Wl,-rpath,/home/isoula/om/shriven_zenith/cmake/build-strict-debug/common  trading/libTrading.a  config/libconfig.a  -lcurl  -lssl  -lcrypto  -lwebsockets  common/libCommonImpl.so  /usr/lib/x86_64-linux-gnu/libnuma.so
+  OBJECT_DIR = tests/CMakeFiles/test_kite_ws.dir
+  POST_BUILD = :
+  PRE_LINK = :
+  TARGET_FILE = tests/test_kite_ws
+  TARGET_PDB = test_kite_ws.dbg
 
 
 #############################################
@@ -825,6 +931,8 @@ build test_binance: phony tests/test_binance
 
 build test_instrument_fetcher: phony tests/test_instrument_fetcher
 
+build test_kite_ws: phony tests/test_kite_ws
+
 build test_zerodha_auth: phony tests/test_zerodha_auth
 
 build trader_main: phony trading/trader_main
@@ -865,7 +973,7 @@ build config/all: phony config/libconfig.a
 #############################################
 # Folder: /home/isoula/om/shriven_zenith/cmake/build-strict-debug/tests
 
-build tests/all: phony tests/test_zerodha_auth tests/test_instrument_fetcher tests/test_binance
+build tests/all: phony tests/test_zerodha_auth tests/test_instrument_fetcher tests/test_binance tests/test_kite_ws
 
 # =============================================================================
 
