@@ -7,6 +7,11 @@
 #include <linux/net_tstamp.h>
 #include <immintrin.h>
 #include <numa.h>
+#include <arpa/inet.h>
+#include <net/if.h>
+#include <cstring>
+#include <unistd.h>
+#include <errno.h>
 
 #include "../socket_utils.h"
 #include "../../v2/logging.h"
@@ -147,7 +152,40 @@ public:
     setsockopt(socket_fd_, SOL_SOCKET, SO_ZEROCOPY, &one, sizeof(one));
     #endif
     
-    // TODO: Complete connection logic
+    // Complete connection logic
+    if (is_listening) {
+      // Server mode - bind and listen
+      struct sockaddr_in server_addr;
+      std::memset(&server_addr, 0, sizeof(server_addr));
+      server_addr.sin_family = AF_INET;
+      server_addr.sin_addr.s_addr = INADDR_ANY;
+      server_addr.sin_port = htons(static_cast<uint16_t>(port));
+      
+      if (bind(socket_fd_, reinterpret_cast<struct sockaddr*>(&server_addr), sizeof(server_addr)) < 0) {
+        close(socket_fd_);
+        return -1;
+      }
+      
+      if (listen(socket_fd_, 128) < 0) {  // Backlog of 128
+        close(socket_fd_);
+        return -1;
+      }
+    } else {
+      // Client mode - connect to server
+      struct sockaddr_in server_addr;
+      std::memset(&server_addr, 0, sizeof(server_addr));
+      server_addr.sin_family = AF_INET;
+      server_addr.sin_addr.s_addr = inet_addr(ip);
+      server_addr.sin_port = htons(static_cast<uint16_t>(port));
+      
+      // Non-blocking connect
+      int result = ::connect(socket_fd_, reinterpret_cast<struct sockaddr*>(&server_addr), sizeof(server_addr));
+      if (result < 0 && errno != EINPROGRESS) {
+        close(socket_fd_);
+        return -1;
+      }
+    }
+    
     return socket_fd_;
   }
   
@@ -255,7 +293,31 @@ public:
     mreq.imr_interface.s_addr = INADDR_ANY;
     setsockopt(socket_fd_, IPPROTO_IP, IP_ADD_MEMBERSHIP, &mreq, sizeof(mreq));
     
-    // TODO: Bind and complete setup
+    // Bind to multicast port
+    struct sockaddr_in local_addr;
+    std::memset(&local_addr, 0, sizeof(local_addr));
+    local_addr.sin_family = AF_INET;
+    local_addr.sin_addr.s_addr = INADDR_ANY;  // Accept from any interface
+    local_addr.sin_port = htons(static_cast<uint16_t>(port));
+    
+    if (bind(socket_fd_, reinterpret_cast<struct sockaddr*>(&local_addr), sizeof(local_addr)) < 0) {
+      LOG_ERROR(logger_, "Failed to bind multicast socket to port: " << port << " errno: " << strerror(errno));
+      close(socket_fd_);
+      return -1;
+    }
+    
+    // Set interface for multicast if specified
+    if (iface && strlen(iface) > 0) {
+      struct ifreq ifr;
+      std::memset(&ifr, 0, sizeof(ifr));
+      strncpy(ifr.ifr_name, iface, IFNAMSIZ - 1);
+      
+      if (setsockopt(socket_fd_, SOL_SOCKET, SO_BINDTODEVICE, &ifr, sizeof(ifr)) < 0) {
+        LOG_WARN(logger_, "Failed to bind to interface: " << iface << " - continuing anyway");
+      }
+    }
+    
+    LOG_INFO(logger_, "Multicast socket joined group: " << ip << " port: " << port);
     return socket_fd_;
   }
   

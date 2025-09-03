@@ -5,6 +5,7 @@
 #include "common/logging.h"
 #include "common/time_utils.h"
 #include "common/types.h"
+#include "common/thread_utils.h"
 
 #include "config/config.h"
 #include "trading/auth/zerodha/zerodha_auth.h"
@@ -64,7 +65,21 @@ static void displayInstrumentsSummary(Trading::MarketData::Zerodha::ZerodhaInstr
                inst.trading_symbol, inst.getDaysToExpiry());
     }
     
-    // TODO: Add instrument type counting when iterator methods are available
+    // Display instrument type counts
+    printf("\n[INSTRUMENT TYPES]\n");
+    auto counts = fetcher->countByType();
+    printf("Equity:      %6zu\n", counts.equity);
+    printf("Futures:     %6zu\n", counts.futures);
+    printf("Call Options:%6zu\n", counts.option_calls);
+    printf("Put Options: %6zu\n", counts.option_puts);
+    printf("Currency:    %6zu\n", counts.currency);
+    printf("Commodity:   %6zu\n", counts.commodity);
+    printf("Index:       %6zu\n", counts.index);
+    if (counts.unknown > 0) {
+        printf("Unknown:     %6zu\n", counts.unknown);
+    }
+    printf("---------------------\n");
+    printf("TOTAL:       %6zu\n", counts.total);
     
     printf("---------------------\n\n");
 }
@@ -182,10 +197,27 @@ static bool initializeSystem() {
     LOG_INFO("=== SYSTEM INITIALIZATION STARTED ===");
     
     // Step 1: Set thread affinity and priority for main thread
-    // TODO: Add thread affinity and priority when ThreadUtils is available
+    const auto& cfg = Trading::ConfigManager::getConfig();
+    if (cfg.cpu_config.trading_core >= 0) {
+        if (Common::setThreadCore(cfg.cpu_config.trading_core)) {
+            LOG_INFO("Main trading thread pinned to CPU core %d", cfg.cpu_config.trading_core);
+        } else {
+            LOG_WARN("Failed to set thread affinity to core %d", cfg.cpu_config.trading_core);
+        }
+    }
+    
+    // Set real-time scheduling priority for low latency
+    if (cfg.cpu_config.enable_realtime) {
+        struct sched_param param;
+        param.sched_priority = cfg.cpu_config.realtime_priority;
+        if (sched_setscheduler(0, SCHED_FIFO, &param) == 0) {
+            LOG_INFO("Set real-time scheduling (SCHED_FIFO) with priority %d", cfg.cpu_config.realtime_priority);
+        } else {
+            LOG_WARN("Failed to set real-time scheduling (may need sudo/CAP_SYS_NICE)");
+        }
+    }
     
     // Step 2: ConfigManager already initialized in main()
-    const auto& cfg = Trading::ConfigManager::getConfig();
     LOG_INFO("ConfigManager already initialized: env_file=%s", cfg.paths.env_file);
     
     // Step 3: Load environment variables from .env file

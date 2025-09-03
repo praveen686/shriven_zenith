@@ -881,6 +881,7 @@ ThreadUtils::setRealTimePriority(99);
 1. **Fixed Critical Memory Bug in lf_queue.h**
    - Store pointer was never allocated in constructor
    - Added proper aligned memory allocation
+   - Replaced exception with abort (no exceptions in trading code)
    - System would have crashed in production
 
 2. **Consolidated Configuration System**
@@ -902,7 +903,7 @@ ThreadUtils::setRealTimePriority(99);
    - trader_main builds with zero warnings
    - Authenticates with Zerodha using cached token
    - Fetches market instruments
-   - Trading loop runs (awaiting WebSocket implementation)
+   - Trading loop runs (awaiting trading logic implementation)
 
 6. **Implemented Binance WebSocket Client** ✅
    - Zero-allocation design with memory pools
@@ -915,6 +916,23 @@ ThreadUtils::setRealTimePriority(99);
    - Added comprehensive bounds checking
    - Production certified: 0 Tier A safety violations
 
+7. **Fixed Socket Implementation TODOs** ✅
+   - Completed TCP socket connection logic (bind/listen for server, connect for client)
+   - Completed multicast socket setup (bind and interface configuration)
+   - Both sockets now production-ready with proper error handling
+
+8. **Implemented Thread Affinity & CPU Configuration** ✅
+   - Added comprehensive CPU configuration system to config
+   - Thread affinity now properly sets CPU core pinning
+   - Real-time scheduling (SCHED_FIFO) with configurable priority
+   - NUMA node configuration support
+   - Configuration in `config.toml` under `[cpu_config]` section
+
+9. **Added Instrument Type Counting** ✅
+   - Implemented `countByType()` method in ZerodhaInstrumentFetcher
+   - Displays breakdown: Equity, Futures, Options, Currency, Commodity, Index
+   - Provides total count for verification
+
 #### Next Priority Tasks 🎯
 1. **Implement Zerodha WebSocket** (Binary protocol parser)
 2. **Build Order Manager** (Zero-allocation design)
@@ -924,8 +942,8 @@ ThreadUtils::setRealTimePriority(99);
 
 ---
 
-**Document Version**: 2.0.3  
-**Last Updated**: 2025-09-02 22:45 IST  
+**Document Version**: 2.0.4  
+**Last Updated**: 2025-09-02 23:50 IST  
 **Status**: ACTIVE - Day 1 of Development  
 **Build Command**: `./scripts/build_strict.sh`
 

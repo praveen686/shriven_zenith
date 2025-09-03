@@ -544,6 +544,56 @@ public:
     [[nodiscard]] auto getLastUpdateTime() const noexcept -> uint64_t override {
         return last_update_time_ns_;
     }
+    
+    // Count instruments by type
+    struct TypeCounts {
+        size_t equity = 0;
+        size_t futures = 0;
+        size_t option_calls = 0;
+        size_t option_puts = 0;
+        size_t currency = 0;
+        size_t commodity = 0;
+        size_t index = 0;
+        size_t unknown = 0;
+        size_t total = 0;
+    };
+    
+    [[nodiscard]] auto countByType() const noexcept -> TypeCounts {
+        TypeCounts counts{};
+        
+        for (size_t i = 0; i < instrument_count_; ++i) {
+            const auto& inst = instruments_[i];
+            switch (inst.type) {
+                case InstrumentType::EQUITY:
+                    counts.equity++;
+                    break;
+                case InstrumentType::FUTURE:
+                    counts.futures++;
+                    break;
+                case InstrumentType::OPTION_CALL:
+                    counts.option_calls++;
+                    break;
+                case InstrumentType::OPTION_PUT:
+                    counts.option_puts++;
+                    break;
+                case InstrumentType::CURRENCY:
+                    counts.currency++;
+                    break;
+                case InstrumentType::COMMODITY:
+                    counts.commodity++;
+                    break;
+                case InstrumentType::INDEX:
+                    counts.index++;
+                    break;
+                default:
+                    counts.unknown++;
+                    break;
+            }
+            counts.total++;
+        }
+        
+        return counts;
+    }
 };
 
 // Helper function to fetch and cache instruments (exported for tests)

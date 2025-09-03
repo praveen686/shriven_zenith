@@ -28,7 +28,16 @@ latency_target_ns = 35
 # Thread configuration
 thread_count = 8
 cpu_affinity_enabled = true
-realtime_priority = 99
+
+[cpu_config]
+# CPU core affinity for different threads (-1 = no affinity)
+trading_core = 2          # Main trading thread
+market_data_core = 3      # Market data processing
+order_gateway_core = 4    # Order gateway thread
+logging_core = 7          # Logging thread (lower priority core)
+numa_node = 0            # NUMA node for memory allocation (-1 = default)
+enable_realtime = true   # Enable real-time scheduling (requires sudo/CAP_SYS_NICE)
+realtime_priority = 95   # Real-time priority (1-99, higher = more priority)
 
 # Memory configuration
 memory_pool_size_mb = 30

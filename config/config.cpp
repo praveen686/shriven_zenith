@@ -112,6 +112,16 @@ auto ConfigManager::parseTomlFile(const char* filepath) noexcept -> bool {
             if (extractUintValue(line, "order_queue_size", &temp)) config_.performance.order_queue_size = static_cast<uint32_t>(temp);
             if (extractUintValue(line, "response_queue_size", &temp)) config_.performance.response_queue_size = static_cast<uint32_t>(temp);
         }
+        else if (std::strcmp(current_section, "cpu_config") == 0) {
+            int64_t temp;
+            if (extractIntValue(line, "trading_core", &temp)) config_.cpu_config.trading_core = static_cast<int>(temp);
+            if (extractIntValue(line, "market_data_core", &temp)) config_.cpu_config.market_data_core = static_cast<int>(temp);
+            if (extractIntValue(line, "order_gateway_core", &temp)) config_.cpu_config.order_gateway_core = static_cast<int>(temp);
+            if (extractIntValue(line, "logging_core", &temp)) config_.cpu_config.logging_core = static_cast<int>(temp);
+            if (extractIntValue(line, "numa_node", &temp)) config_.cpu_config.numa_node = static_cast<int>(temp);
+            extractBoolValue(line, "enable_realtime", &config_.cpu_config.enable_realtime);
+            if (extractIntValue(line, "realtime_priority", &temp)) config_.cpu_config.realtime_priority = static_cast<int>(temp);
+        }
         else if (std::strcmp(current_section, "trading") == 0) {
             extractIntValue(line, "max_position_value", &config_.trading.max_position_value);
             extractIntValue(line, "max_daily_loss", &config_.trading.max_daily_loss);

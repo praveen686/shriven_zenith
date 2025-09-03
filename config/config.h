@@ -97,6 +97,17 @@ struct TradingConfig {
         uint32_t recv_window_ms;
     } binance;
     
+    // CPU configuration for thread affinity
+    struct CPUConfig {
+        int trading_core;        // Main trading thread CPU core (-1 = no affinity)
+        int market_data_core;    // Market data thread CPU core
+        int order_gateway_core;  // Order gateway thread CPU core
+        int logging_core;        // Logging thread CPU core
+        int numa_node;          // NUMA node for memory allocation (-1 = default)
+        bool enable_realtime;   // Enable real-time scheduling (SCHED_FIFO)
+        int realtime_priority;  // Real-time priority (1-99)
+    } cpu_config;
+    
     // Strategy configuration
     struct MarketMaker {
         bool enabled;
