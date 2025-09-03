@@ -15,6 +15,8 @@ add_library(Trading STATIC
     strategy/feature_engine.cpp
     strategy/market_maker.cpp
     strategy/liquidity_taker.cpp
+    order_gw/zerodha/zerodha_order_gateway.cpp
+    order_gw/binance/binance_order_gateway.cpp
 )
 
 target_include_directories(Trading PUBLIC
