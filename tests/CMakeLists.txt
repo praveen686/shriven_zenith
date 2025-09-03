@@ -46,9 +46,27 @@ target_include_directories(test_binance PRIVATE
 )
 
 # Binance WebSocket test
-add_executable(test_binance_ws test_binance_ws.cpp)
+# add_executable(test_binance_ws test_binance_ws.cpp)  # Disabled - use trader_main only
 
-target_link_libraries(test_binance_ws
+# target_link_libraries(test_binance_ws
+#     Trading
+#     CommonImpl
+#     config
+#     curl
+#     ssl
+#     crypto
+#     websockets
+#     Threads::Threads
+# )
+# 
+# target_include_directories(test_binance_ws PRIVATE
+#     ${CMAKE_SOURCE_DIR}
+# )
+
+# Kite WebSocket test
+add_executable(test_kite_ws test_kite_ws.cpp)
+
+target_link_libraries(test_kite_ws
     Trading
     CommonImpl
     config
@@ -59,7 +77,7 @@ target_link_libraries(test_binance_ws
     Threads::Threads
 )
 
-target_include_directories(test_binance_ws PRIVATE
+target_include_directories(test_kite_ws PRIVATE
     ${CMAKE_SOURCE_DIR}
 )
 

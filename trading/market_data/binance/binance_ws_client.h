@@ -90,6 +90,9 @@ public:
         int cpu_affinity = -1;  // -1 = no affinity
     };
     
+    // Forward declaration
+    class OrderBookManager;
+    
     // Callbacks for market data
     using TickCallback = std::function<void(const BinanceTickData*)>;
     using DepthCallback = std::function<void(const BinanceDepthUpdate*)>;
@@ -129,10 +132,24 @@ private:
     std::atomic<uint64_t> last_ping_time_{0};
     std::atomic<uint64_t> messages_rate_limited_{0};
     
-    // Subscribed symbols
+    // Symbol management
     static constexpr size_t MAX_SYMBOLS = 100;
-    std::array<const char*, MAX_SYMBOLS> symbols_;
+    struct SymbolInfo {
+        char symbol[16];
+        uint32_t ticker_id;
+        bool has_ticker;
+        bool has_depth;
+    };
+    std::array<SymbolInfo, MAX_SYMBOLS> symbols_;
     size_t symbol_count_{0};
+    
+    // Symbol to ticker_id mapping for fast lookup
+    struct SymbolMap {
+        char symbol[16];
+        uint32_t ticker_id;
+    };
+    std::array<SymbolMap, MAX_SYMBOLS> symbol_map_;
+    size_t symbol_map_count_{0};
     
     // Threading
     std::thread ws_thread_;
@@ -149,6 +166,9 @@ private:
     // Callbacks
     TickCallback tick_callback_;
     DepthCallback depth_callback_;
+    
+    // Order book manager pointer (void* to avoid circular dependency)
+    void* order_book_manager_{nullptr};
     
 public:
     BinanceWSClient() = default;
@@ -167,21 +187,41 @@ public:
     bool start();
     void stop();
     
-    // Subscribe to market data streams
-    bool subscribeTicker(const char* symbol);
-    bool subscribeDepth(const char* symbol, int levels = 10);
-    bool subscribeAllTickers();
+    // Subscribe to market data streams with ticker mapping
+    bool subscribeTicker(const char* symbol, uint32_t ticker_id);
+    bool subscribeDepth(const char* symbol, uint32_t ticker_id, int levels = 10);
+    bool subscribeSymbol(const char* symbol, uint32_t ticker_id, bool ticker = true, bool depth = true, int depth_levels = 10);
+    
+    // Symbol management
+    void registerSymbol(const char* symbol, uint32_t ticker_id);
+    uint32_t getTickerId(const char* symbol) const;
     
     // Set callbacks
     void setTickCallback(TickCallback cb) { tick_callback_ = std::move(cb); }
     void setDepthCallback(DepthCallback cb) { depth_callback_ = std::move(cb); }
     
-    // Statistics
+    // Set order book manager for direct updates
+    void setOrderBookManager(void* manager) { order_book_manager_ = manager; }
+    
+    // Statistics & Health Monitoring
     uint64_t getMessagesReceived() const { return messages_received_.load(std::memory_order_relaxed); }
     uint64_t getMessagesDropped() const { return messages_dropped_.load(std::memory_order_relaxed); }
     uint64_t getReconnectCount() const { return reconnect_count_.load(std::memory_order_relaxed); }
     uint64_t getMessagesRateLimited() const { return messages_rate_limited_.load(std::memory_order_relaxed); }
     bool isConnected() const { return connected_.load(std::memory_order_acquire); }
+    
+    struct HealthStatus {
+        bool connected;
+        uint64_t messages_received;
+        uint64_t messages_dropped;
+        uint64_t reconnect_count;
+        uint64_t last_message_time_ns;
+        uint64_t uptime_seconds;
+        double drop_rate;
+        double message_rate_per_sec;
+    };
+    
+    HealthStatus getHealthStatus() const;
     
     // WebSocket callback - must be public for C callback
     static int wsCallback(struct lws* wsi, enum lws_callback_reasons reason,
@@ -197,6 +237,7 @@ private:
     // Message parsing - zero allocation
     bool parseTickMessage(const char* json, size_t len, BinanceTickData* tick);
     bool parseDepthMessage(const char* json, size_t len, BinanceDepthUpdate* depth);
+    bool parsePartialBookMessage(const char* json, size_t len, BinanceDepthUpdate* depth);
     
     // Fast JSON parsing helpers - no allocation
     bool parseDouble(const char* str, double& value);

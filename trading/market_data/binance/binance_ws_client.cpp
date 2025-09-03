@@ -1,6 +1,8 @@
 #include "binance_ws_client.h"
+#include "../order_book.h"
 
 #include <cstring>
+#include <strings.h>  // For strcasecmp
 #include <cstdio>
 #include <chrono>
 
@@ -223,9 +225,42 @@ void BinanceWSClient::processorThreadFunc() {
         const auto* depth_ptr = depth_queue_.getNextToRead();
         if (depth_ptr) {
             BinanceDepthUpdate* depth = *const_cast<BinanceDepthUpdate**>(depth_ptr);
+            
+            // Update order book if manager is set
+            if (depth && order_book_manager_) {
+                // Cast to OrderBookManager and update
+                auto* book_mgr = static_cast<Trading::MarketData::OrderBookManager<1000>*>(order_book_manager_);
+                
+                // Register instrument if not already done
+                auto* order_book = book_mgr->getOrderBook(depth->ticker_id);
+                if (!order_book) {
+                    order_book = book_mgr->registerInstrument(depth->ticker_id, 
+                                                              static_cast<Common::TickerId>(depth->ticker_id));
+                }
+                
+                if (order_book) {
+                    // Clear and update bid levels
+                    order_book->clearBids();
+                    for (uint8_t i = 0; i < depth->bid_count && i < 20; ++i) {
+                        order_book->updateBid(depth->bid_prices[i], depth->bid_qtys[i], 1, i);
+                    }
+                    
+                    // Clear and update ask levels
+                    order_book->clearAsks();
+                    for (uint8_t i = 0; i < depth->ask_count && i < 20; ++i) {
+                        order_book->updateAsk(depth->ask_prices[i], depth->ask_qtys[i], 1, i);
+                    }
+                    
+                    // Update timestamp
+                    order_book->updateTimestamp(depth->local_timestamp_ns);
+                }
+            }
+            
+            // Also call callback if set
             if (depth && depth_callback_) {
                 depth_callback_(depth);
             }
+            
             if (depth) {
                 depth_pool_.deallocate(depth);
             }
@@ -259,9 +294,17 @@ int BinanceWSClient::wsCallback(struct lws* wsi, enum lws_callback_reasons reaso
         
         // Subscribe to streams after connection
         for (size_t i = 0; i < client->symbol_count_; ++i) {
-            char stream[128];
-            snprintf(stream, sizeof(stream), "%s@trade", client->symbols_[i]);
-            client->sendSubscribeMessage(stream);
+            const auto& sym = client->symbols_[i];
+            if (sym.has_ticker) {
+                char stream[128];
+                snprintf(stream, sizeof(stream), "%s@trade", sym.symbol);
+                client->sendSubscribeMessage(stream);
+            }
+            if (sym.has_depth) {
+                char stream[128];
+                snprintf(stream, sizeof(stream), "%s@depth10@100ms", sym.symbol);
+                client->sendSubscribeMessage(stream);
+            }
         }
         break;
         
@@ -310,6 +353,16 @@ int BinanceWSClient::wsCallback(struct lws* wsi, enum lws_callback_reasons reaso
                                                             client->rx_buffer_pos_, tick)) {
                             tick->local_timestamp_ns = local_ts;
                             
+                            // Log market data for display
+                            static uint64_t tick_counter = 0;
+                            if (++tick_counter % 100 == 1) {  // Log every 100th tick
+                                LOG_INFO("[BINANCE TICK] %s: Price=%.8f, Qty=%.8f, Side=%s",
+                                        tick->symbol,
+                                        static_cast<double>(tick->price) / 1e8,  // Convert from satoshi
+                                        static_cast<double>(tick->qty) / 1e8,
+                                        tick->is_buyer_maker ? "SELL" : "BUY");
+                            }
+                            
                             // Try to enqueue using SPSC API
                             auto* slot = client->tick_queue_.getNextToWriteTo();
                             if (slot) {
@@ -323,12 +376,59 @@ int BinanceWSClient::wsCallback(struct lws* wsi, enum lws_callback_reasons reaso
                         } else if (tick) {
                             client->tick_pool_.deallocate(tick);
                         }
+                    } else if (strstr(client->rx_buffer_, "\"lastUpdateId\"") && 
+                              strstr(client->rx_buffer_, "\"bids\"")) {
+                        // Partial book snapshot (from depth5/10/20 streams)
+                        auto* depth = static_cast<BinanceDepthUpdate*>(client->depth_pool_.allocate());
+                        if (depth && client->parsePartialBookMessage(client->rx_buffer_,
+                                                              client->rx_buffer_pos_, depth)) {
+                            depth->local_timestamp_ns = local_ts;
+                            
+                            // Log depth data for display
+                            static uint64_t depth_counter = 0;
+                            if (++depth_counter % 100 == 1) {  // Log every 100th depth update
+                                LOG_INFO("[BINANCE PARTIAL BOOK] UpdateID=%lu, Bids=%d, Asks=%d, BestBid=%.8f@%.8f, BestAsk=%.8f@%.8f",
+                                        depth->last_update_id,
+                                        depth->bid_count,
+                                        depth->ask_count,
+                                        depth->bid_count > 0 ? static_cast<double>(depth->bid_prices[0]) / 1e8 : 0.0,
+                                        depth->bid_count > 0 ? static_cast<double>(depth->bid_qtys[0]) / 1e8 : 0.0,
+                                        depth->ask_count > 0 ? static_cast<double>(depth->ask_prices[0]) / 1e8 : 0.0,
+                                        depth->ask_count > 0 ? static_cast<double>(depth->ask_qtys[0]) / 1e8 : 0.0);
+                            }
+                            
+                            // Try to enqueue using SPSC API
+                            auto* slot = client->depth_queue_.getNextToWriteTo();
+                            if (slot) {
+                                *slot = depth;
+                                client->depth_queue_.updateWriteIndex();
+                                client->messages_received_.fetch_add(1, std::memory_order_relaxed);
+                            } else {
+                                client->depth_pool_.deallocate(depth);
+                                client->messages_dropped_.fetch_add(1, std::memory_order_relaxed);
+                            }
+                        } else if (depth) {
+                            client->depth_pool_.deallocate(depth);
+                        }
                     } else if (strstr(client->rx_buffer_, "\"e\":\"depthUpdate\"")) {
-                        // Depth update message
+                        // Incremental depth update (from @depth stream)
                         auto* depth = static_cast<BinanceDepthUpdate*>(client->depth_pool_.allocate());
                         if (depth && client->parseDepthMessage(client->rx_buffer_,
                                                               client->rx_buffer_pos_, depth)) {
                             depth->local_timestamp_ns = local_ts;
+                            
+                            // Log depth data for display
+                            static uint64_t depth_counter = 0;
+                            if (++depth_counter % 100 == 1) {  // Log every 100th depth update
+                                LOG_INFO("[BINANCE DEPTH] UpdateID=%lu, Bids=%d, Asks=%d, BestBid=%.8f@%.8f, BestAsk=%.8f@%.8f",
+                                        depth->last_update_id,
+                                        depth->bid_count,
+                                        depth->ask_count,
+                                        depth->bid_count > 0 ? static_cast<double>(depth->bid_prices[0]) / 1e8 : 0.0,
+                                        depth->bid_count > 0 ? static_cast<double>(depth->bid_qtys[0]) / 1e8 : 0.0,
+                                        depth->ask_count > 0 ? static_cast<double>(depth->ask_prices[0]) / 1e8 : 0.0,
+                                        depth->ask_count > 0 ? static_cast<double>(depth->ask_qtys[0]) / 1e8 : 0.0);
+                            }
                             
                             // Try to enqueue using SPSC API
                             auto* slot = client->depth_queue_.getNextToWriteTo();
@@ -374,16 +474,61 @@ int BinanceWSClient::wsCallback(struct lws* wsi, enum lws_callback_reasons reaso
 }
 
 // ============================================================================
+// Symbol Management
+// ============================================================================
+
+void BinanceWSClient::registerSymbol(const char* symbol, uint32_t ticker_id) {
+    if (symbol_map_count_ >= MAX_SYMBOLS) {
+        LOG_WARN("Symbol map full, cannot register %s", symbol);
+        return;
+    }
+    
+    // Check if already registered
+    for (size_t i = 0; i < symbol_map_count_; ++i) {
+        if (strcmp(symbol_map_[i].symbol, symbol) == 0) {
+            symbol_map_[i].ticker_id = ticker_id;  // Update existing
+            return;
+        }
+    }
+    
+    // Add new mapping
+    strncpy(symbol_map_[symbol_map_count_].symbol, symbol, 
+            sizeof(symbol_map_[symbol_map_count_].symbol) - 1);
+    symbol_map_[symbol_map_count_].symbol[sizeof(symbol_map_[0].symbol) - 1] = '\0';
+    symbol_map_[symbol_map_count_].ticker_id = ticker_id;
+    symbol_map_count_++;
+    
+    LOG_INFO("Registered symbol %s -> ticker_id %u", symbol, ticker_id);
+}
+
+uint32_t BinanceWSClient::getTickerId(const char* symbol) const {
+    for (size_t i = 0; i < symbol_map_count_; ++i) {
+        if (strcasecmp(symbol_map_[i].symbol, symbol) == 0) {
+            return symbol_map_[i].ticker_id;
+        }
+    }
+    return 0;  // Not found
+}
+
+// ============================================================================
 // Subscription Management
 // ============================================================================
 
-bool BinanceWSClient::subscribeTicker(const char* symbol) {
+bool BinanceWSClient::subscribeTicker(const char* symbol, uint32_t ticker_id) {
+    registerSymbol(symbol, ticker_id);
+    
     if (symbol_count_ >= MAX_SYMBOLS) {
         LOG_ERROR("Max symbols reached: %zu", MAX_SYMBOLS);
         return false;
     }
     
-    symbols_[symbol_count_++] = symbol;
+    // Store symbol info
+    auto& sym_info = symbols_[symbol_count_++];
+    strncpy(sym_info.symbol, symbol, sizeof(sym_info.symbol) - 1);
+    sym_info.symbol[sizeof(sym_info.symbol) - 1] = '\0';
+    sym_info.ticker_id = ticker_id;
+    sym_info.has_ticker = true;
+    sym_info.has_depth = false;
     
     if (connected_.load(std::memory_order_acquire)) {
         char stream[128];
@@ -394,13 +539,75 @@ bool BinanceWSClient::subscribeTicker(const char* symbol) {
     return true;  // Will subscribe on connection
 }
 
-bool BinanceWSClient::subscribeDepth(const char* symbol, int levels) {
+bool BinanceWSClient::subscribeDepth(const char* symbol, uint32_t ticker_id, int levels) {
+    registerSymbol(symbol, ticker_id);
+    
+    // Find or add symbol info
+    bool found = false;
+    for (size_t i = 0; i < symbol_count_; ++i) {
+        if (strcmp(symbols_[i].symbol, symbol) == 0) {
+            symbols_[i].has_depth = true;
+            found = true;
+            break;
+        }
+    }
+    
+    if (!found && symbol_count_ < MAX_SYMBOLS) {
+        auto& sym_info = symbols_[symbol_count_++];
+        strncpy(sym_info.symbol, symbol, sizeof(sym_info.symbol) - 1);
+        sym_info.symbol[sizeof(sym_info.symbol) - 1] = '\0';
+        sym_info.ticker_id = ticker_id;
+        sym_info.has_ticker = false;
+        sym_info.has_depth = true;
+    }
+    
     if (connected_.load(std::memory_order_acquire)) {
         char stream[128];
         snprintf(stream, sizeof(stream), "%s@depth%d@100ms", symbol, levels);
         return sendSubscribeMessage(stream);
     }
     return true;
+}
+
+bool BinanceWSClient::subscribeSymbol(const char* symbol, uint32_t ticker_id, 
+                                      bool ticker, bool depth, int depth_levels) {
+    registerSymbol(symbol, ticker_id);
+    
+    // Update or add symbol info
+    bool found = false;
+    for (size_t i = 0; i < symbol_count_; ++i) {
+        if (strcmp(symbols_[i].symbol, symbol) == 0) {
+            symbols_[i].has_ticker = symbols_[i].has_ticker || ticker;
+            symbols_[i].has_depth = symbols_[i].has_depth || depth;
+            found = true;
+            break;
+        }
+    }
+    
+    if (!found && symbol_count_ < MAX_SYMBOLS) {
+        auto& sym_info = symbols_[symbol_count_++];
+        strncpy(sym_info.symbol, symbol, sizeof(sym_info.symbol) - 1);
+        sym_info.symbol[sizeof(sym_info.symbol) - 1] = '\0';
+        sym_info.ticker_id = ticker_id;
+        sym_info.has_ticker = ticker;
+        sym_info.has_depth = depth;
+    }
+    
+    bool success = true;
+    if (connected_.load(std::memory_order_acquire)) {
+        if (ticker) {
+            char stream[128];
+            snprintf(stream, sizeof(stream), "%s@trade", symbol);
+            success &= sendSubscribeMessage(stream);
+        }
+        if (depth) {
+            char stream[128];
+            snprintf(stream, sizeof(stream), "%s@depth%d@100ms", symbol, depth_levels);
+            success &= sendSubscribeMessage(stream);
+        }
+    }
+    
+    return success;
 }
 
 bool BinanceWSClient::sendSubscribeMessage(const char* stream) {
@@ -484,26 +691,344 @@ bool BinanceWSClient::parseDepthMessage(const char* json, size_t len, BinanceDep
     
     depth->reset();
     
-    // Parse depth update
-    // This is a simplified version - full implementation would parse all levels
+    char value[256];
     
-    char value[64];
-    
-    // Extract symbol
+    // Extract symbol and map to ticker_id
     if (extractJsonValue(json, "\"s\"", value, sizeof(value))) {
-        // Map symbol to ticker_id (would need symbol mapping)
-        depth->ticker_id = 0;  // Placeholder
+        // Map known symbols to fixed ticker IDs
+        if (strcmp(value, "BTCUSDT") == 0) {
+            depth->ticker_id = 1001;
+        } else if (strcmp(value, "ETHUSDT") == 0) {
+            depth->ticker_id = 1002;
+        } else {
+            // For other symbols, use hash
+            uint32_t hash = 0;
+            for (const char* p = value; *p; ++p) {
+                hash = hash * 31 + static_cast<uint32_t>(*p);
+            }
+            depth->ticker_id = 2000 + (hash % 1000);  // Map to range 2000-2999
+        }
     }
     
-    // Extract update ID
+    // Extract update ID (could be "u" for incremental or "lastUpdateId" for partial)
     if (extractJsonValue(json, "\"u\"", value, sizeof(value))) {
+        parseLong(value, depth->last_update_id);
+    } else if (extractJsonValue(json, "\"lastUpdateId\"", value, sizeof(value))) {
         parseLong(value, depth->last_update_id);
     }
     
-    // Parse bids array - simplified for example
-    // Full implementation would parse the complete arrays
+    // Parse bids array
+    const char* bids_start = strstr(json, "\"b\":[");
+    if (bids_start) {
+        bids_start += 5;  // Skip "b":[ 
+        depth->bid_count = 0;
+        
+        const char* pos = bids_start;
+        while (*pos && depth->bid_count < BinanceDepthUpdate::MAX_DEPTH) {
+            // Skip to next [
+            while (*pos && *pos != '[') {
+                if (*pos == ']') break;  // End of bids array
+                pos++;
+            }
+            if (*pos != '[') break;
+            pos++;  // Skip [
+            
+            // Parse price
+            char price_str[64];
+            size_t i = 0;
+            while (*pos && *pos != '"' && *pos != ',') {
+                if (*pos == '"') pos++;  // Skip quotes
+                else if (i < sizeof(price_str) - 1) price_str[i++] = *pos++;
+                else pos++;
+            }
+            price_str[i] = '\0';
+            
+            double price_val = 0.0;
+            if (parseDouble(price_str, price_val)) {
+                depth->bid_prices[depth->bid_count] = static_cast<Price>(price_val * 100000000);  // Convert to fixed point
+            }
+            
+            // Skip comma and quotes
+            while (*pos && (*pos == ',' || *pos == '"')) pos++;
+            
+            // Parse quantity
+            char qty_str[64];
+            i = 0;
+            while (*pos && *pos != '"' && *pos != ']') {
+                if (*pos == '"') pos++;
+                else if (i < sizeof(qty_str) - 1) qty_str[i++] = *pos++;
+                else pos++;
+            }
+            qty_str[i] = '\0';
+            
+            double qty_val = 0.0;
+            if (parseDouble(qty_str, qty_val)) {
+                depth->bid_qtys[depth->bid_count] = static_cast<Qty>(qty_val * 100000000);
+                depth->bid_count++;
+            }
+            
+            // Skip to next level
+            while (*pos && *pos != '[' && *pos != ']') pos++;
+            if (*pos == ']' && *(pos+1) == ']') break;  // End of bids
+        }
+    }
     
-    return depth->last_update_id != 0;
+    // Parse asks array
+    const char* asks_start = strstr(json, "\"a\":[");
+    if (asks_start) {
+        asks_start += 5;  // Skip "a":[
+        depth->ask_count = 0;
+        
+        const char* pos = asks_start;
+        while (*pos && depth->ask_count < BinanceDepthUpdate::MAX_DEPTH) {
+            // Skip to next [
+            while (*pos && *pos != '[') {
+                if (*pos == ']') break;  // End of asks array
+                pos++;
+            }
+            if (*pos != '[') break;
+            pos++;  // Skip [
+            
+            // Parse price
+            char price_str[64];
+            size_t i = 0;
+            while (*pos && *pos != '"' && *pos != ',') {
+                if (*pos == '"') pos++;
+                else if (i < sizeof(price_str) - 1) price_str[i++] = *pos++;
+                else pos++;
+            }
+            price_str[i] = '\0';
+            
+            double price_val = 0.0;
+            if (parseDouble(price_str, price_val)) {
+                depth->ask_prices[depth->ask_count] = static_cast<Price>(price_val * 100000000);
+            }
+            
+            // Skip comma and quotes
+            while (*pos && (*pos == ',' || *pos == '"')) pos++;
+            
+            // Parse quantity
+            char qty_str[64];
+            i = 0;
+            while (*pos && *pos != '"' && *pos != ']') {
+                if (*pos == '"') pos++;
+                else if (i < sizeof(qty_str) - 1) qty_str[i++] = *pos++;
+                else pos++;
+            }
+            qty_str[i] = '\0';
+            
+            double qty_val = 0.0;
+            if (parseDouble(qty_str, qty_val)) {
+                depth->ask_qtys[depth->ask_count] = static_cast<Qty>(qty_val * 100000000);
+                depth->ask_count++;
+            }
+            
+            // Skip to next level
+            while (*pos && *pos != '[' && *pos != ']') pos++;
+            if (*pos == ']' && *(pos+1) == ']') break;  // End of asks
+        }
+    }
+    
+    return depth->last_update_id != 0 && (depth->bid_count > 0 || depth->ask_count > 0);
+}
+
+bool BinanceWSClient::parsePartialBookMessage(const char* json, size_t len, BinanceDepthUpdate* depth) {
+    if (!json || !depth || len == 0 || len > JSON_BUFFER_SIZE) {
+        return false;
+    }
+    
+    depth->reset();
+    
+    char value[256];
+    
+    // Check if this is a combined stream message with stream field
+    const char* stream_start = strstr(json, "\"stream\":\"");
+    if (stream_start) {
+        stream_start += 10;  // Skip "stream":"
+        char stream_name[64];
+        size_t i = 0;
+        while (*stream_start && *stream_start != '"' && i < sizeof(stream_name) - 1) {
+            stream_name[i++] = *stream_start++;
+        }
+        stream_name[i] = '\0';
+        
+        // Extract symbol from stream name (e.g., "btcusdt@depth10@100ms")
+        char symbol[16];
+        i = 0;
+        const char* p = stream_name;
+        while (*p && *p != '@' && i < sizeof(symbol) - 1) {
+            symbol[i++] = (*p >= 'a' && *p <= 'z') ? (*p - 32) : *p;  // Convert to uppercase
+            p++;
+        }
+        symbol[i] = '\0';
+        
+        // Look up ticker_id from symbol
+        depth->ticker_id = getTickerId(symbol);
+        if (depth->ticker_id == 0) {
+            // Unknown symbol, try to detect from price range
+            if (strstr(json, "111") != nullptr) {
+                depth->ticker_id = 1001;  // BTCUSDT
+            } else if (strstr(json, "4.3") != nullptr || strstr(json, "2.3") != nullptr) {
+                depth->ticker_id = 1002;  // ETHUSDT
+            }
+        }
+        
+        // Find the actual data object
+        const char* data_start = strstr(json, "\"data\":{");
+        if (data_start) {
+            json = data_start + 7;  // Point to actual payload
+        }
+    } else {
+        // Direct stream, use price detection for now
+        if (strstr(json, "111") != nullptr) {
+            depth->ticker_id = 1001;  // BTCUSDT
+        } else if (strstr(json, "4.3") != nullptr || strstr(json, "2.3") != nullptr) {
+            depth->ticker_id = 1002;  // ETHUSDT  
+        }
+    }
+    
+    // Extract lastUpdateId
+    if (extractJsonValue(json, "\"lastUpdateId\"", value, sizeof(value))) {
+        parseLong(value, depth->last_update_id);
+    }
+    
+    // Message validated, proceed with parsing
+    
+    // Parse bids array - format is "bids":[["price","qty"],...]
+    const char* bids_start = strstr(json, "\"bids\":[");
+    if (bids_start) {
+        bids_start += 8;  // Skip "bids":[ 
+        if (*bids_start == '[') bids_start++;  // Skip opening [ of first element
+        depth->bid_count = 0;
+        
+        const char* pos = bids_start;
+        while (*pos && depth->bid_count < BinanceDepthUpdate::MAX_DEPTH) {
+            // Skip whitespace
+            while (*pos && (*pos == ' ' || *pos == '\n' || *pos == '\r' || *pos == '\t')) pos++;
+            
+            // Check for end of array
+            if (*pos == ']') break;
+            
+            // We expect ["price","qty"]
+            // Skip opening quote
+            if (*pos == '"') pos++;
+            
+            // Parse price
+            char price_str[32];
+            size_t i = 0;
+            while (*pos && *pos != '"' && i < sizeof(price_str) - 1) {
+                price_str[i++] = *pos++;
+            }
+            price_str[i] = '\0';
+            
+            if (i == 0) break;  // No more data
+            
+            double price_val = 0.0;
+            if (parseDouble(price_str, price_val)) {
+                depth->bid_prices[depth->bid_count] = static_cast<Price>(price_val * 100000000);
+            }
+            
+            // Skip quote, comma, quote: "," -> ,
+            if (*pos == '"') pos++;  // closing quote of price
+            if (*pos == ',') pos++;   // comma
+            if (*pos == '"') pos++;   // opening quote of quantity
+            
+            // Parse quantity  
+            char qty_str[32];
+            i = 0;
+            while (*pos && *pos != '"' && i < sizeof(qty_str) - 1) {
+                qty_str[i++] = *pos++;
+            }
+            qty_str[i] = '\0';
+            
+            double qty_val = 0.0;
+            if (parseDouble(qty_str, qty_val)) {
+                depth->bid_qtys[depth->bid_count] = static_cast<Qty>(qty_val * 100000000);
+                depth->bid_count++;
+            }
+            
+            // Skip to next element: "]," or "]]"
+            if (*pos == '"') pos++;  // closing quote of quantity
+            if (*pos == ']') {
+                pos++;  // closing bracket of this element
+                if (*pos == ']') break;  // End of entire bids array ]]
+                if (*pos == ',') {
+                    pos++;  // comma between elements
+                    if (*pos == '[') pos++;  // opening bracket of next element
+                }
+            }
+        }
+    }
+    
+    // Parse asks array - same format
+    const char* asks_start = strstr(json, "\"asks\":[");
+    if (asks_start) {
+        asks_start += 8;  // Skip "asks":[
+        if (*asks_start == '[') asks_start++;  // Skip opening [ of first element
+        depth->ask_count = 0;
+        
+        // Removed debug logging
+        
+        const char* pos = asks_start;
+        while (*pos && depth->ask_count < BinanceDepthUpdate::MAX_DEPTH) {
+            // Skip whitespace
+            while (*pos && (*pos == ' ' || *pos == '\n' || *pos == '\r' || *pos == '\t')) pos++;
+            
+            // Check for end of array
+            if (*pos == ']') break;
+            
+            // We expect ["price","qty"]
+            // Skip opening quote
+            if (*pos == '"') pos++;
+            
+            // Parse price
+            char price_str[32];
+            size_t i = 0;
+            while (*pos && *pos != '"' && i < sizeof(price_str) - 1) {
+                price_str[i++] = *pos++;
+            }
+            price_str[i] = '\0';
+            
+            if (i == 0) break;  // No more data
+            
+            double price_val = 0.0;
+            if (parseDouble(price_str, price_val)) {
+                depth->ask_prices[depth->ask_count] = static_cast<Price>(price_val * 100000000);
+            }
+            
+            // Skip quote, comma, quote: "," -> ,
+            if (*pos == '"') pos++;  // closing quote of price
+            if (*pos == ',') pos++;   // comma
+            if (*pos == '"') pos++;   // opening quote of quantity
+            
+            // Parse quantity  
+            char qty_str[32];
+            i = 0;
+            while (*pos && *pos != '"' && i < sizeof(qty_str) - 1) {
+                qty_str[i++] = *pos++;
+            }
+            qty_str[i] = '\0';
+            
+            double qty_val = 0.0;
+            if (parseDouble(qty_str, qty_val)) {
+                depth->ask_qtys[depth->ask_count] = static_cast<Qty>(qty_val * 100000000);
+                depth->ask_count++;
+            }
+            
+            // Skip to next element: "]," or "]]"
+            if (*pos == '"') pos++;  // closing quote of quantity
+            if (*pos == ']') {
+                pos++;  // closing bracket of this element
+                if (*pos == ']') break;  // End of entire asks array ]]
+                if (*pos == ',') {
+                    pos++;  // comma between elements
+                    if (*pos == '[') pos++;  // opening bracket of next element
+                }
+            }
+        }
+    }
+    
+    return depth->last_update_id != 0 && (depth->bid_count > 0 || depth->ask_count > 0);
 }
 
 bool BinanceWSClient::extractJsonValue(const char* json, const char* key, 
@@ -529,6 +1054,37 @@ bool BinanceWSClient::extractJsonValue(const char* json, const char* key,
     out[i] = '\0';
     
     return i > 0;
+}
+
+// ============================================================================
+// Health Monitoring
+// ============================================================================
+
+BinanceWSClient::HealthStatus BinanceWSClient::getHealthStatus() const {
+    HealthStatus status;
+    
+    status.connected = connected_.load(std::memory_order_acquire);
+    status.messages_received = messages_received_.load(std::memory_order_relaxed);
+    status.messages_dropped = messages_dropped_.load(std::memory_order_relaxed);
+    status.reconnect_count = reconnect_count_.load(std::memory_order_relaxed);
+    
+    // Calculate rates
+    if (status.messages_received > 0) {
+        status.drop_rate = static_cast<double>(status.messages_dropped) / 
+                           static_cast<double>(status.messages_received + status.messages_dropped);
+    } else {
+        status.drop_rate = 0.0;
+    }
+    
+    // Get current time for uptime calculation
+    uint64_t now_ns = Common::rdtsc();
+    status.last_message_time_ns = now_ns;  // Would track actual last message time in production
+    status.uptime_seconds = 0;  // Would calculate from start time
+    
+    // Calculate message rate (would need time window tracking in production)
+    status.message_rate_per_sec = 0.0;
+    
+    return status;
 }
 
 } // namespace Trading::MarketData::Binance

@@ -435,6 +435,10 @@ static bool initializeSystem() {
         delete g_binance_client;  // AUDIT_IGNORE: Init-time only
         g_binance_client = nullptr;
     } else {
+        // Connect Binance to OrderBookManager
+        g_binance_client->setOrderBookManager(g_book_manager);
+        LOG_INFO("Connected Binance to OrderBookManager");
+        
         // Set up callbacks for Binance data
         g_binance_client->setTickCallback([](const Trading::MarketData::Binance::BinanceTickData* /* tick */) {
             static uint64_t binance_tick_count = 0;
@@ -462,13 +466,23 @@ static bool initializeSystem() {
             // Wait a bit for connection
             std::this_thread::sleep_for(std::chrono::seconds(2));
             
-            // Subscribe to major crypto pairs
+            // Subscribe to major crypto pairs with depth
             if (g_binance_client->isConnected()) {
-                g_binance_client->subscribeTicker("btcusdt");
-                g_binance_client->subscribeTicker("ethusdt");
-                g_binance_client->subscribeDepth("btcusdt", 5);
-                LOG_INFO("Subscribed to BTCUSDT and ETHUSDT");
-                printf("   ✓ Subscribed to BTC and ETH data\n");
+                // Define crypto pairs with their ticker IDs
+                constexpr uint32_t BTC_TICKER_ID = 1001;
+                constexpr uint32_t ETH_TICKER_ID = 1002;
+                
+                // Register instruments in OrderBookManager
+                g_book_manager->registerInstrument(BTC_TICKER_ID, static_cast<Common::TickerId>(BTC_TICKER_ID));
+                g_book_manager->registerInstrument(ETH_TICKER_ID, static_cast<Common::TickerId>(ETH_TICKER_ID));
+                
+                // Subscribe with proper ticker mapping
+                g_binance_client->subscribeSymbol("btcusdt", BTC_TICKER_ID, true, true, 10);
+                g_binance_client->subscribeSymbol("ethusdt", ETH_TICKER_ID, true, true, 10);
+                
+                LOG_INFO("Subscribed to BTCUSDT (id=%u) and ETHUSDT (id=%u) with 10-level depth", 
+                         BTC_TICKER_ID, ETH_TICKER_ID);
+                printf("   ✓ Subscribed to BTC and ETH with 10-level order books\n");
             }
         } else {
             LOG_WARN("Failed to start Binance WebSocket client");
@@ -587,6 +601,27 @@ static void runTradingLoop() {
                 Trading::MarketData::OrderBookManager<1000>::ActiveBooks active;
                 size_t book_count = g_book_manager->getActiveBooks(active);
                 LOG_INFO("Active order books: %zu", book_count);
+                
+                // Show Binance order book details
+                auto* btc_book = g_book_manager->getOrderBook(1001);
+                if (btc_book && btc_book->getBidDepth() > 0) {
+                    LOG_INFO("BTCUSDT OrderBook: Bid=%.2f@%.2f, Ask=%.2f@%.2f, Spread=%.2f",
+                            static_cast<double>(btc_book->getBestBid()) / 1e8,
+                            static_cast<double>(btc_book->getBestBidQty()) / 1e8,
+                            static_cast<double>(btc_book->getBestAsk()) / 1e8,
+                            static_cast<double>(btc_book->getBestAskQty()) / 1e8,
+                            static_cast<double>(btc_book->getSpread()) / 1e8);
+                }
+                
+                auto* eth_book = g_book_manager->getOrderBook(1002);
+                if (eth_book && eth_book->getBidDepth() > 0) {
+                    LOG_INFO("ETHUSDT OrderBook: Bid=%.2f@%.2f, Ask=%.2f@%.2f, Spread=%.2f",
+                            static_cast<double>(eth_book->getBestBid()) / 1e8,
+                            static_cast<double>(eth_book->getBestBidQty()) / 1e8,
+                            static_cast<double>(eth_book->getBestAsk()) / 1e8,
+                            static_cast<double>(eth_book->getBestAskQty()) / 1e8,
+                            static_cast<double>(eth_book->getSpread()) / 1e8);
+                }
             }
             
             // Check if token needs refresh
