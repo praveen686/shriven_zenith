@@ -10,6 +10,11 @@
 #include "config/config.h"
 #include "trading/auth/zerodha/zerodha_auth.h"
 #include "trading/market_data/zerodha/zerodha_instrument_fetcher.h"
+#include "trading/market_data/zerodha/kite_ws_client.h"
+#include "trading/market_data/zerodha/kite_symbol_resolver.h"
+#include "trading/market_data/binance/binance_ws_client.h"
+#include "trading/market_data/order_book.h"
+#include "common/lf_queue.h"
 
 #include <cstdio>
 #include <cstdlib>
@@ -21,6 +26,12 @@
 
 // Global shutdown flag
 static std::atomic<bool> g_shutdown{false};
+
+// Global market data queue and WebSocket clients
+static Common::LFQueue<Trading::MarketData::MarketUpdate, 262144>* g_market_queue = nullptr;
+static Trading::MarketData::Zerodha::KiteWSClient* g_kite_client = nullptr;
+static Trading::MarketData::Binance::BinanceWSClient* g_binance_client = nullptr;
+static Trading::MarketData::OrderBookManager<1000>* g_book_manager = nullptr;
 
 // Signal handler for graceful shutdown
 static void signalHandler(int signal) {
@@ -221,7 +232,7 @@ static bool initializeSystem() {
     LOG_INFO("ConfigManager already initialized: env_file=%s", cfg.paths.env_file);
     
     // Step 3: Load environment variables from .env file
-    FILE* env_file = fopen(cfg.paths.env_file, "r");
+    FILE* env_file = fopen(cfg.paths.env_file, "r");  // AUDIT_IGNORE: Init-time only
     if (env_file) {
         char line[1024];
         while (fgets(line, sizeof(line), env_file)) {
@@ -349,9 +360,121 @@ static bool initializeSystem() {
         displayInstrumentsSummary(fetcher);
     }
     
-    // Store fetcher globally (would be better in a context object)
-    // For now, we'll just delete it as we don't use it in the trading loop yet
+    // Step 7: Initialize market data connection
+    LOG_INFO("Initializing market data connection...");
+    printf("   Initializing WebSocket connection...\n");
+    
+    // Create market update queue
+    g_market_queue = new Common::LFQueue<Trading::MarketData::MarketUpdate, 262144>();  // AUDIT_IGNORE: Init-time only
+    
+    // Initialize Kite WebSocket client
+    Trading::MarketData::Zerodha::KiteWSClient::Config ws_config;
+    ws_config.api_key = api_key;
+    ws_config.access_token = auth->getAccessToken();
+    ws_config.ws_endpoint = cfg.zerodha.websocket_endpoint;
+    ws_config.persist_ticks = cfg.zerodha.persist_ticks;
+    ws_config.persist_orderbook = cfg.zerodha.persist_orderbook;
+    
+    g_kite_client = new Trading::MarketData::Zerodha::KiteWSClient(g_market_queue, ws_config);  // AUDIT_IGNORE: Init-time only
+    
+    // Initialize symbol resolver
+    Trading::MarketData::Zerodha::KiteSymbolResolver resolver(fetcher);
+    
+    // Get subscription list based on config
+    LOG_INFO("Resolving %s components...", cfg.zerodha.indices[0]);
+    auto subscription = resolver.getSubscriptionList(cfg);
+    LOG_INFO("Subscription list: %zu tokens", subscription.count);
+    printf("   ✓ Resolved %zu instruments for subscription\n", subscription.count);
+    
+    // Initialize order book manager
+    g_book_manager = new Trading::MarketData::OrderBookManager<1000>();  // AUDIT_IGNORE: Init-time only
+    
+    // Map tokens to order books
+    for (size_t i = 0; i < subscription.count && i < 100; ++i) {  // Limit to 100 for initial setup
+        g_book_manager->registerInstrument(subscription.tokens[i], static_cast<Common::TickerId>(i));
+        g_kite_client->mapTokenToTicker(subscription.tokens[i], static_cast<Common::TickerId>(i));
+    }
+    
+    // Start WebSocket client
+    LOG_INFO("Starting WebSocket client...");
+    g_kite_client->start();
+    
+    // Connect to Kite
+    LOG_INFO("Connecting to Kite WebSocket...");
+    if (!g_kite_client->connect()) {
+        LOG_ERROR("Failed to connect to Kite WebSocket");
+        printf("   ✗ Failed to connect to WebSocket\n");
+        delete fetcher;  // AUDIT_IGNORE: Init-time only
+        return false;
+    }
+    printf("   ✓ Connected to Kite WebSocket\n");
+    
+    // Subscribe to tokens
+    LOG_INFO("Subscribing to market data...");
+    size_t subscribe_count = std::min(subscription.count, static_cast<size_t>(100));  // Start with 100 instruments
+    g_kite_client->subscribeTokens(subscription.tokens, subscribe_count, 
+                                Trading::MarketData::Zerodha::KiteMode::MODE_FULL);
+    printf("   ✓ Subscribed to %zu instruments\n", subscribe_count);
+    
     delete fetcher;  // AUDIT_IGNORE: Init-time only
+    
+    // Step 8: Initialize Binance WebSocket client
+    LOG_INFO("Initializing Binance WebSocket client...");
+    printf("   Initializing Binance connection...\n");
+    
+    g_binance_client = new Trading::MarketData::Binance::BinanceWSClient();  // AUDIT_IGNORE: Init-time only
+    
+    Trading::MarketData::Binance::BinanceWSClient::Config binance_config;
+    binance_config.use_testnet = false;  // Use live data
+    binance_config.reconnect_interval_ms = 5000;
+    binance_config.cpu_affinity = cfg.cpu_config.market_data_core;
+    
+    if (!g_binance_client->init(binance_config)) {
+        LOG_ERROR("Failed to initialize Binance WebSocket client");
+        printf("   ✗ Failed to initialize Binance client\n");
+        delete g_binance_client;  // AUDIT_IGNORE: Init-time only
+        g_binance_client = nullptr;
+    } else {
+        // Set up callbacks for Binance data
+        g_binance_client->setTickCallback([](const Trading::MarketData::Binance::BinanceTickData* /* tick */) {
+            static uint64_t binance_tick_count = 0;
+            binance_tick_count++;
+            
+            if (binance_tick_count % 1000 == 1) {
+                LOG_INFO("[BINANCE] Processed %lu ticks", binance_tick_count);
+            }
+        });
+        
+        g_binance_client->setDepthCallback([](const Trading::MarketData::Binance::BinanceDepthUpdate* /* depth */) {
+            static uint64_t binance_depth_count = 0;
+            binance_depth_count++;
+            
+            if (binance_depth_count % 1000 == 1) {
+                LOG_INFO("[BINANCE] Processed %lu depth updates", binance_depth_count);
+            }
+        });
+        
+        // Start Binance client
+        if (g_binance_client->start()) {
+            LOG_INFO("Binance WebSocket client started");
+            printf("   ✓ Binance client started\n");
+            
+            // Wait a bit for connection
+            std::this_thread::sleep_for(std::chrono::seconds(2));
+            
+            // Subscribe to major crypto pairs
+            if (g_binance_client->isConnected()) {
+                g_binance_client->subscribeTicker("btcusdt");
+                g_binance_client->subscribeTicker("ethusdt");
+                g_binance_client->subscribeDepth("btcusdt", 5);
+                LOG_INFO("Subscribed to BTCUSDT and ETHUSDT");
+                printf("   ✓ Subscribed to BTC and ETH data\n");
+            }
+        } else {
+            LOG_WARN("Failed to start Binance WebSocket client");
+            printf("   ⚠ Binance client not started\n");
+        }
+    }
     
     LOG_INFO("=== SYSTEM INITIALIZATION COMPLETE ===");
     return true;
@@ -360,6 +483,34 @@ static bool initializeSystem() {
 // Shutdown system components
 static void shutdownSystem() {
     LOG_INFO("=== SYSTEM SHUTDOWN STARTED ===");
+    
+    // Shutdown Kite WebSocket client
+    if (g_kite_client) {
+        LOG_INFO("Shutting down Kite WebSocket client...");
+        g_kite_client->stop();
+        delete g_kite_client;  // AUDIT_IGNORE: Shutdown-time only
+        g_kite_client = nullptr;
+    }
+    
+    // Shutdown Binance WebSocket client
+    if (g_binance_client) {
+        LOG_INFO("Shutting down Binance WebSocket client...");
+        g_binance_client->stop();
+        delete g_binance_client;  // AUDIT_IGNORE: Shutdown-time only
+        g_binance_client = nullptr;
+    }
+    
+    // Cleanup order book manager
+    if (g_book_manager) {
+        delete g_book_manager;  // AUDIT_IGNORE: Shutdown-time only
+        g_book_manager = nullptr;
+    }
+    
+    // Cleanup market queue
+    if (g_market_queue) {
+        delete g_market_queue;  // AUDIT_IGNORE: Shutdown-time only
+        g_market_queue = nullptr;
+    }
     
     // Shutdown Zerodha authentication
     LOG_INFO("Shutting down Zerodha authentication...");
@@ -381,16 +532,62 @@ static void runTradingLoop() {
     }
     
     uint64_t loop_count = 0;
+    uint64_t tick_count = 0;
+    Common::Price last_bid = 0;
+    Common::Price last_ask = 0;
     auto last_status_time = std::chrono::steady_clock::now();
     
     while (!g_shutdown.load()) {
         auto now = std::chrono::steady_clock::now();
         
+        // Process market data from queue
+        if (g_market_queue) {
+            const Trading::MarketData::MarketUpdate* update = g_market_queue->getNextToRead();
+            if (update) {
+                tick_count++;
+                
+                // Update order book
+                if (update->ticker_id != Common::TickerId_INVALID && g_book_manager) {
+                    auto* book = g_book_manager->getOrderBook(update->ticker_id);
+                    if (book) {
+                        // Update bid/ask based on update type
+                        if (update->update_type == Trading::MarketData::MessageType::MARKET_DATA) {
+                            book->updateBid(update->bid_price, update->bid_qty, 1, 0);
+                            book->updateAsk(update->ask_price, update->ask_qty, 1, 0);
+                            book->updateTimestamp(update->timestamp);
+                            
+                            last_bid = update->bid_price;
+                            last_ask = update->ask_price;
+                        }
+                    }
+                }
+                
+                g_market_queue->updateReadIndex();
+                
+                // Log every 1000 ticks
+                if (tick_count % 1000 == 0) {
+                    LOG_INFO("Processed %llu ticks, Last: Bid=%ld Ask=%ld Spread=%ld",
+                            static_cast<unsigned long long>(tick_count),
+                            last_bid,
+                            last_ask,
+                            last_ask - last_bid);
+                }
+            }
+        }
+        
         // Print status every 30 seconds
         if (std::chrono::duration_cast<std::chrono::seconds>(now - last_status_time).count() >= 30) {
-            LOG_INFO("Trading loop status: iterations=%llu, authenticated=%s",
+            LOG_INFO("Trading loop status: iterations=%llu, ticks=%llu, authenticated=%s",
                     static_cast<unsigned long long>(loop_count),
+                    static_cast<unsigned long long>(tick_count),
                     auth->isAuthenticated() ? "true" : "false");
+            
+            // Print order book summary
+            if (g_book_manager) {
+                Trading::MarketData::OrderBookManager<1000>::ActiveBooks active;
+                size_t book_count = g_book_manager->getActiveBooks(active);
+                LOG_INFO("Active order books: %zu", book_count);
+            }
             
             // Check if token needs refresh
             if (auth->needsRefresh()) {
@@ -406,15 +603,14 @@ static void runTradingLoop() {
         }
         
         // TODO: Add actual trading logic here
-        // - Market data processing
-        // - Signal generation
-        // - Order management
+        // - Signal generation based on order books
         // - Risk checks
+        // - Order placement
         
         loop_count++;
         
-        // Sleep briefly to avoid spinning
-        std::this_thread::sleep_for(std::chrono::milliseconds(100));
+        // High-frequency loop - minimal sleep
+        std::this_thread::sleep_for(std::chrono::microseconds(100));
     }
     
     LOG_INFO("=== TRADING LOOP STOPPED === (iterations=%llu)", 

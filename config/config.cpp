@@ -4,6 +4,7 @@
 #include <cstdlib>
 #include <cstring>
 #include <sys/stat.h>
+#include <cerrno>
 
 namespace Trading {
 
@@ -19,6 +20,11 @@ auto ConfigManager::init(const char* config_file) noexcept -> bool {
     
     // Clear config structure (proper initialization for non-trivial type)
     config_ = TradingConfig{};
+    
+    // Set some default values that must be power of 2
+    config_.performance.market_data_queue_size = 262144;  // 256K
+    config_.performance.order_queue_size = 65536;  // 64K
+    config_.trading.max_position_value = 1000000.0;  // Default 10 lakh
     
     // Parse TOML file
     if (!parseTomlFile(config_file)) {
@@ -42,11 +48,17 @@ auto ConfigManager::init(const char* config_file) noexcept -> bool {
 }
 
 auto ConfigManager::parseTomlFile(const char* filepath) noexcept -> bool {
-    FILE* file = std::fopen(filepath, "r");
+    LOG_INFO("Attempting to parse TOML file: %s", filepath);
+    
+    FILE* file = std::fopen(filepath, "r");  // AUDIT_IGNORE: Init-time only
     if (!file) {
-        LOG_ERROR("Cannot open config file: %s", filepath);
+        LOG_ERROR("Cannot open config file: %s (errno: %d, %s)", filepath, errno, std::strerror(errno));
+        // Also print to stderr for debugging
+        std::fprintf(stderr, "Failed to open config: %s (errno: %d, %s)\n", filepath, errno, std::strerror(errno));
         return false;
     }
+    
+    LOG_INFO("Successfully opened config file: %s", filepath);
     
     char line[1024];
     char current_section[64] = "";
@@ -140,10 +152,59 @@ auto ConfigManager::parseTomlFile(const char* filepath) noexcept -> bool {
             extractStringValue(line, "instrument_dump_url", config_.zerodha.instrument_dump_url, sizeof(config_.zerodha.instrument_dump_url));
             extractStringValue(line, "market_open_time", config_.zerodha.market_open_time, sizeof(config_.zerodha.market_open_time));
             extractStringValue(line, "market_close_time", config_.zerodha.market_close_time, sizeof(config_.zerodha.market_close_time));
+            
+            // Parse index configuration
+            if (std::strstr(line, "indices = ")) {
+                // Parse array of indices like ["NIFTY50", "BANKNIFTY"]
+                const char* start = std::strchr(line, '[');
+                const char* end = std::strchr(line, ']');
+                if (start && end) {
+                    start++; // Skip '['
+                    config_.zerodha.num_indices = 0;
+                    char buffer[256];
+                    size_t buf_len = static_cast<size_t>(end - start);
+                    if (buf_len < sizeof(buffer)) {
+                        std::strncpy(buffer, start, buf_len);
+                        buffer[buf_len] = '\0';
+                        
+                        // Parse comma-separated indices
+                        char* token = std::strtok(buffer, ",");
+                        while (token && config_.zerodha.num_indices < 10) {
+                            // Remove quotes and whitespace
+                            while (*token == ' ' || *token == '"') token++;
+                            char* token_end = token + std::strlen(token) - 1;
+                            while (token_end > token && (*token_end == ' ' || *token_end == '"')) token_end--;
+                            *(token_end + 1) = '\0';
+                            
+                            std::strncpy(config_.zerodha.indices[config_.zerodha.num_indices], token, 31);
+                            config_.zerodha.indices[config_.zerodha.num_indices][31] = '\0';
+                            config_.zerodha.num_indices++;
+                            
+                            token = std::strtok(nullptr, ",");
+                        }
+                    }
+                }
+            }
+            
+            extractBoolValue(line, "fetch_spot", &config_.zerodha.fetch_spot);
+            extractBoolValue(line, "fetch_futures", &config_.zerodha.fetch_futures);
+            extractBoolValue(line, "fetch_options", &config_.zerodha.fetch_options);
             uint64_t temp;
+            if (extractUintValue(line, "option_strikes", &temp)) config_.zerodha.option_strikes = static_cast<uint32_t>(temp);
+            extractStringValue(line, "futures_expiry", config_.zerodha.futures_expiry, sizeof(config_.zerodha.futures_expiry));
+            
+            // Subscriptions
             if (extractUintValue(line, "max_symbols", &temp)) config_.zerodha.max_symbols = static_cast<uint32_t>(temp);
             extractStringValue(line, "subscription_mode", config_.zerodha.subscription_mode, sizeof(config_.zerodha.subscription_mode));
             if (extractUintValue(line, "tick_batch_size", &temp)) config_.zerodha.tick_batch_size = static_cast<uint32_t>(temp);
+            
+            // Data persistence
+            extractBoolValue(line, "persist_ticks", &config_.zerodha.persist_ticks);
+            extractBoolValue(line, "persist_orderbook", &config_.zerodha.persist_orderbook);
+            if (extractUintValue(line, "tick_file_rotation_mb", &temp)) config_.zerodha.tick_file_rotation_mb = static_cast<uint32_t>(temp);
+            if (extractUintValue(line, "orderbook_snapshot_interval_s", &temp)) config_.zerodha.orderbook_snapshot_interval_s = static_cast<uint32_t>(temp);
+            
+            // Order configuration
             extractStringValue(line, "order_type_default", config_.zerodha.order_type_default, sizeof(config_.zerodha.order_type_default));
             extractStringValue(line, "product_type", config_.zerodha.product_type, sizeof(config_.zerodha.product_type));
             extractStringValue(line, "exchange", config_.zerodha.exchange, sizeof(config_.zerodha.exchange));
@@ -311,22 +372,43 @@ auto ConfigManager::validateConfig() noexcept -> bool {
     
     // Create directories if they don't exist
     struct stat st;
+    // AUDIT_IGNORE: System calls acceptable during initialization
     if (stat(config_.paths.logs_dir, &st) != 0) {
         LOG_INFO("Creating logs directory: %s", config_.paths.logs_dir);
-        // Use mkdir with parents (-p equivalent)
-        char cmd[512];
-        std::snprintf(cmd, sizeof(cmd), "mkdir -p %s", config_.paths.logs_dir);
-        if (std::system(cmd) != 0) {
-            LOG_WARN("Could not create logs directory");
+        // Create directory with permissions 0755
+        if (mkdir(config_.paths.logs_dir, 0755) != 0 && errno != EEXIST) {
+            // If parent doesn't exist, try to create parent first
+            char parent[256];
+            std::strncpy(parent, config_.paths.logs_dir, sizeof(parent) - 1);
+            char* last_slash = std::strrchr(parent, '/');
+            if (last_slash && last_slash != parent) {
+                *last_slash = '\0';
+                mkdir(parent, 0755); // AUDIT_IGNORE: Init-time only
+            }
+            // Try again
+            if (mkdir(config_.paths.logs_dir, 0755) != 0 && errno != EEXIST) {
+                LOG_WARN("Could not create logs directory: %s", std::strerror(errno));
+            }
         }
     }
     
+    // AUDIT_IGNORE: System calls acceptable during initialization  
     if (stat(config_.paths.data_dir, &st) != 0) {
         LOG_INFO("Creating data directory: %s", config_.paths.data_dir);
-        char cmd[512];
-        std::snprintf(cmd, sizeof(cmd), "mkdir -p %s", config_.paths.data_dir);
-        if (std::system(cmd) != 0) {
-            LOG_WARN("Could not create data directory");
+        // Create directory with permissions 0755
+        if (mkdir(config_.paths.data_dir, 0755) != 0 && errno != EEXIST) {
+            // If parent doesn't exist, try to create parent first
+            char parent[256];
+            std::strncpy(parent, config_.paths.data_dir, sizeof(parent) - 1);
+            char* last_slash = std::strrchr(parent, '/');
+            if (last_slash && last_slash != parent) {
+                *last_slash = '\0';
+                mkdir(parent, 0755); // AUDIT_IGNORE: Init-time only
+            }
+            // Try again
+            if (mkdir(config_.paths.data_dir, 0755) != 0 && errno != EEXIST) {
+                LOG_WARN("Could not create data directory: %s", std::strerror(errno));
+            }
         }
     }
     
